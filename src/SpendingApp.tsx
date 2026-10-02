@@ -4,6 +4,7 @@ import { AppBar, type AppBarUser } from '@huishouden/pwa-kit/react/app-bar';
 import { useClock } from '@huishouden/pwa-kit/react/clock';
 import { iconButton, Toast, type useToast } from '@huishouden/pwa-kit/react/ui';
 import { toYmd } from '@huishouden/pwa-kit/time';
+import { track, trackView } from '@huishouden/pwa-kit/observability';
 import type { SpendingStore } from './data/store';
 import type { SpendingRecord } from './data/model';
 import { useEmailCheck } from './data/useEmailCheck';
@@ -60,6 +61,16 @@ export function SpendingApp({ store, frame, toasts, banner }: Props) {
   const [adding, setAdding] = useState(false);
   const [importing, setImporting] = useState(false);
   const [settings, setSettings] = useState<SettingsTab | null>(null);
+  // Anonymous counts of what is used, per visit (the portal's /privacy page).
+  useEffect(() => {
+    trackView(settings ? `settings:${settings}` : category ? 'category' : 'overview');
+  }, [settings, category]);
+  useEffect(() => {
+    if (adding) track('add spending');
+  }, [adding]);
+  useEffect(() => {
+    if (importing) track('import statement');
+  }, [importing]);
 
   const purchases = useMemo(() => counted(store.records, store.settings.ignoredKeywords), [store.records, store.settings.ignoredKeywords]);
   const shownMonths = useMemo(() => months(purchases, today), [purchases, today]);

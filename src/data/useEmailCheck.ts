@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { checkAlerts } from '../lib/alertSync';
 import { gmailError } from '@huishouden/pwa-kit/gmail';
 import type { SpendingStore } from './store';
+import { track } from '@huishouden/pwa-kit/observability';
 
 export type CheckState =
   | { status: 'idle' }
@@ -26,6 +27,7 @@ export function useEmailCheck(store: SpendingStore) {
       const s = storeRef.current;
       const box = s.mail.stored() ?? (interactive ? await s.mail.request() : null);
       if (!box) return;
+      track('check email', { interactive });
       setState({ status: 'checking' });
       const result = await checkAlerts(box, {
         cards: s.cards,
