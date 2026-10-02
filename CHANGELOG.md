@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.0](https://github.com/huishouden/spending/compare/v2.0.2...v2.1.0) (2026-10-02)
+
+
+### Features
+
+* error, speed and anonymous usage reports (pwa-kit observability) ([#27](https://github.com/huishouden/spending/issues/27)) ([62a0f2c](https://github.com/huishouden/spending/commit/62a0f2ccbd72b2fa0c6dc18bc17e5f617a0d5555))
+* **roles:** helpers and kids are told only admins and members see the money; nothing loads (pwa-kit 0.40.0) ([#29](https://github.com/huishouden/spending/issues/29)) ([df3ca2e](https://github.com/huishouden/spending/commit/df3ca2e3d7d3e092062d752b1870938b228e3982))
+
 ## [2.0.2](https://github.com/huishouden/spending/compare/v2.0.1...v2.0.2) (2026-10-02)
 
 
