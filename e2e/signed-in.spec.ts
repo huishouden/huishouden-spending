@@ -33,3 +33,25 @@ test('a budget one member saves is the household budget for the other', async ({
     await other.close();
   }
 });
+
+// Roles: a helper (test-helper) is refused the household's money and nothing loads; the app bar
+// still works for them.
+test.describe('as a helper', () => {
+  test.beforeAll(async () => {
+    // Another app's run may have reseeded the household with an older kit that has no helper.
+    const { seedTestHousehold } = await import('@huishouden/pwa-kit/staging');
+    await seedTestHousehold({ accessToken: process.env.HH_STAGING_ACCESS_TOKEN! });
+  });
+
+  test('opening Spending says only admins and members can see the money, and loads none', async ({ page }) => {
+    const reads: string[] = [];
+    page.on('request', (r) => {
+      if (/spending(Transactions|Settings|Cards|Rules)/.test(decodeURIComponent(r.url()) + (r.postData() ?? ''))) reads.push(r.url());
+    });
+    await signInTestUser(page, { email: 'test-helper@example.com' });
+    await expect(page.getByText('Only admins and members can see the household’s money.')).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByRole('link', { name: 'Open Huishouden' })).toBeVisible();
+    await expect(page.locator('hh-app-bar').getByRole('button', { name: 'Settings' })).toHaveCount(0);
+    expect(reads).toEqual([]);
+  });
+});

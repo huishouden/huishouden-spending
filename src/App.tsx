@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import { signInSilently } from '@huishouden/pwa-kit/auth';
 import { markJoined, saveMyProfile, watchHousehold, type HouseholdState } from '@huishouden/pwa-kit/household';
+import { refusal } from '@huishouden/pwa-kit/roles';
+import { seesMoney } from './lib/access';
 import { popupCancelled } from '@huishouden/pwa-kit/feedback';
 import { ClockProvider } from '@huishouden/pwa-kit/react/clock';
 import { cardClass, primaryButton, useToast } from '@huishouden/pwa-kit/react/ui';
@@ -41,6 +43,8 @@ export default function App() {
   const frame: FrameProps = { user, onSignIn: signIn, onSignOut: signOut, signingIn };
 
   if (user === undefined) return <Frame {...frame} />;
+  // `?sample=helper`: what a helper or kid sees when signed in, for screenshots and tests.
+  if (user === null && new URLSearchParams(location.search).get('sample') === 'helper') return <MoneyRefusal frame={frame} />;
   if (user === null) return <SampleApp frame={frame} signInError={signInError} />;
   return <SignedIn key={user.uid} user={user} frame={frame} />;
 }
@@ -57,6 +61,8 @@ function SignedIn({ user, frame }: { user: User; frame: FrameProps }) {
     saveMyProfile(getDb(), household.id, user).catch(() => {});
   }, [household, email, user]);
 
+  // Helpers and kids never see the household's money (the rules refuse every read): no listeners, no email checks.
+  if (state.status === 'ready' && !seesMoney(state.household, email)) return <MoneyRefusal frame={frame} />;
   if (state.status === 'ready') return <LiveApp householdId={state.household.id} email={email} frame={frame} />;
   if (state.status === 'loading') return <Note frame={frame}>Finding your household.</Note>;
   if (state.status === 'error') return <Note frame={frame}>Couldn't reach the household. Check the connection; the app tries again on its own.</Note>;
@@ -100,6 +106,18 @@ function SampleApp({ frame, signInError }: { frame: FrameProps; signInError: str
     <ClockProvider read={read}>
       <SpendingApp store={store} frame={frame} toasts={toasts} banner={banner} />
     </ClockProvider>
+  );
+}
+
+function MoneyRefusal({ frame }: { frame: FrameProps }) {
+  return (
+    <Note frame={frame}>
+      <h2 className="text-2xl font-semibold text-stone-800">Spending</h2>
+      <p className="mt-2">{refusal('see-money')}</p>
+      <a className={`${primaryButton} mt-5`} href={PORTAL_URL}>
+        Open Huishouden
+      </a>
+    </Note>
   );
 }
 
