@@ -4,7 +4,7 @@ import { registerSW } from 'virtual:pwa-register';
 import App from './App.tsx';
 import './index.css';
 
-// Auto-register service worker for Android WebAPK & Pixel Tablet installability
+// The service worker makes the app installable and keeps it working offline.
 registerSW({ immediate: true });
 
 createRoot(document.getElementById('root')!).render(

@@ -1,0 +1,11 @@
+[
+  { "id": "a", "date": "2031-03-14", "description": "EXAMPLE GROCERY #42", "amount": 61.15, "category": "Groceries", "card": "Card One", "type": "Sale", "source": "statement", "createdAt": 1900000000000 },
+  { "id": "b", "date": "2031-03-12", "description": "EXAMPLE NOODLE BAR", "amount": 23.4, "category": "Dining & Food", "card": "Card Two", "type": "Sale", "source": "alert" },
+  { "id": "c", "date": "2031-03-10", "description": "EXAMPLE OUTFITTERS", "amount": -18, "category": "Shopping & Retail", "card": "Card One", "type": "Return", "source": "statement" },
+  { "id": "d", "date": "2031-03-09", "description": "EXAMPLE BOOKSHOP", "amount": 40.1, "category": "Shopping & Retail", "card": "Card One", "type": "Sale", "source": "statement" },
+  { "id": "e", "date": "2031-03-02", "description": "EXAMPLE CORNER SHOP", "amount": 9.99, "category": "", "card": "Card One", "type": "Sale", "source": "statement" },
+  { "id": "f", "date": "2031-03-01", "description": "LANDLORD RENT PAYMENT", "amount": 1500, "category": "Bills & Utilities", "card": "Card Three", "type": "Sale", "source": "statement" },
+  { "id": "g", "date": "2031-03-05", "description": "PAYMENT THANK YOU", "amount": -250, "category": "", "card": "Card One", "type": "Payment", "source": "statement" },
+  { "id": "h", "date": "2031-02-20", "description": "EXAMPLE GROCERY #42", "amount": 180.5, "category": "Groceries", "card": "Card One", "type": "Sale", "source": "statement", "createdAt": 1800000000000 },
+  { "id": "i", "date": "2031-01-03", "description": "EXAMPLE TEA HOUSE", "amount": 8.4, "category": "Dining & Food", "card": "Card Two", "type": "Sale", "source": "alert" }
+]

@@ -18,9 +18,9 @@ export function alertMessage(id: string, sentAt: string, from: string, subject: 
   };
 }
 
-/** Two alerts for the sample household's cards and one payment notice, all in March 2031. */
+/** Two alerts for the sample household's cards and one payment notice, the day before the sample household's clock starts (27 September 2026). */
 export const alerts = [
-  alertMessage('msg-grocery', '2031-03-14T09:00:00', 'Example Bank <alerts@bank.example.com>', 'Purchase alert', 'You spent $61.15 at EXAMPLE GROCERY with your card ending in 1111.'),
-  alertMessage('msg-noodle', '2031-03-13T19:30:00', 'Example Card Co <notices@card.example.com>', 'You made a $23.40 transaction', 'You made a $23.40 transaction with EXAMPLE NOODLE BAR on your card ending in 2222.'),
-  alertMessage('msg-payment', '2031-03-12T08:00:00', 'Example Bank <alerts@bank.example.com>', 'Payment received', 'We received your payment of $500.00. Thank you for your payment.'),
+  alertMessage('msg-grocery', '2026-09-26T09:00:00', 'Example Bank <alerts@bank.example.com>', 'Purchase alert', 'You spent $61.15 at EXAMPLE GROCERY with your card ending in 1111.'),
+  alertMessage('msg-noodle', '2026-09-25T19:30:00', 'Example Card Co <notices@card.example.com>', 'You made a $23.40 transaction', 'You made a $23.40 transaction with EXAMPLE NOODLE BAR on your card ending in 2222.'),
+  alertMessage('msg-payment', '2026-09-24T08:00:00', 'Example Bank <alerts@bank.example.com>', 'Payment received', 'We received your payment of $500.00. Thank you for your payment.'),
 ];
