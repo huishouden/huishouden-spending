@@ -15,7 +15,7 @@ import {
 } from './services/storage';
 import { aggregateMonthlySummary, MOCK_CARD_TRANSACTIONS } from './services/mockData';
 import { initAuth, getAccessToken, setCachedAccessToken, googleSignIn, googleSignInBasic, auth } from './services/auth';
-import { signInSilently } from '@piekstra/huishouden-pwa-kit/auth';
+import { signInSilently } from '@huishouden/pwa-kit/auth';
 import { findHouseholdId, subscribeTransactions } from './services/firestoreTransactions';
 import { getSpreadsheetRowsUniversal, parseSheetRowsToTransactions } from './services/sheets';
 import { AmbientDashboard } from './components/AmbientDashboard';

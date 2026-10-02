@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
-import { pwaApp } from '@piekstra/huishouden-pwa-kit/vite';
+import { pwaApp } from '@huishouden/pwa-kit/vite';
 
 const googleFontsCache = (urlPattern: RegExp, cacheName: string) => ({
   urlPattern,

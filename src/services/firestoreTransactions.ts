@@ -1,3 +1,4 @@
+import { findHousehold } from '@huishouden/pwa-kit/household';
 import {
   collection,
   getDocs,
@@ -32,12 +33,10 @@ function getDb(): Firestore {
 }
 
 /** The household whose members include this email, or null when there is none or it is unreadable. */
+/** The household every Huishouden app uses for this person (the kit's shared choice), or null. */
 export async function findHouseholdId(email: string): Promise<string | null> {
   try {
-    const snap = await getDocs(
-      query(collection(getDb(), 'households'), where('members', 'array-contains', email.toLowerCase()), limit(1)),
-    );
-    return snap.empty ? null : snap.docs[0].id;
+    return (await findHousehold(getDb(), email))?.id ?? null;
   } catch (err) {
     console.warn('Household lookup failed; falling back to the Sheets source.', err);
     return null;
