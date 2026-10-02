@@ -14,9 +14,9 @@ import {
   saveCachedTransactions,
 } from './services/storage';
 import { aggregateMonthlySummary, MOCK_CARD_TRANSACTIONS } from './services/mockData';
-import { initAuth, getAccessToken, setCachedAccessToken, googleSignIn, googleSignInBasic, auth } from './services/auth';
-import { signInSilently } from '@huishouden/pwa-kit/auth';
-import { findHouseholdId, subscribeTransactions } from './services/firestoreTransactions';
+import { initAuth, getAccessToken, setCachedAccessToken, googleSignIn, googleSignInBasic, logout, auth } from './services/auth';
+import { forgetSilentSignIn, signInSilently } from '@huishouden/pwa-kit/auth';
+import { findHouseholdId, saveProfile, subscribeTransactions } from './services/firestoreTransactions';
 import { getSpreadsheetRowsUniversal, parseSheetRowsToTransactions } from './services/sheets';
 import { AmbientDashboard } from './components/AmbientDashboard';
 import { InteractiveDashboard } from './components/InteractiveDashboard';
@@ -31,6 +31,9 @@ const FIRESTORE_SOURCE_ENABLED = import.meta.env.VITE_DATA_SOURCE !== 'sheets';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  /** False until Firebase has restored (or ruled out) the saved session. */
+  const [authResolved, setAuthResolved] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
   const [householdId, setHouseholdId] = useState<string | null>(null);
   const [hasGoogleAuth, setHasGoogleAuth] = useState(false);
   const [settings, setSettings] = useState<HouseholdSettings>(loadSettings);
@@ -63,6 +66,7 @@ export default function App() {
     const unsubscribe = initAuth(
       (user, token) => {
         setCurrentUser(user);
+        setAuthResolved(true);
         if (token) {
           setCachedAccessToken(token);
           setHasGoogleAuth(true);
@@ -72,6 +76,7 @@ export default function App() {
       },
       () => {
         setCurrentUser(null);
+        setAuthResolved(true);
         setCachedAccessToken(null);
         setHasGoogleAuth(false);
       }
@@ -129,6 +134,38 @@ export default function App() {
       },
     );
   }, [householdId, settings.ignoredKeywords]);
+
+  // Members' names and photos come from their own sign-ins (shown in the portal and the other apps).
+  useEffect(() => {
+    if (householdId && currentUser) saveProfile(householdId, currentUser).catch(() => {});
+  }, [householdId, currentUser]);
+
+  // The app bar's Sign in: plain Google sign-in (no Sheets scopes); the household lookup follows.
+  const handleSignIn = async () => {
+    setSigningIn(true);
+    try {
+      await googleSignInBasic();
+    } catch (err) {
+      const code = (err as { code?: string }).code;
+      if (code !== 'auth/popup-closed-by-user' && code !== 'auth/cancelled-popup-request') {
+        setSyncStatusToast({ message: "Couldn't sign in. Try again.", type: 'error' });
+        setTimeout(() => setSyncStatusToast(null), 3000);
+      }
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    await forgetSilentSignIn();
+    await logout();
+    // The household's transactions stay out of the cache once its member has signed out.
+    if (householdId) {
+      setHouseholdId(null);
+      setTransactions(MOCK_CARD_TRANSACTIONS);
+      saveCachedTransactions(MOCK_CARD_TRANSACTIONS);
+    }
+  };
 
   // Sync data from connected Google Sheet (supports interactive click-to-reconnect)
   const syncFromGoogleSheet = useCallback(
@@ -432,6 +469,10 @@ export default function App() {
           onReconnectGoogle={handleReconnectGoogle}
           isLiveHousehold={!!householdId}
           isSignedIn={!!currentUser}
+          user={authResolved ? currentUser : undefined}
+          signingIn={signingIn}
+          onSignIn={handleSignIn}
+          onSignOut={handleSignOut}
           onEnterAmbient={() => setIsAmbientMode(true)}
           onOpenSettings={() => setIsSettingsModalOpen(true)}
           onOpenSheetSync={() => setIsSheetModalOpen(true)}

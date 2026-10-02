@@ -1,4 +1,5 @@
-import { findHousehold } from '@huishouden/pwa-kit/household';
+import { findHousehold, saveMyProfile } from '@huishouden/pwa-kit/household';
+import type { User } from 'firebase/auth';
 import {
   collection,
   getDocs,
@@ -32,7 +33,6 @@ function getDb(): Firestore {
   return db;
 }
 
-/** The household whose members include this email, or null when there is none or it is unreadable. */
 /** The household every Huishouden app uses for this person (the kit's shared choice), or null. */
 export async function findHouseholdId(email: string): Promise<string | null> {
   try {
@@ -41,6 +41,11 @@ export async function findHouseholdId(email: string): Promise<string | null> {
     console.warn('Household lookup failed; falling back to the Sheets source.', err);
     return null;
   }
+}
+
+/** Records this member's name and photo on the household, for the portal and the other apps. */
+export function saveProfile(householdId: string, user: User): Promise<void> {
+  return saveMyProfile(getDb(), householdId, user);
 }
 
 /** Streams the household's transactions; returns the unsubscribe function. */
