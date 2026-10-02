@@ -1,19 +1,24 @@
-# Household spending
+# Huishouden Spending
 
-Where the household's money goes: this month against the budget, by category and by card, with an
-ambient Dock Mode for a tablet on its stand. Installable as an app on tablets, phones and laptops.
-Live at https://huishouden-spending.web.app, also linked from the
-[Huishouden portal](https://huishouden-piekstra.web.app).
+Where the household's money goes. Open it and the first thing you see answers "how are we doing
+this month?": what has been spent, what is left of the budget and whether that is on track, readable
+from across the room on the kitchen tablet. Below it, where the money went and the latest
+purchases; tap one to put it in another category. Live at https://huishouden-spending.web.app, also
+linked from the [Huishouden portal](https://huishouden-piekstra.web.app).
 
-| Dashboard | Dock Mode |
+| This month | On a phone |
 |---|---|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Dock Mode](docs/screenshots/dock-mode.png) |
+| ![This month](docs/screenshots/dashboard.png) | ![On a phone](docs/screenshots/phone-dashboard.png) |
 
-| Settings: the household's cards | Importing a statement |
+| One category | A purchase |
 |---|---|
-| ![Settings](docs/screenshots/settings-cards.png) | ![Import](docs/screenshots/import-statement.png) |
+| ![One category](docs/screenshots/category.png) | ![A purchase](docs/screenshots/purchase.png) |
 
-_Screenshots of the live site with its built-in sample household (invented cards and shops),
+| Add spending | Settings |
+|---|---|
+| ![Add spending](docs/screenshots/add-spending.png) | ![Settings](docs/screenshots/settings-budget.png) |
+
+_Screenshots of the live site with its built-in sample household (invented cards and amounts),
 refreshed by CI after each deploy._
 
 ## How a household uses it
@@ -25,17 +30,19 @@ household's data in Firestore under `households/{id}/`:
 | What | How | Stored in |
 |---|---|---|
 | Cards: name, last 4 digits, bank, alert words | Settings > Cards | `spendingCards` |
-| Category rules: "the shop's name contains X → category Y" | Settings > Categories; starts with a default set; "use this category for every charge like it" on any transaction | `spendingRules` |
-| Budget, currency, words never counted (rent, card payments), Gmail labels | Settings > Budget, Settings > Email and Sheet | `spendingSettings/main` |
-| Statement files | Import a statement: any bank's or card's CSV; columns and sign found from the file, remembered per card | `spendingTransactions` (`source: statement`) |
-| Card purchase alert emails | Check email: reads the member's own Gmail (read-only, asked for once in a popup; Google warns the app is unverified the first time), searching each card's alert words and the household's labels. Runs again on open while access is fresh (an hour); never opens a popup by itself | `spendingTransactions` (`source: alert`) |
+| Category rules: "the shop's name contains X → category Y" | Settings > Categories; starts with a default set; "Always put <shop> in <category>" on any purchase | `spendingRules` |
+| Budget (none: compared with last month), currency, words never counted (rent, card payments), Gmail labels | Settings > Budget, Settings > Email | `spendingSettings/main` |
+| Statement files | Add spending > Import a statement: any bank's or card's CSV; columns and sign found from the file, remembered per card | `spendingTransactions` (`source: statement`) |
+| Card purchase alert emails | Add spending > Check email: reads the member's own Gmail (read-only, asked for once in a popup; Google warns the app is unverified the first time), searching each card's alert words and the household's labels. Runs again on open while access is fresh (an hour); never opens a popup by itself | `spendingTransactions` (`source: alert`) |
 
 Every import is categorised by the household's rules and de-duplicated against what is there: the
 same card and amount within 3 days with a similar description is the same purchase (the Apps
 Script's rule, plus the description check). A statement row replaces the email alert for the same
 purchase, since the statement has the real date and the bank's name for the shop.
 
-Signed out, the app shows an invented sample household with the same screens, kept in memory.
+Signed out, the app shows an invented sample household with the same screens, kept in memory and on
+its own clock (27 September 2026), so every screenshot shows the same month. Signed in to an account
+that is in no household yet, it points to the Huishouden home screen to start one or be invited.
 
 ## Moving from the Sheet and its Apps Script (legacy)
 
@@ -43,8 +50,8 @@ Households that started with a Google Sheet and `apps-script/` can keep it runni
 writes `spendingTransactions` with its owner's credentials, and the app shows those alongside
 everything members add. To switch:
 
-1. Open Spending signed in as a household member. Settings > Email and Sheet > **Bring settings from
-   a Google Sheet**: paste the Sheet's link and Read the Sheet (read-only access, asked once), or
+1. Open Spending signed in as a household member. Settings > Email > **Bring settings from a Google
+   Sheet**: paste the Sheet's link and Read the Sheet (read-only access, asked once), or
    paste the rows of the Cards, Categories and Alert labels tabs. Bring them in: cards (with their
    Alert source as the bank and Alert keywords as alert words), category rules and labels.
 2. Settings > Cards: add each card's alert sender address to its alert words (the script searched

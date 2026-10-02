@@ -2,7 +2,11 @@ import { useMemo, useRef, useState } from 'react';
 import { FileUp, Trash2 } from 'lucide-react';
 import type { SpendingStore } from '../data/store';
 import { cardFromFileName, detectMapping, mappingFits, parseStatement, readCsv, type CsvFile, type CsvMapping, type StatementRow } from '../lib/csvImport';
-import { Dialog, ErrorNotice, ghostButton, hintClass, iconButton, inputClass, labelClass, primaryButton, secondaryButton } from './ui';
+import { Dialog, ghostButton, iconButton, inputClass, primaryButton, secondaryButton, selectClass } from '@huishouden/pwa-kit/react/ui';
+import { shortDate } from '@huishouden/pwa-kit/time';
+import { cents, money } from '../lib/month';
+
+const labelClass = 'mb-1.5 block text-sm font-medium text-stone-700';
 
 /**
  * Statement files (CSV) from any bank or card into the household's transactions. Columns are found
@@ -26,15 +30,12 @@ interface Loaded {
 }
 
 interface Props {
-  isOpen: boolean;
   onClose: () => void;
   store: SpendingStore;
   onDone: (message: string) => void;
 }
 
-const money = (n: number, symbol: string) => `${n < 0 ? '−' : ''}${symbol}${Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
+export function ImportDialog({ onClose, store, onDone }: Props) {
   const [files, setFiles] = useState<Loaded[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -62,8 +63,6 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
     added: plan.create.filter((r) => r.group === i).length,
     replaced: plan.replace.filter((r) => r.tx.group === i).length,
   });
-
-  if (!isOpen) return null;
 
   const load = async (list: FileList | null) => {
     setError(null);
@@ -113,14 +112,14 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
         batches.push({ rows: parsed[i]!.rows, remember: { cardId, mapping: f.mapping! } });
       }
       const r = await store.actions.importStatements(batches);
-      const parts = [`Added ${r.added} transaction${r.added === 1 ? '' : 's'}`];
+      const parts = [`Added ${r.added} purchase${r.added === 1 ? '' : 's'}`];
       if (r.replaced) parts.push(`${r.replaced} email alert${r.replaced === 1 ? '' : 's'} replaced by the statement`);
       if (r.duplicates) parts.push(`${r.duplicates} already here`);
       onDone(parts.join('; '));
       setFiles([]);
       onClose();
     } catch (e) {
-      setError((e as Error).message || "Couldn't add the transactions.");
+      setError((e as Error).message || "Couldn't add the purchases.");
     } finally {
       setBusy(false);
     }
@@ -132,24 +131,26 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
         Cancel
       </button>
       <button type="button" className={primaryButton} disabled={!ready || busy || total === 0} onClick={save}>
-        {total === 0 && ready ? 'Nothing new to add' : `Add ${total} transaction${total === 1 ? '' : 's'}`}
+        {total === 0 && ready ? 'Nothing new to add' : `Add ${total} purchase${total === 1 ? '' : 's'}`}
       </button>
     </>
   );
 
   return (
-    <Dialog title="Import a statement" onClose={onClose} footer={footer} wide>
+    <Dialog title="Import a statement" onClose={onClose} footer={footer}>
       <div className="space-y-5">
-        <p className="text-stone-600 dark:text-stone-300">
-          Download your card's or bank's activity as a CSV file from its website, then choose it here. Spending finds the date, description and amount, skips card payments and the words you never count, and leaves out anything already here.
-        </p>
-        <label className="flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-stone-200 p-5 text-center hover:border-forest-400 dark:border-forest-600">
-          <FileUp size={24} className="text-forest-700 dark:text-forest-300" />
+        <p className="text-stone-600">Download your card’s or bank’s activity as a CSV file from its website, then choose it here. Anything already here is left out.</p>
+        <label className="flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-stone-200 p-5 text-center hover:border-forest-400">
+          <FileUp size={24} className="text-forest-700" />
           <span className="font-medium">Choose statement files</span>
-          <span className="text-sm text-stone-600 dark:text-stone-300">CSV, one or more</span>
+          <span className="text-sm text-stone-600">CSV, one or more</span>
           <input ref={input} type="file" accept=".csv,text/csv" multiple className="sr-only" aria-label="Statement files" onChange={(e) => void load(e.target.files)} />
         </label>
-        {error && <ErrorNotice message={error} />}
+        {error && (
+          <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-red-700">
+            {error}
+          </p>
+        )}
 
         {files.map((f, i) => {
           const result = parsed[i];
@@ -160,7 +161,7 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
               <label className={labelClass} htmlFor={`${f.key}-${key}`}>
                 {label}
               </label>
-              <select id={`${f.key}-${key}`} className={inputClass} value={(f.mapping?.[key] as string | undefined) ?? ''} onChange={(e) => setMapping(i, { [key]: e.target.value || undefined })}>
+              <select id={`${f.key}-${key}`} className={selectClass} value={(f.mapping?.[key] as string | undefined) ?? ''} onChange={(e) => setMapping(i, { [key]: e.target.value || undefined })}>
                 <option value="">{optional ? 'None' : 'Choose a column'}</option>
                 {cols.map((c) => (
                   <option key={c} value={c}>
@@ -172,7 +173,7 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
           );
           const split = !!f.mapping && !f.mapping.amount && (!!f.mapping.debit || !!f.mapping.credit);
           return (
-            <section key={f.key} aria-label={f.fileName} className="space-y-4 rounded-2xl border border-stone-200 p-4 dark:border-forest-600">
+            <section key={f.key} aria-label={f.fileName} className="space-y-4 rounded-2xl border border-stone-200 p-4">
               <div className="flex items-center gap-3">
                 <h3 className="min-w-0 flex-1 truncate font-semibold">{f.fileName}</h3>
                 <button type="button" className={iconButton} aria-label={`Remove ${f.fileName}`} onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))}>
@@ -185,7 +186,7 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
                   <label className={labelClass} htmlFor={`${f.key}-card`}>
                     Card
                   </label>
-                  <select id={`${f.key}-card`} className={inputClass} value={f.cardId} onChange={(e) => update(i, { cardId: e.target.value })}>
+                  <select id={`${f.key}-card`} className={selectClass} value={f.cardId} onChange={(e) => update(i, { cardId: e.target.value })}>
                     <option value="" disabled>
                       Choose the card
                     </option>
@@ -216,7 +217,7 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
                 )}
               </div>
 
-              <details open={!f.mapping || f.missing.length > 0} className="rounded-xl bg-stone-100 px-4 py-3 dark:bg-forest-900">
+              <details open={!f.mapping || f.missing.length > 0} className="rounded-xl bg-stone-100 px-4 py-3">
                 <summary className="min-h-8 cursor-pointer font-medium">
                   {f.mapping && f.missing.length === 0
                     ? `Columns: ${f.mapping.date}, ${f.mapping.description}, ${f.mapping.amount ?? `${f.mapping.debit} and ${f.mapping.credit}`}${f.mapping.amount ? `; purchases are ${f.mapping.purchases}` : ''}`
@@ -252,7 +253,7 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
                     Dates are day first (31/01/2031)
                   </label>
                 </div>
-                <p className={hintClass}>These columns are remembered for the card.</p>
+                <p className="mt-2 text-sm text-stone-600">These columns are remembered for the card.</p>
               </details>
 
               {result && (
@@ -266,20 +267,20 @@ export function ImportDialog({ isOpen, onClose, store, onDone }: Props) {
                   </p>
                   <table className="w-full text-sm">
                     <caption className="sr-only">First rows of {f.fileName}</caption>
-                    <tbody className="divide-y divide-stone-200 dark:divide-forest-600">
+                    <tbody className="divide-y divide-stone-200">
                       {result.rows.slice(0, 5).map((r) => (
                         <tr key={r.row}>
-                          <td className="py-1.5 pr-3 text-stone-600 tabular-nums dark:text-stone-300">{r.date}</td>
+                          <td className="py-1.5 pr-3 whitespace-nowrap text-stone-600 tabular-nums">{shortDate(r.date)}</td>
                           <td className="py-1.5 pr-3">{r.description}</td>
-                          <td className="py-1.5 pr-3 text-stone-600 dark:text-stone-300">{r.category}</td>
-                          <td className="py-1.5 text-right tabular-nums">{money(r.amount, store.settings.currencySymbol)}</td>
+                          <td className="py-1.5 pr-3 text-stone-600">{r.category}</td>
+                          <td className="py-1.5 text-right tabular-nums">{money(cents(r.amount), store.settings.currencySymbol)}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
               )}
-              {!cardName(f) && <p className="text-sm text-terracotta-dark dark:text-terracotta-light">Choose the card this file is for.</p>}
+              {!cardName(f) && <p className="text-sm text-terracotta-dark">Choose the card this file is for.</p>}
             </section>
           );
         })}

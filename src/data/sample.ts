@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
 import type { Mailbox, MailMessage } from '../lib/mail';
-import { MOCK_CARD_TRANSACTIONS } from '../services/mockData';
 import { gmailMailbox } from '@huishouden/pwa-kit/gmail';
 import { cardDoc, DEFAULT_SPEND_SETTINGS, ruleDoc, type SpendSettings } from './model';
 import { applyWrites, DEFAULT_RULE_DOCS, derive, emptyDocs, makeActions, type Docs, type SpendingStore } from './store';
@@ -13,28 +12,63 @@ import { applyWrites, DEFAULT_RULE_DOCS, derive, emptyDocs, makeActions, type Do
 
 const SAMPLE_ME = 'sample@example.com';
 
+/** Sunday 27 September 2026, 10:00 local time. The sample's clock starts here, so its month always reads the same. */
+export const SAMPLE_NOW = new Date(2026, 8, 27, 10, 0).getTime();
+
+/** Date, shop, amount, category, card. */
+const SAMPLE_PURCHASES: [string, string, number, string, string][] = [
+  ['2026-09-26', "Trader Joe's", 142.8, 'Groceries', 'Example Visa'],
+  ['2026-09-25', 'The Olive Branch Bistro', 88.5, 'Dining & Food', 'Example Rewards Card'],
+  ['2026-09-24', 'Costco Wholesale', 284.15, 'Groceries', 'Example Visa'],
+  ['2026-09-23', 'Chevron Fuel', 52.4, 'Gas & Transport', 'Example Visa'],
+  ['2026-09-22', 'Target Store #1128', 76.9, 'Shopping & Retail', 'Example Visa'],
+  ['2026-09-20', 'Home Depot', 135.2, 'Home & Garden', 'Example Visa'],
+  ['2026-09-19', 'Sushi Blossom', 114, 'Dining & Food', 'Example Rewards Card'],
+  ['2026-09-18', 'Amazon.com', 45.6, 'Shopping & Retail', 'Example Visa'],
+  ['2026-09-16', 'Whole Foods Market', 98.4, 'Groceries', 'Example Visa'],
+  ['2026-09-15', 'Netflix Subscription', 22.99, 'Subscriptions & Tech', 'Example Everyday Card'],
+  ['2026-09-14', 'Spotify Family', 19.99, 'Subscriptions & Tech', 'Example Everyday Card'],
+  ['2026-09-12', 'Blue Bottle Coffee', 16.5, 'Dining & Food', 'Example Rewards Card'],
+  ['2026-09-10', 'CVS Pharmacy', 38.75, 'Health & Personal Care', 'Example Everyday Card'],
+  ['2026-09-08', 'Shell Oil', 48.2, 'Gas & Transport', 'Example Visa'],
+  ['2026-09-06', 'Albertsons Grocers', 112.35, 'Groceries', 'Example Visa'],
+  ['2026-09-04', 'Chipotle Mexican Grill', 34.6, 'Dining & Food', 'Example Rewards Card'],
+  ['2026-09-02', 'Apple Services', 14.98, 'Subscriptions & Tech', 'Example Visa'],
+  ['2026-09-01', 'Cinemark Theatres', 42, 'Entertainment', 'Example Rewards Card'],
+  ['2026-08-30', 'Costco Wholesale', 312.45, 'Groceries', 'Example Visa'],
+  ['2026-08-28', "Trader Joe's", 154.2, 'Groceries', 'Example Visa'],
+  ['2026-08-25', 'Prime Steakhouse', 185, 'Dining & Food', 'Example Rewards Card'],
+  ['2026-08-22', 'Target', 118.4, 'Shopping & Retail', 'Example Visa'],
+  ['2026-08-18', 'Delta Airlines', 462.8, 'Travel & Lodging', 'Example Rewards Card'],
+  ['2026-08-15', 'Chevron Gas', 54, 'Gas & Transport', 'Example Visa'],
+  ['2026-08-12', 'Online Marketplace', 89.95, 'Shopping & Retail', 'Example Visa'],
+  ['2026-08-10', 'Whole Foods Market', 122.5, 'Groceries', 'Example Visa'],
+  ['2026-08-07', 'Thai Basil Kitchen', 64.3, 'Dining & Food', 'Example Rewards Card'],
+  ['2026-08-04', 'Home Depot', 168, 'Home & Garden', 'Example Visa'],
+  ['2026-08-01', 'Netflix + Spotify + Apple', 57.96, 'Subscriptions & Tech', 'Example Everyday Card'],
+  ['2026-07-28', 'Marriott Resort', 540, 'Travel & Lodging', 'Example Rewards Card'],
+  ['2026-07-24', 'Costco Wholesale', 275.6, 'Groceries', 'Example Visa'],
+  ['2026-07-19', "Trader Joe's", 139.1, 'Groceries', 'Example Visa'],
+  ['2026-07-14', 'Local Artisan Pizzeria', 58.7, 'Dining & Food', 'Example Rewards Card'],
+  ['2026-07-10', 'REI Outdoor Goods', 145, 'Shopping & Retail', 'Example Visa'],
+  ['2026-07-05', 'Chevron Fuel', 61.2, 'Gas & Transport', 'Example Visa'],
+];
+
 export const SAMPLE_CARDS = [
   { id: 'c-sample-1', name: 'Example Visa', last4: '1111', issuer: 'Example Bank', alertWords: ['alerts@bank.example.com'] },
   { id: 'c-sample-2', name: 'Example Rewards Card', last4: '2222', issuer: 'Example Card Co', alertWords: ['notices@card.example.com', 'rewards card'] },
   { id: 'c-sample-3', name: 'Example Everyday Card', last4: '3333', issuer: 'Example Bank', alertWords: ['alerts@bank.example.com'] },
 ];
 
-export function sampleDocs(): Docs {
+export function sampleDocs(now = SAMPLE_NOW): Docs {
   const docs = emptyDocs();
-  for (const t of MOCK_CARD_TRANSACTIONS) {
-    docs.spendingTransactions.set(t.id, {
-      date: t.date,
-      description: t.merchant,
-      amount: t.amount,
-      category: t.category,
-      card: t.cardName,
-      type: t.amount < 0 ? 'Return' : 'Sale',
-      source: 'statement',
-    });
-  }
+  SAMPLE_PURCHASES.forEach(([date, description, amount, category, card], i) => {
+    docs.spendingTransactions.set(`tx-sample-${i}`, { date, description, amount, category, card, type: amount < 0 ? 'Return' : 'Sale', source: 'statement' });
+  });
   for (const { id, ...c } of SAMPLE_CARDS) docs.spendingCards.set(id, cardDoc(c, SAMPLE_ME, 0));
   for (const { id, ...r } of DEFAULT_RULE_DOCS) docs.spendingRules.set(id, ruleDoc(r, SAMPLE_ME, 0));
-  docs.settings = { ...DEFAULT_SPEND_SETTINGS, updatedAt: 0, updatedBy: SAMPLE_ME };
+  // Email was checked two hours before the sample's clock starts.
+  docs.settings = { ...DEFAULT_SPEND_SETTINGS, emailCheckedAt: now - 2 * 3_600_000, emailCheckedBy: SAMPLE_ME, updatedAt: 0, updatedBy: SAMPLE_ME };
   return docs;
 }
 
@@ -71,8 +105,8 @@ export function sampleMailbox(now = Date.now()): Mailbox {
 }
 
 /** The sample household's store. Browser tests can point it at a stubbed Gmail with window.__gmailTestToken. */
-export function useSampleStore(): SpendingStore & { reset: () => void } {
-  const [docs, setDocs] = useState<Docs>(sampleDocs);
+export function useSampleStore(read: () => number = Date.now): SpendingStore {
+  const [docs, setDocs] = useState<Docs>(() => sampleDocs(read()));
   const docsRef = useRef(docs);
   docsRef.current = docs;
   const seen = useRef(new Set<string>());
@@ -87,15 +121,16 @@ export function useSampleStore(): SpendingStore & { reset: () => void } {
           docsRef.current = applyWrites(docsRef.current, writes);
           setDocs(docsRef.current);
         },
+        read,
       ),
-    // The fallback never changes for the sample.
+    // The fallback and the clock never change for the sample.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
   const mail = useMemo(() => {
     const box = () => {
       const token = typeof window !== 'undefined' ? window.__gmailTestToken : undefined;
-      return token ? gmailMailbox(token) : sampleMailbox();
+      return token ? gmailMailbox(token) : sampleMailbox(read());
     };
     return {
       stored: box,
@@ -105,10 +140,5 @@ export function useSampleStore(): SpendingStore & { reset: () => void } {
     };
   }, []);
   const derived = useMemo(() => derive(docs, settings), [docs, settings]);
-  const reset = () => {
-    docsRef.current = sampleDocs();
-    seen.current.clear();
-    setDocs(docsRef.current);
-  };
-  return { live: false, ready: true, me: SAMPLE_ME, ...derived, actions, mail, reset };
+  return { live: false, ready: true, me: SAMPLE_ME, ...derived, actions, mail };
 }
