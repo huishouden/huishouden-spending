@@ -6,7 +6,7 @@ import { refusal } from '@huishouden/pwa-kit/roles';
 import { seesMoney } from './lib/access';
 import { popupCancelled } from '@huishouden/pwa-kit/feedback';
 import { ClockProvider } from '@huishouden/pwa-kit/react/clock';
-import { cardClass, primaryButton, useToast } from '@huishouden/pwa-kit/react/ui';
+import { cardClass, primaryButton, SampleBanner, useToast } from '@huishouden/pwa-kit/react/ui';
 import { auth, googleClientId, signInWithGoogle, signOutEverywhere } from './services/auth';
 import { getDb } from './services/firestoreTransactions';
 import { useLiveStore } from './data/useLiveStore';
@@ -96,12 +96,7 @@ function SampleApp({ frame, signInError }: { frame: FrameProps; signInError: str
   const read = useCallback(() => SAMPLE_NOW + (Date.now() - loadedAt), [loadedAt]);
   const toasts = useToast();
   const store = useSampleStore(read);
-  const banner = (
-    <div className={`${cardClass} flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2.5`} role="note">
-      <span className="rounded-full bg-terracotta-light px-3 py-1 text-sm font-semibold text-terracotta-dark">Sample data</span>
-      <p className="min-w-0 flex-1 text-base text-stone-600">{signInError ?? 'An invented household. Nothing is saved. Sign in to see your household’s own spending.'}</p>
-    </div>
-  );
+  const banner = <SampleBanner text="An invented household. Nothing is saved. Sign in to see your household’s own spending." notice={signInError ?? undefined} />;
   return (
     <ClockProvider read={read}>
       <SpendingApp store={store} frame={frame} toasts={toasts} banner={banner} />
