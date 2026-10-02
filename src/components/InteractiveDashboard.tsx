@@ -42,6 +42,9 @@ interface InteractiveDashboardProps {
   sheetConfig: SheetConfig | null;
   hasGoogleAuth?: boolean;
   onReconnectGoogle?: () => void;
+  /** Live household data from Firestore (signed-in member); hides the sample-data banner. */
+  isLiveHousehold?: boolean;
+  isSignedIn?: boolean;
   onEnterAmbient: () => void;
   onOpenSettings: () => void;
   onOpenSheetSync: () => void;
@@ -66,6 +69,8 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
   sheetConfig,
   hasGoogleAuth = false,
   onReconnectGoogle,
+  isLiveHousehold = false,
+  isSignedIn = false,
   onEnterAmbient,
   onOpenSettings,
   onOpenSheetSync,
@@ -614,13 +619,11 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
 
       {/* Main Content Area */}
       <main className="flex-1 p-4 sm:p-6 lg:p-10 space-y-6 lg:space-y-8 max-w-7xl mx-auto w-full">
-        {/* Sample Data Alert Banner - Shown whenever no Google Sheet is connected */}
-        {!sheetConfig && (
+        {/* Sample-data banner: shown until this device has live household data or a connected Sheet. */}
+        {!sheetConfig && !isLiveHousehold && (
           <div
-            className={`p-5 sm:p-6 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn ${
-              isLight
-                ? 'bg-white border-terracotta/30 text-stone-800 shadow-sm shadow-stone-900/5'
-                : 'bg-forest-800 border-terracotta/40 text-stone-100'
+            className={`p-5 sm:p-6 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
+              isLight ? 'bg-white border-stone-200 text-stone-800 shadow-sm' : 'bg-forest-800 border-forest-700 text-stone-100'
             }`}
           >
             <div className="flex items-start sm:items-center gap-3.5">
@@ -629,23 +632,32 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
               </div>
               <div>
                 <div className={`text-sm sm:text-base font-semibold flex items-center gap-2 ${isLight ? 'text-forest-700' : 'text-cream'}`}>
-                  <span>Currently Showing Sample Demo Data</span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-terracotta-light text-terracotta-dark dark:bg-terracotta/25 dark:text-terracotta-light">
-                    Demo
-                  </span>
+                  <span>Showing sample data</span>
                 </div>
                 <p className={`text-xs mt-0.5 ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
-                  Your Google Sheet is not connected yet on this tablet. Tap the button to select or link your Google Drive spreadsheet to see your real Chase &amp; Robinhood credit card charges.
+                  {isSignedIn
+                    ? "You're signed in but not in a household yet. Ask a member to invite you in Huishouden, or connect a Google Sheet."
+                    : 'Sign in with the Google account your household uses to see your card spending.'}
                 </p>
               </div>
             </div>
-            <button
-              onClick={onOpenSheetSync}
-              className={`w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium flex ${isLight ? 'bg-forest-700 hover:bg-forest-600 text-white' : 'bg-forest-400 hover:bg-forest-300 text-forest-900'} items-center justify-center gap-2 transition cursor-pointer shrink-0`}
-            >
-              <FileSpreadsheet className="w-4 h-4" />
-              <span>Connect My Google Sheet</span>
-            </button>
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto shrink-0">
+              {!isSignedIn && (
+                <button
+                  onClick={onReconnectGoogle}
+                  className={`px-5 py-2.5 rounded-xl text-sm font-medium flex ${isLight ? 'bg-forest-700 hover:bg-forest-600 text-white' : 'bg-forest-400 hover:bg-forest-300 text-forest-900'} items-center justify-center gap-2 transition cursor-pointer`}
+                >
+                  <span>Sign in with Google</span>
+                </button>
+              )}
+              <button
+                onClick={onOpenSheetSync}
+                className={`px-4 py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition cursor-pointer ${isLight ? 'text-stone-700 hover:bg-stone-100' : 'text-stone-200 hover:bg-forest-700'}`}
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                <span>Connect a Google Sheet</span>
+              </button>
+            </div>
           </div>
         )}
         {/* Tablet & Sheet Quick Setup Bar */}
