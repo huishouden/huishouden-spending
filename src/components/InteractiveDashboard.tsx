@@ -31,7 +31,11 @@ import {
   Upload,
   Info,
 } from 'lucide-react';
+import { AppBar, type AppBarUser } from '@huishouden/pwa-kit/react/app-bar';
 import { usePWAInstall } from '../usePWAInstall';
+import { PORTAL_URL } from '../config/portal';
+
+const VERSION = `${import.meta.env.VITE_APP_VERSION} (${import.meta.env.VITE_BUILD_SHA})`;
 
 interface InteractiveDashboardProps {
   monthlySummary: MonthlySummary;
@@ -45,6 +49,11 @@ interface InteractiveDashboardProps {
   /** Live household data from Firestore (signed-in member); hides the sample-data banner. */
   isLiveHousehold?: boolean;
   isSignedIn?: boolean;
+  /** Undefined while the session is being restored. */
+  user: AppBarUser | null | undefined;
+  signingIn?: boolean;
+  onSignIn: () => void;
+  onSignOut: () => void;
   onEnterAmbient: () => void;
   onOpenSettings: () => void;
   onOpenSheetSync: () => void;
@@ -71,6 +80,10 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
   onReconnectGoogle,
   isLiveHousehold = false,
   isSignedIn = false,
+  user,
+  signingIn = false,
+  onSignIn,
+  onSignOut,
   onEnterAmbient,
   onOpenSettings,
   onOpenSheetSync,
@@ -141,37 +154,30 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
         isLight ? 'bg-cream text-stone-800' : 'bg-forest-900 text-stone-100'
       }`}
     >
-      {/* Top Tablet Navigation Header */}
-      <header
-        className={`sticky top-0 z-30 px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between border-b ${
-          isLight
-            ? 'bg-cream/90 border-stone-200/70'
-            : 'bg-forest-900/90 border-forest-800'
-        }`}
+      {/* The kit's Huishouden app bar: the month switcher as its nav, the app's buttons beside the account. */}
+      <AppBar
+        app="Spending"
+        glyph="card"
+        portalUrl={PORTAL_URL}
+        version={VERSION}
+        theme={isLight ? 'light' : 'dark'}
+        user={user}
+        signingIn={signingIn}
+        onSignIn={onSignIn}
+        onSignOut={onSignOut}
       >
-        {/* Left: Branding & Month Selector */}
-        <div className="flex items-center gap-4 sm:gap-6">
-          {/* Huishouden frame: family logo back to the portal, suite name over the app name. */}
-          <a href="https://huishouden-piekstra.web.app" className="flex items-center gap-2.5 rounded-xl" aria-label="Huishouden home">
-            <img src="/icon.svg" alt="" className="w-10 h-10 rounded-xl" />
-            <div>
-              <p className={`text-xs font-medium ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>Huishouden</p>
-              <h1 className={`text-lg font-bold tracking-tight leading-tight ${isLight ? 'text-forest-700' : 'text-cream'}`}>
-                Spending
-              </h1>
-            </div>
-          </a>
-
           {/* Month Switcher Carousel */}
           <div
-            className={`flex items-center rounded-xl p-1 border ${
+            slot="nav"
+            className={`flex w-full sm:w-auto items-center justify-between rounded-xl p-1 border ${
               isLight ? 'bg-white border-stone-200' : 'bg-forest-800 border-forest-700'
             }`}
           >
             <button
               onClick={goToPrevMonth}
               disabled={!hasPrevMonth}
-              className={`p-1.5 rounded-lg transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
+              aria-label="Previous month"
+              className={`min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
                 isLight ? 'text-stone-600 hover:text-forest-700 hover:bg-stone-100' : 'text-stone-300 hover:text-white hover:bg-forest-700'
               }`}
             >
@@ -187,22 +193,22 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             <button
               onClick={goToNextMonth}
               disabled={!hasNextMonth}
-              className={`p-1.5 rounded-lg transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
+              aria-label="Next month"
+              className={`min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
                 isLight ? 'text-stone-600 hover:text-forest-700 hover:bg-stone-100' : 'text-stone-300 hover:text-white hover:bg-forest-700'
               }`}
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-        </div>
-
         {/* Right: Actions (Clean Top Bar with Refresh, Dock Mode, and Unified Setup Menu) */}
-        <div className="flex items-center gap-2 sm:gap-3 relative">
+        <div slot="actions" className="flex items-center gap-2 sm:gap-3 relative">
           {/* Quick Refresh from Google Sheets */}
           <button
             onClick={onRefresh}
             disabled={isRefreshing}
-            className={`p-2 rounded-xl border transition cursor-pointer relative ${
+            aria-label="Refresh"
+            className={`min-h-11 min-w-11 inline-flex items-center justify-center rounded-xl border transition cursor-pointer relative ${
               sheetConfig && !hasGoogleAuth
                 ? isLight
                   ? 'bg-terracotta-light/40 hover:bg-terracotta-light/70 text-terracotta-dark border-terracotta/40'
@@ -226,7 +232,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
           {/* Ambient Hub Mode Button (For Pixel Tablet on Dock) */}
           <button
             onClick={onEnterAmbient}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer flex items-center gap-1.5 shrink-0 ${
+            className={`min-h-11 px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer flex items-center gap-1.5 shrink-0 ${
               isLight ? 'bg-forest-700 hover:bg-forest-600 text-white' : 'bg-forest-400 hover:bg-forest-300 text-forest-900'
             }`}
           >
@@ -240,7 +246,8 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             <button
               onClick={() => setIsMenuOpen((prev) => !prev)}
               aria-label="Configuration and Settings Menu"
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition cursor-pointer ${
+              aria-expanded={isMenuOpen}
+              className={`min-h-11 flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition cursor-pointer ${
                 isMenuOpen
                   ? isLight
                     ? 'bg-forest-50 border-forest-300 text-forest-700'
@@ -615,7 +622,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             )}
           </div>
         </div>
-      </header>
+      </AppBar>
 
       {/* Main Content Area */}
       <main className="flex-1 p-4 sm:p-6 lg:p-10 space-y-6 lg:space-y-8 max-w-7xl mx-auto w-full">
