@@ -14,6 +14,7 @@
     "script:pull": "clasp pull",
     "script:push": "bun test apps-script && clasp push --force",
     "e2e": "playwright test e2e/smoke.spec.ts e2e/household.spec.ts",
+    "e2e:signed-in": "playwright test e2e/signed-in.spec.ts",
     "prepare": "git config core.hooksPath .githooks",
     "screenshots": "playwright test e2e/screenshots.spec.ts",
     "env:pull": "gh variable list --json name,value -q '.[] | select(.name|startswith(\"VITE_\")) | \"\\(.name)=\\(.value)\"' > .env.local && echo 'wrote .env.local'"
@@ -29,7 +30,7 @@
   },
   "devDependencies": {
     "@google/clasp": "^3.4.1",
-    "@huishouden/pwa-kit": "github:huishouden/pwa-kit#v0.24.1",
+    "@huishouden/pwa-kit": "github:huishouden/pwa-kit#v0.29.0",
     "@playwright/test": "^1.63.0",
     "@types/bun": "^1.4.2",
     "@types/node": "^22.14.0",
