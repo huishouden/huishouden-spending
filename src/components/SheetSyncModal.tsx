@@ -209,7 +209,7 @@ export const SheetSyncModal: React.FC<SheetSyncModalProps> = ({
 
     const config: SheetConfig = {
       spreadsheetId: selectedSheetId,
-      spreadsheetTitle: spreadsheetMeta?.title || 'Household Card Spend',
+      spreadsheetTitle: spreadsheetMeta?.title || 'Huishouden Spending',
       sheetName: selectedTabTitle,
       lastSyncedAt: new Date().toISOString(),
       mapping: columnMapping,
@@ -223,7 +223,7 @@ export const SheetSyncModal: React.FC<SheetSyncModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 animate-fadeIn">
       <div
         className={`border rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden transition-colors ${
           isLight ? 'bg-white border-stone-200 text-stone-900' : 'bg-forest-800 border-forest-700 text-stone-100'

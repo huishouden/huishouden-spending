@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@piekstra/pwa-kit/theme.css";
+@import "@piekstra/huishouden-pwa-kit/theme.css";
 
 /* The app toggles its own theme (settings.theme), so dark: follows the .dark class on the root, not the OS. */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -19,20 +19,19 @@
   --color-cream: var(--hh-cream);
   --color-terracotta: var(--hh-terracotta);
   --color-terracotta-light: var(--hh-terracotta-light);
-  /* Kit terracotta is 3.6:1 on white; text uses this darker step to stay above 4.5:1. */
-  --color-terracotta-dark: #94452f;
+  --color-terracotta-dark: var(--hh-terracotta-dark);
   --font-sans: var(--hh-font);
 
-  /* Muted, earthy category set for charts and category chips. */
-  --color-cat-sage: #40916c;
+  /* The design language's chart set (DESIGN.md "Colour"); categories past eight share stone. */
+  --color-cat-sage: #2d6a4f;
   --color-cat-clay: #c86d51;
-  --color-cat-dusk: #4f6d8a;
-  --color-cat-ochre: #b08433;
-  --color-cat-plum: #7d5a7f;
-  --color-cat-olive: #6f7d3c;
-  --color-cat-rose: #b0646b;
-  --color-cat-lagoon: #3f7f7a;
-  --color-cat-sand: #a68a64;
+  --color-cat-dusk: #5b7a99;
+  --color-cat-ochre: #b08d57;
+  --color-cat-plum: #8a6f9e;
+  --color-cat-olive: #6f8f72;
+  --color-cat-rose: #a8735a;
+  --color-cat-lagoon: #6f8f72;
+  --color-cat-sand: #b08d57;
   --color-cat-stone: #78716c;
 }
 

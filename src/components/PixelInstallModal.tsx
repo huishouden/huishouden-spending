@@ -67,7 +67,7 @@ export const PixelInstallModal: React.FC<PixelInstallModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 animate-fadeIn">
       <div
         className={`border rounded-3xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden transition-colors ${
           isLight ? 'bg-white border-stone-200 text-stone-900' : 'bg-forest-800 border-forest-700 text-stone-100'

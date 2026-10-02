@@ -112,7 +112,7 @@ export const GoogleSheetGuideModal: React.FC<GoogleSheetGuideModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 animate-fadeIn">
       <div
         className={`border rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden transition-colors ${
           isLight ? 'bg-white border-stone-200 text-stone-900' : 'bg-forest-800 border-forest-700 text-stone-100'
@@ -287,7 +287,7 @@ export const GoogleSheetGuideModal: React.FC<GoogleSheetGuideModalProps> = ({
                     <div className="flex-1">
                       <h4 className="font-bold text-sm">Create a New Google Sheet</h4>
                       <p className={`text-xs mt-1 ${isLight ? 'text-stone-600' : 'text-stone-400'}`}>
-                        Click <strong className={isLight ? 'text-stone-800' : 'text-stone-200'}>+ New</strong> in the upper left of Google Drive &rarr; Select <strong className={isLight ? 'text-stone-800' : 'text-stone-200'}>Google Sheets</strong> &rarr; <strong className={isLight ? 'text-stone-800' : 'text-stone-200'}>Blank spreadsheet</strong>. Name it <code className="px-1 py-0.5 bg-stone-200/60 dark:bg-forest-800 rounded text-xs font-mono">Household Card Spend 2026</code>.
+                        Click <strong className={isLight ? 'text-stone-800' : 'text-stone-200'}>+ New</strong> in the upper left of Google Drive &rarr; Select <strong className={isLight ? 'text-stone-800' : 'text-stone-200'}>Google Sheets</strong> &rarr; <strong className={isLight ? 'text-stone-800' : 'text-stone-200'}>Blank spreadsheet</strong>. Name it <code className="px-1 py-0.5 bg-stone-200/60 dark:bg-forest-800 rounded text-xs font-mono">Huishouden Spending</code>.
                       </p>
                     </div>
                   </div>

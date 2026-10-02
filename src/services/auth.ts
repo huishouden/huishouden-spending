@@ -7,7 +7,7 @@ import {
   signOut,
   User,
 } from 'firebase/auth';
-import { firebaseConfigFromEnv } from '@piekstra/pwa-kit/firebase';
+import { firebaseConfigFromEnv } from '@piekstra/huishouden-pwa-kit/firebase';
 
 // From VITE_FIREBASE_* build variables: CI sets them from repo variables; locally run
 // `bun run env:pull` to write them to .env.local.

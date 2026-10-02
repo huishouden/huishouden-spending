@@ -9,7 +9,7 @@ const TRANSACTIONS_CACHE_KEY = 'household_transactions_cache';
 export const DEFAULT_SETTINGS: HouseholdSettings = {
   theme: 'light',
   monthlyBudget: 2000,
-  householdName: 'Household Card Spend',
+  householdName: 'Huishouden',
   currencySymbol: '$',
   ambientModeTheme: 'light',
   ambientRefreshRateMinutes: 15,

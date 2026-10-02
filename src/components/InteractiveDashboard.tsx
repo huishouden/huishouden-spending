@@ -16,7 +16,6 @@ import {
   Sparkles,
   TrendingDown,
   TrendingUp,
-  Receipt,
   Coins,
   CheckCircle2,
   Sun,
@@ -139,7 +138,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
     >
       {/* Top Tablet Navigation Header */}
       <header
-        className={`sticky top-0 z-30 px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between border-b backdrop-blur-xl ${
+        className={`sticky top-0 z-30 px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between border-b ${
           isLight
             ? 'bg-cream/90 border-stone-200/70'
             : 'bg-forest-900/90 border-forest-800'
@@ -147,19 +146,16 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
       >
         {/* Left: Branding & Month Selector */}
         <div className="flex items-center gap-4 sm:gap-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-forest-700 flex items-center justify-center text-white">
-              <Receipt className="w-5 h-5" />
-            </div>
+          {/* Huishouden frame: family logo back to the portal, suite name over the app name. */}
+          <a href="https://huishouden-piekstra.web.app" className="flex items-center gap-2.5 rounded-xl" aria-label="Huishouden home">
+            <img src="/icon.svg" alt="" className="w-10 h-10 rounded-xl" />
             <div>
+              <p className={`text-xs font-medium ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>Huishouden</p>
               <h1 className={`text-lg font-bold tracking-tight leading-tight ${isLight ? 'text-forest-700' : 'text-cream'}`}>
-                {settings.householdName}
+                Spending
               </h1>
-              <p className={`text-xs ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
-                Card charges & category monitor
-              </p>
             </div>
-          </div>
+          </a>
 
           {/* Month Switcher Carousel */}
           <div
@@ -267,7 +263,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
               <>
                 {/* Backdrop overlay to close when clicking outside */}
                 <div
-                  className="fixed inset-0 z-40 bg-black/10 backdrop-blur-xs sm:bg-transparent sm:backdrop-blur-none"
+                  className="fixed inset-0 z-40 bg-black/10 sm:bg-transparent"
                   onClick={() => setIsMenuOpen(false)}
                 />
 
@@ -729,7 +725,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             }`}
           >
             <span className={`text-sm font-medium ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
-              Household Card Spend
+              Spending this month
             </span>
             <div
               className={`text-2xl sm:text-3xl font-bold mt-2 tracking-tight tabular-nums ${

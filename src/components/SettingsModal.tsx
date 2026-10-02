@@ -54,7 +54,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 animate-fadeIn">
       <div
         className={`border rounded-3xl w-full max-w-xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden transition-colors ${
           isLight ? 'bg-white border-stone-200 text-stone-900' : 'bg-forest-800 border-forest-700 text-stone-100'
@@ -279,6 +279,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             isLight ? 'bg-stone-50 border-stone-200' : 'bg-forest-800/80 border-forest-700'
           }`}
         >
+          <span className={`mr-auto text-xs tabular-nums ${isLight ? 'text-stone-500' : 'text-stone-400'}`}>
+            Huishouden Spending {import.meta.env.VITE_APP_VERSION} ({import.meta.env.VITE_BUILD_SHA})
+          </span>
           <button
             onClick={onClose}
             className={`px-4 py-2 rounded-xl text-xs transition cursor-pointer ${
