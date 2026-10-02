@@ -14,24 +14,12 @@ export const googleClientId: string | undefined = import.meta.env.VITE_GOOGLE_CL
 // Firebase sign-in (see @huishouden/pwa-kit/google-token).
 configureGoogleTokens({ clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID });
 
-<<<<<<< HEAD
-// Initialize Firebase App singleton safely
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-export const firebaseApp = app;
-// getAuth persists the session in IndexedDB (indexedDBLocalPersistence), so a device stays
-// signed in across reloads and restarts until someone signs out.
-export const auth = getAuth(app);
-// Gmail and Sheets tokens come from Google Identity Services with the OAuth web client, not from
-// Firebase sign-in (see @huishouden/pwa-kit/google-token).
-configureGoogleTokens({ clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID });
-=======
 /** Plain Google sign-in: no Google API scopes, so no "unverified app" screen. Gmail is asked for separately, from a tap. */
 export async function signInWithGoogle(): Promise<void> {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
   await signInWithPopup(auth, provider);
 }
->>>>>>> ccafcf7 (feat!: Spending answers "how are we doing this month?" at a glance)
 
 export async function signOutEverywhere(): Promise<void> {
   await forgetSilentSignIn();
