@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/huishouden/spending/compare/v2.0.0...v2.0.1) (2026-10-02)
+
+
+### Bug Fixes
+
+* Save budget says Saved (or why it couldn't); kit v0.24.1 puts toasts above dialogs ([#20](https://github.com/huishouden/spending/issues/20)) ([18102bd](https://github.com/huishouden/spending/commit/18102bda8479f4ba4306b242ce50ce4b06c26c3b))
+
 ## [2.0.0](https://github.com/huishouden/spending/compare/v1.3.1...v2.0.0) (2026-10-02)
 
 
