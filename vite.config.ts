@@ -22,7 +22,8 @@ export default defineConfig(() => {
       pwaApp({
         name: 'Huishouden Spending',
         shortName: 'Spending',
-        description: 'Household card spending at a glance: this month against the budget, by category and by card.',
+        description: "Where the household's money goes",
+      url: 'https://huishouden-spending.web.app',
         themeColor: '#1b4332',
         backgroundColor: '#faf9f5',
         includeAssets: ['icon.svg', 'favicon.png', 'apple-touch-icon.png'],
