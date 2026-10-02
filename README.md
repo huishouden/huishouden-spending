@@ -68,7 +68,7 @@ bun run e2e          # Playwright against the live site (BASE_URL to override): 
 bun run script:push  # legacy: deploy apps-script/ to a Sheet (tests first); see apps-script/README.md
 ```
 
-Security rules live in [huishouden/tasks](https://github.com/huishouden/tasks) `firestore.rules`
+Security rules live in [huishouden/rules](https://github.com/huishouden/rules) `firestore.rules`
 (one rules file per Firebase project); see `docs/firestore-rules-spending.md`.
 
 Built on [pwa-kit](https://github.com/huishouden/pwa-kit) and follows its
