@@ -30,6 +30,7 @@ import {
   Menu,
   X,
   Upload,
+  Info,
 } from 'lucide-react';
 import { usePWAInstall } from '../usePWAInstall';
 
@@ -133,28 +134,28 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
   return (
     <div
       className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
-        isLight ? 'bg-slate-50 text-slate-900' : 'bg-slate-950 text-slate-100'
+        isLight ? 'bg-cream text-stone-800' : 'bg-forest-900 text-stone-100'
       }`}
     >
       {/* Top Tablet Navigation Header */}
       <header
-        className={`sticky top-0 z-30 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between border-b backdrop-blur-xl ${
+        className={`sticky top-0 z-30 px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between border-b backdrop-blur-xl ${
           isLight
-            ? 'bg-white/90 border-slate-200/90 shadow-2xs'
-            : 'bg-slate-950/80 border-slate-900'
+            ? 'bg-cream/90 border-stone-200/70'
+            : 'bg-forest-900/90 border-forest-800'
         }`}
       >
         {/* Left: Branding & Month Selector */}
         <div className="flex items-center gap-4 sm:gap-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+            <div className="w-10 h-10 rounded-xl bg-forest-700 flex items-center justify-center text-white">
               <Receipt className="w-5 h-5" />
             </div>
             <div>
-              <h1 className={`text-base font-bold tracking-tight leading-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
+              <h1 className={`text-lg font-bold tracking-tight leading-tight ${isLight ? 'text-forest-700' : 'text-cream'}`}>
                 {settings.householdName}
               </h1>
-              <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              <p className={`text-xs ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
                 Card charges & category monitor
               </p>
             </div>
@@ -163,21 +164,21 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
           {/* Month Switcher Carousel */}
           <div
             className={`flex items-center rounded-xl p-1 border ${
-              isLight ? 'bg-slate-100 border-slate-200/80' : 'bg-slate-900 border-slate-800'
+              isLight ? 'bg-white border-stone-200' : 'bg-forest-800 border-forest-700'
             }`}
           >
             <button
               onClick={goToPrevMonth}
               disabled={!hasPrevMonth}
               className={`p-1.5 rounded-lg transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
-                isLight ? 'text-slate-600 hover:text-slate-900 hover:bg-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                isLight ? 'text-stone-600 hover:text-forest-700 hover:bg-stone-100' : 'text-stone-300 hover:text-white hover:bg-forest-700'
               }`}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <span
-              className={`text-xs sm:text-sm font-semibold px-3 font-mono ${
-                isLight ? 'text-slate-900' : 'text-white'
+              className={`text-xs sm:text-sm font-semibold px-3 tabular-nums ${
+                isLight ? 'text-forest-700' : 'text-cream'
               }`}
             >
               {monthlySummary.monthName}
@@ -186,7 +187,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
               onClick={goToNextMonth}
               disabled={!hasNextMonth}
               className={`p-1.5 rounded-lg transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
-                isLight ? 'text-slate-600 hover:text-slate-900 hover:bg-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                isLight ? 'text-stone-600 hover:text-forest-700 hover:bg-stone-100' : 'text-stone-300 hover:text-white hover:bg-forest-700'
               }`}
             >
               <ChevronRight className="w-4 h-4" />
@@ -203,11 +204,11 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             className={`p-2 rounded-xl border transition cursor-pointer relative ${
               sheetConfig && !hasGoogleAuth
                 ? isLight
-                  ? 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-300'
-                  : 'bg-amber-950/50 hover:bg-amber-900 text-amber-300 border-amber-800'
+                  ? 'bg-terracotta-light/40 hover:bg-terracotta-light/70 text-terracotta-dark border-terracotta/40'
+                  : 'bg-terracotta/15 hover:bg-terracotta/25 text-terracotta-light border-terracotta/50'
                 : isLight
-                ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
-                : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
             }`}
             title={
               sheetConfig && !hasGoogleAuth
@@ -215,18 +216,20 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                 : 'Refresh latest transactions from Google Sheets'
             }
           >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-indigo-600' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-forest-600' : ''}`} />
             {sheetConfig && !hasGoogleAuth && (
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-white dark:ring-slate-950" />
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-terracotta ring-2 ring-cream dark:ring-forest-900" />
             )}
           </button>
 
           {/* Ambient Hub Mode Button (For Pixel Tablet on Dock) */}
           <button
             onClick={onEnterAmbient}
-            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/25 transition cursor-pointer flex items-center gap-1.5 shrink-0"
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer flex items-center gap-1.5 shrink-0 ${
+              isLight ? 'bg-forest-700 hover:bg-forest-600 text-white' : 'bg-forest-400 hover:bg-forest-300 text-forest-900'
+            }`}
           >
-            <Tv className="w-3.5 h-3.5" />
+            <Tv className="w-4 h-4" />
             <span className="hidden sm:inline">Dock Mode</span>
             <span className="sm:hidden">Dock</span>
           </button>
@@ -236,26 +239,26 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             <button
               onClick={() => setIsMenuOpen((prev) => !prev)}
               aria-label="Configuration and Settings Menu"
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-semibold transition cursor-pointer ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition cursor-pointer ${
                 isMenuOpen
                   ? isLight
-                    ? 'bg-indigo-50 border-indigo-300 text-indigo-700'
-                    : 'bg-indigo-950/70 border-indigo-700 text-indigo-300'
+                    ? 'bg-forest-50 border-forest-300 text-forest-700'
+                    : 'bg-forest-700 border-forest-600 text-forest-100'
                   : isLight
-                  ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-800'
+                  ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                  : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
               }`}
             >
               <Menu className="w-4 h-4" />
               <span>Menu</span>
               {sheetConfig ? (
                 hasGoogleAuth ? (
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" title="Google Sheet Connected & Synced" />
+                  <span className="w-2 h-2 rounded-full bg-forest-500" title="Google Sheet Connected & Synced" />
                 ) : (
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" title="Google Authorization Expired (Click to Reconnect)" />
+                  <span className="w-2 h-2 rounded-full bg-terracotta animate-pulse" title="Google Authorization Expired (Click to Reconnect)" />
                 )
               ) : (
-                <span className="w-2 h-2 rounded-full bg-slate-400" title="Using Demo Data" />
+                <span className="w-2 h-2 rounded-full bg-stone-400" title="Using Demo Data" />
               )}
             </button>
 
@@ -271,21 +274,21 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                 <div
                   className={`absolute right-0 top-full mt-2 w-80 sm:w-88 rounded-2xl border shadow-2xl z-50 p-4 space-y-4 max-h-[85vh] overflow-y-auto animate-fadeIn ${
                     isLight
-                      ? 'bg-white/98 border-slate-200 text-slate-800 shadow-slate-300/50'
-                      : 'bg-slate-900/98 border-slate-800 text-slate-100 shadow-black/80'
+                      ? 'bg-white border-stone-200 text-stone-800 shadow-stone-900/10'
+                      : 'bg-forest-800 border-forest-700 text-stone-100 shadow-black/40'
                   }`}
                 >
                   {/* Menu Title Header */}
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center justify-between pb-2 border-b border-stone-200 dark:border-forest-700">
                     <div className="flex items-center gap-2">
-                      <Sliders className="w-4 h-4 text-indigo-500" />
-                      <h3 className="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                      <Sliders className="w-4 h-4 text-forest-600 dark:text-forest-300" />
+                      <h3 className="font-bold text-xs uppercase tracking-wider text-stone-600 dark:text-stone-300">
                         Configuration &amp; Setup
                       </h3>
                     </div>
                     <button
                       onClick={() => setIsMenuOpen(false)}
-                      className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition"
+                      className="p-1 rounded-lg hover:bg-stone-100 dark:hover:bg-forest-700 text-stone-500 dark:text-stone-300 hover:text-stone-700 dark:hover:text-stone-200 transition"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -297,14 +300,14 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                       sheetConfig
                         ? hasGoogleAuth
                           ? isLight
-                            ? 'bg-emerald-50/80 border-emerald-200'
-                            : 'bg-emerald-950/30 border-emerald-800/60'
+                            ? 'bg-forest-50/80 border-forest-200'
+                            : 'bg-forest-900/50 border-forest-700'
                           : isLight
-                          ? 'bg-amber-50/90 border-amber-300'
-                          : 'bg-amber-950/40 border-amber-700/60'
+                          ? 'bg-terracotta-light/50 border-terracotta/40'
+                          : 'bg-terracotta/15 border-terracotta/50'
                         : isLight
-                        ? 'bg-slate-100 border-slate-200'
-                        : 'bg-slate-800/50 border-slate-700'
+                        ? 'bg-stone-50 border-stone-200'
+                        : 'bg-forest-900/50 border-forest-700'
                     }`}
                   >
                     <div className="min-w-0">
@@ -313,18 +316,18 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                           className={`w-2 h-2 rounded-full ${
                             sheetConfig
                               ? hasGoogleAuth
-                                ? 'bg-emerald-500'
-                                : 'bg-amber-500 animate-pulse'
-                              : 'bg-slate-400'
+                                ? 'bg-forest-500'
+                                : 'bg-terracotta animate-pulse'
+                              : 'bg-stone-400'
                           }`}
                         />
                         <span
                           className={`text-[10px] font-bold uppercase tracking-wider ${
                             sheetConfig
                               ? hasGoogleAuth
-                                ? 'text-emerald-700 dark:text-emerald-400'
-                                : 'text-amber-700 dark:text-amber-400 font-extrabold'
-                              : 'text-slate-600 dark:text-slate-400'
+                                ? 'text-forest-700 dark:text-forest-300'
+                                : 'text-terracotta-dark dark:text-terracotta-light'
+                              : 'text-stone-600 dark:text-stone-400'
                           }`}
                         >
                           {sheetConfig
@@ -348,8 +351,8 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                           }}
                           className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer shrink-0 ${
                             isLight
-                              ? 'bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-300'
-                              : 'bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 border border-emerald-700'
+                              ? 'bg-white hover:bg-forest-50 text-forest-700 border border-forest-200'
+                              : 'bg-forest-900 hover:bg-forest-700 text-forest-100 border border-forest-600'
                           }`}
                         >
                           Manage
@@ -364,7 +367,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                               onRefresh();
                             }
                           }}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer shrink-0 bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-xs"
+                          className="px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer shrink-0 bg-terracotta-dark hover:bg-terracotta text-white"
                         >
                           Reconnect
                         </button>
@@ -375,7 +378,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                           setIsMenuOpen(false);
                           onOpenSheetSync();
                         }}
-                        className="px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer shrink-0 bg-emerald-600 hover:bg-emerald-500 text-white"
+                        className="px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer shrink-0 bg-forest-700 hover:bg-forest-600 text-white dark:bg-forest-400 dark:hover:bg-forest-300 dark:text-forest-900"
                       >
                         Connect Sheet
                       </button>
@@ -384,7 +387,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
 
                   {/* Section 1: Spreadsheet & Card Sync */}
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 px-2">
                       Card Sync &amp; Data
                     </span>
 
@@ -394,19 +397,19 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                         onOpenSheetSync();
                       }}
                       className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                        isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+                        <div className="w-7 h-7 rounded-lg bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-200 flex items-center justify-center shrink-0">
                           <FileSpreadsheet className="w-4 h-4" />
                         </div>
                         <div className="text-left">
                           <p className="text-xs font-semibold">Google Sheet Sync</p>
-                          <p className="text-[11px] text-slate-400">Manage spreadsheet ID &amp; card tabs</p>
+                          <p className="text-[11px] text-stone-500 dark:text-stone-400">Manage spreadsheet ID &amp; card tabs</p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                      <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
                     </button>
 
                     <button
@@ -415,22 +418,22 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                         onOpenSheetSync();
                       }}
                       className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                        isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+                        <div className="w-7 h-7 rounded-lg bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-200 flex items-center justify-center shrink-0">
                           <Upload className="w-4 h-4" />
                         </div>
                         <div className="text-left">
                           <div className="flex items-center gap-1.5">
                             <p className="text-xs font-semibold">Import Chase CSVs</p>
-                            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-blue-500/20 text-blue-400 font-bold">New</span>
+                            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-100 font-semibold">New</span>
                           </div>
-                          <p className="text-[11px] text-slate-400">Clean older data &amp; auto-filter payments</p>
+                          <p className="text-[11px] text-stone-500 dark:text-stone-400">Clean older data &amp; auto-filter payments</p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                      <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
                     </button>
 
                     {onOpenSheetGuide && (
@@ -440,22 +443,22 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                           onOpenSheetGuide('gmail_sync');
                         }}
                         className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                          isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                          isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-terracotta-light/60 text-terracotta-dark dark:bg-terracotta/20 dark:text-terracotta-light flex items-center justify-center shrink-0">
                             <Zap className="w-4 h-4" />
                           </div>
                           <div className="text-left">
                             <div className="flex items-center gap-1.5">
                               <p className="text-xs font-semibold">Automated Gmail Sync</p>
-                              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-400 font-bold">Free</span>
+                              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-terracotta-light text-terracotta-dark dark:bg-terracotta/25 dark:text-terracotta-light font-semibold">Free</span>
                             </div>
-                            <p className="text-[11px] text-slate-400">15-min background script for Chase &amp; Robinhood</p>
+                            <p className="text-[11px] text-stone-500 dark:text-stone-400">15-min background script for Chase &amp; Robinhood</p>
                           </div>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
+                        <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
                       </button>
                     )}
 
@@ -466,26 +469,26 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                           onOpenSheetGuide('quickstart');
                         }}
                         className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                          isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                          isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-7 h-7 rounded-lg bg-slate-500/10 text-slate-400 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-stone-100 text-stone-600 dark:bg-forest-700 dark:text-stone-200 flex items-center justify-center shrink-0">
                             <HelpCircle className="w-4 h-4" />
                           </div>
                           <div className="text-left">
                             <p className="text-xs font-semibold">Spreadsheet Columns &amp; Guide</p>
-                            <p className="text-[11px] text-slate-400">Templates, headers, and format tips</p>
+                            <p className="text-[11px] text-stone-500 dark:text-stone-400">Templates, headers, and format tips</p>
                           </div>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
+                        <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
                       </button>
                     )}
                   </div>
 
                   {/* Section 2: Tablet & Display Options */}
-                  <div className="space-y-1 pt-1 border-t border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-2">
+                  <div className="space-y-1 pt-1 border-t border-stone-200 dark:border-forest-700">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 px-2">
                       Tablet &amp; Display
                     </span>
 
@@ -496,19 +499,19 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                           onOpenPixelGuide();
                         }}
                         className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                          isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                          isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-200 flex items-center justify-center shrink-0">
                             <Tablet className="w-4 h-4" />
                           </div>
                           <div className="text-left">
                             <p className="text-xs font-semibold">Pixel Tablet Setup &amp; PWA</p>
-                            <p className="text-[11px] text-slate-400">Kiosk instructions &amp; Hub mode</p>
+                            <p className="text-[11px] text-stone-500 dark:text-stone-400">Kiosk instructions &amp; Hub mode</p>
                           </div>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
+                        <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
                       </button>
                     )}
 
@@ -519,19 +522,19 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                         setIsMenuOpen(false);
                       }}
                       className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                        isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-slate-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                        <div className="w-7 h-7 rounded-lg bg-stone-100 text-stone-600 dark:bg-forest-700 dark:text-stone-200 flex items-center justify-center shrink-0">
                           {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                         </div>
                         <div className="text-left">
                           <p className="text-xs font-semibold">{isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Kiosk Mode'}</p>
-                          <p className="text-[11px] text-slate-400">Hides browser address bar on tablet</p>
+                          <p className="text-[11px] text-stone-500 dark:text-stone-400">Hides browser address bar on tablet</p>
                         </div>
                       </div>
-                      <span className="text-[11px] text-slate-400 font-mono">{isFullscreen ? 'Active' : 'Off'}</span>
+                      <span className="text-[11px] text-stone-500 dark:text-stone-400 font-mono">{isFullscreen ? 'Active' : 'Off'}</span>
                     </button>
 
                     {/* Theme switcher */}
@@ -540,19 +543,19 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                         onToggleTheme();
                       }}
                       className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                        isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-slate-500/10 flex items-center justify-center shrink-0">
-                          {isLight ? <Moon className="w-4 h-4 text-indigo-600" /> : <Sun className="w-4 h-4 text-amber-400" />}
+                        <div className="w-7 h-7 rounded-lg bg-stone-100 dark:bg-forest-700 flex items-center justify-center shrink-0">
+                          {isLight ? <Moon className="w-4 h-4 text-forest-700 dark:text-forest-300" /> : <Sun className="w-4 h-4 text-forest-200" />}
                         </div>
                         <div className="text-left">
                           <p className="text-xs font-semibold">Appearance</p>
-                          <p className="text-[11px] text-slate-400">{isLight ? 'Light theme active' : 'Dark theme active'}</p>
+                          <p className="text-[11px] text-stone-500 dark:text-stone-400">{isLight ? 'Light theme active' : 'Dark theme active'}</p>
                         </div>
                       </div>
-                      <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                      <span className="text-xs font-semibold text-forest-700 dark:text-forest-300">
                         {isLight ? 'Dark' : 'Light'}
                       </span>
                     </button>
@@ -563,47 +566,47 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                         onTogglePrivacy();
                       }}
                       className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                        isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-slate-500/10 flex items-center justify-center shrink-0">
-                          {settings.showPrivacyBlur ? <EyeOff className="w-4 h-4 text-amber-500" /> : <Eye className="w-4 h-4 text-slate-400" />}
+                        <div className="w-7 h-7 rounded-lg bg-stone-100 dark:bg-forest-700 flex items-center justify-center shrink-0">
+                          {settings.showPrivacyBlur ? <EyeOff className="w-4 h-4 text-terracotta-dark dark:text-terracotta-light" /> : <Eye className="w-4 h-4 text-stone-600 dark:text-stone-300" />}
                         </div>
                         <div className="text-left">
                           <p className="text-xs font-semibold">Privacy Blur</p>
-                          <p className="text-[11px] text-slate-400">
+                          <p className="text-[11px] text-stone-500 dark:text-stone-400">
                             {settings.showPrivacyBlur ? 'Dollar amounts are blurred' : 'Dollar amounts are visible'}
                           </p>
                         </div>
                       </div>
-                      <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                      <span className="text-xs font-semibold text-forest-700 dark:text-forest-300">
                         {settings.showPrivacyBlur ? 'Unhide' : 'Hide'}
                       </span>
                     </button>
                   </div>
 
                   {/* Section 3: Household Budget & Preferences */}
-                  <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+                  <div className="pt-2 border-t border-stone-200 dark:border-forest-700">
                     <button
                       onClick={() => {
                         setIsMenuOpen(false);
                         onOpenSettings();
                       }}
                       className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                        isLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800/70'
+                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
+                        <div className="w-7 h-7 rounded-lg bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-200 flex items-center justify-center shrink-0">
                           <Sliders className="w-4 h-4" />
                         </div>
                         <div className="text-left">
                           <p className="text-xs font-semibold">Budget &amp; Filter Settings</p>
-                          <p className="text-[11px] text-slate-400">Budget, currency symbol &amp; exclusions</p>
+                          <p className="text-[11px] text-stone-500 dark:text-stone-400">Budget, currency symbol &amp; exclusions</p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                      <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
                     </button>
                   </div>
                 </div>
@@ -614,35 +617,35 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto w-full">
+      <main className="flex-1 p-4 sm:p-6 lg:p-10 space-y-6 lg:space-y-8 max-w-7xl mx-auto w-full">
         {/* Sample Data Alert Banner - Shown whenever no Google Sheet is connected */}
         {!sheetConfig && (
           <div
-            className={`p-4 sm:p-5 rounded-2xl border-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm animate-fadeIn ${
+            className={`p-5 sm:p-6 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn ${
               isLight
-                ? 'bg-gradient-to-r from-amber-50/90 via-orange-50/50 to-amber-50/90 border-amber-300 text-amber-950'
-                : 'bg-gradient-to-r from-amber-950/40 via-slate-900 to-amber-950/30 border-amber-500/40 text-amber-200'
+                ? 'bg-white border-terracotta/30 text-stone-800 shadow-sm shadow-stone-900/5'
+                : 'bg-forest-800 border-terracotta/40 text-stone-100'
             }`}
           >
             <div className="flex items-start sm:items-center gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs font-bold text-lg">
-                📊
+              <div className="w-10 h-10 rounded-xl bg-terracotta-light text-terracotta-dark flex items-center justify-center shrink-0">
+                <Info className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-sm sm:text-base font-extrabold flex items-center gap-2">
+                <div className={`text-sm sm:text-base font-semibold flex items-center gap-2 ${isLight ? 'text-forest-700' : 'text-cream'}`}>
                   <span>Currently Showing Sample Demo Data</span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide bg-amber-200 text-amber-900 dark:bg-amber-900/80 dark:text-amber-200">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-terracotta-light text-terracotta-dark dark:bg-terracotta/25 dark:text-terracotta-light">
                     Demo
                   </span>
                 </div>
-                <p className={`text-xs mt-0.5 ${isLight ? 'text-amber-900/80' : 'text-amber-300/80'}`}>
+                <p className={`text-xs mt-0.5 ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
                   Your Google Sheet is not connected yet on this tablet. Tap the button to select or link your Google Drive spreadsheet to see your real Chase &amp; Robinhood credit card charges.
                 </p>
               </div>
             </div>
             <button
               onClick={onOpenSheetSync}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-md shadow-emerald-600/30 flex items-center justify-center gap-2 transition cursor-pointer shrink-0"
+              className={`w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-medium flex ${isLight ? 'bg-forest-700 hover:bg-forest-600 text-white' : 'bg-forest-400 hover:bg-forest-300 text-forest-900'} items-center justify-center gap-2 transition cursor-pointer shrink-0`}
             >
               <FileSpreadsheet className="w-4 h-4" />
               <span>Connect My Google Sheet</span>
@@ -651,22 +654,22 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
         )}
         {/* Tablet & Sheet Quick Setup Bar */}
         <div
-          className={`p-4 rounded-2xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-xs transition-colors ${
+          className={`p-4 sm:p-5 rounded-2xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-3 transition-colors ${
             isLight
-              ? 'bg-gradient-to-r from-indigo-50/80 via-white to-blue-50/60 border-indigo-100 text-slate-800'
-              : 'bg-gradient-to-r from-indigo-950/40 via-slate-900 to-blue-950/30 border-indigo-900/40 text-slate-200'
+              ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5 text-stone-800'
+              : 'bg-forest-800 border-forest-700/60 text-stone-200'
           }`}
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-9 h-9 rounded-xl bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-100 flex items-center justify-center shrink-0">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xs font-bold flex items-center gap-1.5">
+              <div className={`text-sm font-semibold flex items-center gap-1.5 ${isLight ? 'text-forest-700' : 'text-cream'}`}>
                 <span>Pixel Tablet & Google Drive Setup Guides</span>
-                <span className="px-1.5 py-0.2 rounded-md bg-indigo-600 text-white text-[10px] font-medium">Ready</span>
+                <span className="px-2 py-0.5 rounded-full bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-100 text-[10px] font-semibold">Ready</span>
               </div>
-              <p className={`text-[11px] ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              <p className={`text-xs ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
                 {sheetConfig
                   ? `Synced to "${sheetConfig.spreadsheetTitle}" • Always-on kitchen display ready`
                   : 'Add this dashboard to your Pixel Tablet dock and learn where to format data in Google Drive.'}
@@ -678,10 +681,10 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             {onOpenPixelGuide && (
               <button
                 onClick={onOpenPixelGuide}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition cursor-pointer ${
                   isLight
-                    ? 'bg-white hover:bg-slate-50 text-indigo-700 border-indigo-200 shadow-2xs'
-                    : 'bg-indigo-900/40 hover:bg-indigo-900/70 text-indigo-300 border-indigo-800'
+                    ? 'bg-white hover:bg-forest-50 text-forest-700 border-stone-200'
+                    : 'bg-forest-900/50 hover:bg-forest-700 text-forest-200 border-forest-700'
                 }`}
               >
                 <Tablet className="w-3.5 h-3.5" />
@@ -692,10 +695,10 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             {onOpenSheetGuide && (
               <button
                 onClick={() => onOpenSheetGuide('quickstart')}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
+                className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition cursor-pointer ${
                   isLight
-                    ? 'bg-white hover:bg-slate-50 text-emerald-800 border-emerald-200 shadow-2xs'
-                    : 'bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-300 border-emerald-800'
+                    ? 'bg-white hover:bg-forest-50 text-forest-700 border-stone-200'
+                    : 'bg-forest-900/50 hover:bg-forest-700 text-forest-200 border-forest-700'
                 }`}
               >
                 <FileSpreadsheet className="w-3.5 h-3.5" />
@@ -706,7 +709,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             {isInstallable && !isInstalled && (
               <button
                 onClick={install}
-                className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer"
+                className="px-3 py-2 rounded-xl bg-forest-700 hover:bg-forest-600 text-white dark:bg-forest-400 dark:hover:bg-forest-300 dark:text-forest-900 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Install App</span>
@@ -716,41 +719,41 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
         </div>
 
         {/* Top KPI Cards Row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           {/* Card 1: Total Card Spend */}
           <div
-            className={`rounded-2xl p-4 sm:p-5 relative overflow-hidden transition-all border ${
+            className={`rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all border ${
               isLight
-                ? 'bg-white border-slate-200/90 shadow-sm'
-                : 'bg-slate-900/90 border-slate-800/80 shadow-lg shadow-black/20'
+                ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+                : 'bg-forest-800 border-forest-700/60'
             }`}
           >
-            <span className={`text-xs font-medium ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <span className={`text-sm font-medium ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
               Household Card Spend
             </span>
             <div
-              className={`text-2xl sm:text-3xl font-extrabold mt-1 tracking-tight ${
-                isLight ? 'text-slate-900' : 'text-white'
+              className={`text-2xl sm:text-3xl font-bold mt-2 tracking-tight tabular-nums ${
+                isLight ? 'text-forest-700' : 'text-cream'
               }`}
             >
               {formatCurrency(monthlySummary.totalSpend)}
             </div>
             {prevSpend ? (
-              <div className="flex items-center gap-1 text-xs mt-1 font-medium">
+              <div className="flex items-center gap-1 text-xs mt-1.5 font-medium">
                 {spendDiff > 0 ? (
-                  <span className="text-amber-600 dark:text-amber-400 flex items-center">
+                  <span className="text-terracotta-dark dark:text-terracotta-light flex items-center">
                     <TrendingUp className="w-3.5 h-3.5 mr-0.5" />
                     +{Math.round(spendPercentDiff)}% vs last mo
                   </span>
                 ) : (
-                  <span className="text-emerald-600 dark:text-emerald-400 flex items-center">
+                  <span className="text-forest-700 dark:text-forest-300 flex items-center">
                     <TrendingDown className="w-3.5 h-3.5 mr-0.5" />
                     {Math.round(spendPercentDiff)}% vs last mo
                   </span>
                 )}
               </div>
             ) : (
-              <div className={`text-xs mt-1 ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>
+              <div className={`text-xs mt-1.5 ${isLight ? 'text-stone-500' : 'text-stone-400'}`}>
                 Based on card sync
               </div>
             )}
@@ -758,72 +761,72 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
 
           {/* Card 2: Daily Velocity */}
           <div
-            className={`rounded-2xl p-4 sm:p-5 relative overflow-hidden transition-all border ${
+            className={`rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all border ${
               isLight
-                ? 'bg-white border-slate-200/90 shadow-sm'
-                : 'bg-slate-900/90 border-slate-800/80 shadow-lg shadow-black/20'
+                ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+                : 'bg-forest-800 border-forest-700/60'
             }`}
           >
-            <span className={`text-xs font-medium ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <span className={`text-sm font-medium ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
               Daily Card Velocity
             </span>
             <div
-              className={`text-2xl sm:text-3xl font-extrabold mt-1 tracking-tight ${
-                isLight ? 'text-slate-900' : 'text-white'
+              className={`text-2xl sm:text-3xl font-bold mt-2 tracking-tight tabular-nums ${
+                isLight ? 'text-forest-700' : 'text-cream'
               }`}
             >
               {formatShortCurrency(monthlySummary.dailyAverage)}
-              <span className={`text-xs font-normal ml-1 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              <span className={`text-xs font-normal ml-1 ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                 /day
               </span>
             </div>
-            <div className={`text-xs mt-1 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className={`text-xs mt-1.5 ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
               Projected end: {formatShortCurrency(monthlySummary.projectedMonthEnd)}
             </div>
           </div>
 
           {/* Card 3: Total Transactions */}
           <div
-            className={`rounded-2xl p-4 sm:p-5 relative overflow-hidden transition-all border ${
+            className={`rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all border ${
               isLight
-                ? 'bg-white border-slate-200/90 shadow-sm'
-                : 'bg-slate-900/90 border-slate-800/80 shadow-lg shadow-black/20'
+                ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+                : 'bg-forest-800 border-forest-700/60'
             }`}
           >
-            <span className={`text-xs font-medium ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <span className={`text-sm font-medium ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
               Total Charges
             </span>
             <div
-              className={`text-2xl sm:text-3xl font-extrabold mt-1 tracking-tight ${
-                isLight ? 'text-slate-900' : 'text-white'
+              className={`text-2xl sm:text-3xl font-bold mt-2 tracking-tight tabular-nums ${
+                isLight ? 'text-forest-700' : 'text-cream'
               }`}
             >
               {monthlySummary.transactionCount}
             </div>
-            <div className={`text-xs mt-1 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className={`text-xs mt-1.5 ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
               Excludes mortgage & debits
             </div>
           </div>
 
           {/* Card 4: Top Category or Rewards */}
           <div
-            className={`rounded-2xl p-4 sm:p-5 relative overflow-hidden transition-all border ${
+            className={`rounded-2xl p-5 sm:p-6 relative overflow-hidden transition-all border ${
               isLight
-                ? 'bg-white border-slate-200/90 shadow-sm'
-                : 'bg-slate-900/90 border-slate-800/80 shadow-lg shadow-black/20'
+                ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+                : 'bg-forest-800 border-forest-700/60'
             }`}
           >
-            <span className={`text-xs font-medium ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <span className={`text-sm font-medium ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
               Top Category
             </span>
             <div
-              className={`text-xl sm:text-2xl font-bold mt-1 tracking-tight truncate ${
-                isLight ? 'text-slate-900' : 'text-white'
+              className={`text-xl sm:text-2xl font-bold mt-2 tracking-tight truncate ${
+                isLight ? 'text-forest-700' : 'text-cream'
               }`}
             >
               {monthlySummary.categories[0]?.category || 'N/A'}
             </div>
-            <div className={`text-xs mt-1 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className={`text-xs mt-1.5 ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
               {monthlySummary.categories[0]
                 ? `${formatShortCurrency(monthlySummary.categories[0].total)} (${monthlySummary.categories[0].percentage.toFixed(0)}%)`
                 : 'No charges'}
@@ -832,7 +835,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
         </div>
 
         {/* Middle Section: Budget Pacing and Active Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           <div className="lg:col-span-5">
             <BudgetPacingCard
               totalSpend={monthlySummary.totalSpend}
@@ -854,9 +857,9 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
         </div>
 
         {/* Bottom Section: Category Breakdown + Filterable Transactions Feed */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* Left Column: Categories List (lg:col-span-5) */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-6 lg:space-y-8">
             <CategoryList
               categories={monthlySummary.categories}
               currencySymbol={settings.currencySymbol}
@@ -867,16 +870,16 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
 
             {/* Quick Card Insights Box */}
             <div
-              className={`rounded-2xl p-4 space-y-3 border ${
-                isLight ? 'bg-white border-slate-200/90 shadow-sm' : 'bg-slate-900/60 border-slate-800/70'
+              className={`rounded-2xl p-5 sm:p-6 space-y-3 border ${
+                isLight ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5' : 'bg-forest-800 border-forest-700/60'
               }`}
             >
               <h4
-                className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-                  isLight ? 'text-slate-500' : 'text-slate-400'
+                className={`text-base font-semibold flex items-center gap-2 ${
+                  isLight ? 'text-forest-700' : 'text-cream'
                 }`}
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <Sparkles className="w-4 h-4 text-terracotta" />
                 <span>Household Insights</span>
               </h4>
 
@@ -884,11 +887,11 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                 {largestTx && (
                   <div
                     className={`flex items-center justify-between p-2.5 rounded-xl border ${
-                      isLight ? 'bg-slate-50 border-slate-200/80 text-slate-800' : 'bg-slate-950/60 border-slate-800 text-slate-300'
+                      isLight ? 'bg-stone-50 border-stone-200/70 text-stone-800' : 'bg-forest-900/50 border-forest-700/60 text-stone-200'
                     }`}
                   >
-                    <span className={isLight ? 'text-slate-500' : 'text-slate-400'}>Largest Charge:</span>
-                    <span className={`font-semibold ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                    <span className={isLight ? 'text-stone-600' : 'text-stone-300'}>Largest Charge:</span>
+                    <span className={`font-semibold ${isLight ? 'text-stone-800' : 'text-cream'}`}>
                       {largestTx.merchant} ({formatCurrency(largestTx.amount)})
                     </span>
                   </div>

@@ -1,11 +1,54 @@
 @import "tailwindcss";
+@import "@piekstra/pwa-kit/theme.css";
+
+/* The app toggles its own theme (settings.theme), so dark: follows the .dark class on the root, not the OS. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Household family look (shared with HearthList and the portal): tokens come from the kit. */
+@theme {
+  --color-forest-50: var(--hh-forest-50);
+  --color-forest-100: var(--hh-forest-100);
+  --color-forest-200: var(--hh-forest-200);
+  --color-forest-300: var(--hh-forest-300);
+  --color-forest-400: var(--hh-forest-400);
+  --color-forest-500: var(--hh-forest-500);
+  --color-forest-600: var(--hh-forest-600);
+  --color-forest-700: var(--hh-forest-700);
+  --color-forest-800: var(--hh-forest-800);
+  --color-forest-900: var(--hh-forest-900);
+  --color-cream: var(--hh-cream);
+  --color-terracotta: var(--hh-terracotta);
+  --color-terracotta-light: var(--hh-terracotta-light);
+  /* Kit terracotta is 3.6:1 on white; text uses this darker step to stay above 4.5:1. */
+  --color-terracotta-dark: #94452f;
+  --font-sans: var(--hh-font);
+
+  /* Muted, earthy category set for charts and category chips. */
+  --color-cat-sage: #40916c;
+  --color-cat-clay: #c86d51;
+  --color-cat-dusk: #4f6d8a;
+  --color-cat-ochre: #b08433;
+  --color-cat-plum: #7d5a7f;
+  --color-cat-olive: #6f7d3c;
+  --color-cat-rose: #b0646b;
+  --color-cat-lagoon: #3f7f7a;
+  --color-cat-sand: #a68a64;
+  --color-cat-stone: #78716c;
+}
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: var(--hh-font);
+    background-color: var(--hh-cream);
+    color: #292524;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     touch-action: manipulation;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--hh-forest-500);
+    outline-offset: 2px;
   }
 }
 
@@ -20,10 +63,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(120, 113, 108, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(120, 113, 108, 0.45);
 }

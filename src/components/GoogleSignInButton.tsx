@@ -18,11 +18,11 @@ export const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({
       type="button"
       onClick={onClick}
       disabled={isLoading}
-      className={`relative inline-flex items-center justify-center gap-3 px-5 py-3 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-xl shadow-xs hover:bg-slate-50 active:bg-slate-100 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-150 cursor-pointer ${className}`}
+      className={`relative inline-flex items-center justify-center gap-3 px-5 py-3 text-sm font-medium text-stone-700 bg-white border border-stone-300 rounded-xl shadow-xs hover:bg-stone-50 active:bg-stone-100 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-150 cursor-pointer ${className}`}
       style={{ minHeight: '44px' }}
     >
       {isLoading ? (
-        <div className="w-5 h-5 border-2 border-slate-300 border-t-blue-600 rounded-full animate-spin" />
+        <div className="w-5 h-5 border-2 border-stone-300 border-t-forest-700 rounded-full animate-spin" />
       ) : (
         <svg
           version="1.1"
@@ -49,7 +49,7 @@ export const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({
           <path fill="none" d="M0 0h48v48H0z" />
         </svg>
       )}
-      <span className="font-semibold text-slate-800 tracking-tight">
+      <span className="font-semibold text-stone-800 tracking-tight">
         {isLoading ? 'Connecting...' : label}
       </span>
     </button>

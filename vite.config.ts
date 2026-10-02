@@ -23,8 +23,8 @@ export default defineConfig(() => {
         name: 'Household Card Spend Display',
         shortName: 'Card Spend',
         description: 'Ambient household credit card spending & category tracker for Pixel Tablet & Google Sheets.',
-        themeColor: '#0f172a',
-        backgroundColor: '#020617',
+        themeColor: '#1b4332',
+        backgroundColor: '#faf9f5',
         icons: [
           { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
