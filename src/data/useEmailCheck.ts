@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { checkAlerts } from '../lib/alertSync';
-import { gmailError } from './gmail';
+import { gmailError } from '@huishouden/pwa-kit/gmail';
 import type { SpendingStore } from './store';
 
 export type CheckState =
