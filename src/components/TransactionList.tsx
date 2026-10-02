@@ -13,6 +13,8 @@ interface TransactionListProps {
   onClearCardFilter: () => void;
   onClearCategoryFilter: () => void;
   theme?: 'light' | 'dark';
+  /** Opens a transaction to change its category or remove it. */
+  onSelect?: (transaction: CardTransaction) => void;
 }
 
 export const TransactionList: React.FC<TransactionListProps> = ({
@@ -23,6 +25,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
   onClearCardFilter,
   onClearCategoryFilter,
   theme = 'light',
+  onSelect,
 }) => {
   const isLight = theme === 'light';
   const [search, setSearch] = useState('');
@@ -219,7 +222,21 @@ export const TransactionList: React.FC<TransactionListProps> = ({
             return (
               <div
                 key={t.id}
-                className={`p-3.5 sm:px-5 sm:py-4 flex items-center justify-between transition-colors ${
+                {...(onSelect
+                  ? {
+                      role: 'button',
+                      tabIndex: 0,
+                      'aria-label': `${t.merchant}, ${t.date}`,
+                      onClick: () => onSelect(t),
+                      onKeyDown: (e: React.KeyboardEvent) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          onSelect(t);
+                        }
+                      },
+                    }
+                  : {})}
+                className={`p-3.5 sm:px-5 sm:py-4 flex items-center justify-between transition-colors ${onSelect ? 'cursor-pointer' : ''} ${
                   isLight ? 'hover:bg-stone-50' : 'hover:bg-forest-900/40'
                 }`}
               >

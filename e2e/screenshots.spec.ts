@@ -34,3 +34,26 @@ test('account menu', ({ page }) =>
       await expect(p.getByRole('link', { name: 'All apps' })).toBeVisible();
     },
   }));
+
+// The household's cards in Settings (the sample household's invented cards).
+test('settings: cards', ({ page }) =>
+  captureScreenshot(page, 'settings-cards', {
+    fixedTime,
+    prepare: async (p) => {
+      await p.getByRole('button', { name: 'Configuration and Settings Menu' }).click();
+      await p.getByRole('button', { name: /^Settings/ }).click();
+      await p.getByRole('dialog', { name: 'Settings' }).getByRole('button', { name: 'Cards' }).click();
+    },
+  }));
+
+// A statement file (invented rows) matched to its card, before anything is added.
+test('import a statement', ({ page }) =>
+  captureScreenshot(page, 'import-statement', {
+    fixedTime,
+    prepare: async (p) => {
+      await p.getByRole('region', { name: 'Bringing spending in' }).getByRole('button', { name: 'Import a statement' }).click();
+      const dialog = p.getByRole('dialog', { name: 'Import a statement' });
+      await dialog.getByLabel('Statement files').setInputFiles(new URL('./fixtures/statement_1111.csv', import.meta.url).pathname);
+      await expect(dialog.getByRole('button', { name: /^Add \d+ transactions?$/ })).toBeVisible();
+    },
+  }));

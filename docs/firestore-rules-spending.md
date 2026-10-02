@@ -1,23 +1,21 @@
-# Firestore rules addition for spending (to apply in piekstra/huishouden-tasks)
+# Firestore rules for Spending (in huishouden/tasks)
 
-One Firebase project has one rules file, and household-tasks deploys it. Spending stores its data
-under the same household documents and reuses `isMember()`, so the addition is one block inside
-the existing `match /households/{householdId} { ... }`, next to `lists`, `items`, `staples`, `menus`:
+One Firebase project has one rules file, and huishouden/tasks deploys it. Spending's blocks sit
+inside `match /households/{householdId}` there and reuse `isMember()`; its tests are in
+`test/rules/firestore.rules.test.ts` (describe "Huishouden Spending").
 
-```
-      // Spending transactions, mirrored from the household's Sheet by its Apps Script (which
-      // writes with the owner's IAM credentials, bypassing rules). Browsers only read.
-      match /spendingTransactions/{txId} {
-        allow read: if isMember();
-        allow write: if false;
-      }
-```
+| Collection | Members may | Fields (exact list) |
+|---|---|---|
+| `spendingTransactions/{id}` | read, create, update, delete | date (YYYY-MM-DD), description, amount, category, card, type, source (`statement` or `alert`), last4, emailId, createdAt, updatedAt, by |
+| `spendingSettings/main` | read, create, update | monthlyBudget, currencySymbol, ignoredKeywords, alertLabels, emailCheckedAt, emailCheckedBy, updatedAt, updatedBy |
+| `spendingCards/{id}` | read, create, update, delete | name, last4, issuer, alertWords, csv (remembered statement columns), createdAt, updatedAt, by |
+| `spendingRules/{id}` | read, create, update, delete | contains, category, createdAt, updatedAt, by |
 
-Note on list queries: the spending app subscribes to the whole subcollection, which `isMember()`
-allows because it does not depend on the document being read.
+The field lists match `src/data/model.ts`. The legacy Apps Script mirror (`apps-script/Firestore.gs`)
+writes `spendingTransactions` with its owner's IAM credentials, which bypass rules.
 
 ## Household membership
 
-The app finds its household with `where('members', 'array-contains', <signed-in email>)`, so every
-account that should see spending must be in the household's `members` (the tasks app's invite flow
-adds them). An account that is not a member keeps using the Sheets path.
+The app finds its household with `where('members', 'array-contains', <signed-in email>)`. Someone
+signed in who is in no household sees the sample household and is pointed to the Huishouden home
+screen to start one or be invited.

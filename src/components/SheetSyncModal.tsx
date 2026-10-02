@@ -13,7 +13,6 @@ import {
 } from '../services/sheets';
 import { googleSignIn, logout, getAccessToken } from '../services/auth';
 import { GoogleSignInButton } from './GoogleSignInButton';
-import { ChaseCsvImporter } from './ChaseCsvImporter';
 import { CardTransaction } from '../types';
 import { User } from 'firebase/auth';
 import {
@@ -42,7 +41,6 @@ interface SheetSyncModalProps {
   onDisconnectConfig: () => void;
   theme?: 'light' | 'dark';
   onOpenFullGuide?: (tab?: 'quickstart' | 'gmail_sync' | 'columns' | 'chase_robinhood' | 'template') => void;
-  onImportTransactions?: (transactions: CardTransaction[]) => void;
 }
 
 export const SheetSyncModal: React.FC<SheetSyncModalProps> = ({
@@ -54,10 +52,9 @@ export const SheetSyncModal: React.FC<SheetSyncModalProps> = ({
   onDisconnectConfig,
   theme = 'light',
   onOpenFullGuide,
-  onImportTransactions,
 }) => {
   const isLight = theme === 'light';
-  const [activeTab, setActiveTab] = useState<'browse' | 'manual' | 'chase' | 'guide'>('browse');
+  const [activeTab, setActiveTab] = useState<'browse' | 'manual' | 'guide'>('browse');
   const [driveFiles, setDriveFiles] = useState<DriveFileItem[]>([]);
   const [isSearchingFiles, setIsSearchingFiles] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -336,24 +333,6 @@ export const SheetSyncModal: React.FC<SheetSyncModalProps> = ({
             Enter Sheet Link
           </button>
           <button
-            onClick={() => setActiveTab('chase')}
-            className={`pb-3 font-semibold transition cursor-pointer relative flex items-center gap-1.5 ${
-              activeTab === 'chase'
-                ? isLight
-                  ? 'text-forest-700 border-b-2 border-forest-700'
-                  : 'text-forest-300 border-b-2 border-forest-600'
-                : isLight
-                ? 'text-stone-500 hover:text-stone-900'
-                : 'text-stone-400 hover:text-stone-200'
-            }`}
-          >
-            <Upload className="w-3.5 h-3.5" />
-            <span>Import Chase CSVs</span>
-            <span className="px-1.5 py-0.5 rounded-full bg-forest-600/20 text-forest-700 dark:text-forest-300 text-[10px] font-bold">
-              New
-            </span>
-          </button>
-          <button
             onClick={() => setActiveTab('guide')}
             className={`pb-3 font-semibold transition cursor-pointer relative ${
               activeTab === 'guide'
@@ -541,14 +520,6 @@ export const SheetSyncModal: React.FC<SheetSyncModalProps> = ({
                 </div>
               </div>
             </div>
-          )}
-
-          {/* TAB: IMPORT CHASE CSVS */}
-          {activeTab === 'chase' && (
-            <ChaseCsvImporter
-              theme={theme}
-              onImportToDashboard={onImportTransactions}
-            />
           )}
 
           {/* TAB: CARD SYNC GUIDE & STARTER TEMPLATE */}

@@ -16,7 +16,19 @@ import {
 import { aggregateMonthlySummary, MOCK_CARD_TRANSACTIONS } from './services/mockData';
 import { initAuth, getAccessToken, setCachedAccessToken, googleSignIn, googleSignInBasic, logout, auth } from './services/auth';
 import { forgetSilentSignIn, signInSilently } from '@huishouden/pwa-kit/auth';
-import { findHouseholdId, saveProfile, subscribeTransactions } from './services/firestoreTransactions';
+import { findHouseholdId, saveProfile } from './services/firestoreTransactions';
+import { docsToTransactions } from './services/spendingDocs';
+import { useLiveStore } from './data/useLiveStore';
+import { useSampleStore } from './data/sample';
+import { deviceFallback } from './data/store';
+import { useEmailCheck } from './data/useEmailCheck';
+import { readSheetTabs, sheetsToken } from './data/sheetTabs';
+import type { SpendingRecord } from './data/model';
+import { DataBar } from './components/DataBar';
+import { ImportDialog } from './components/ImportDialog';
+import { TransactionDialog } from './components/TransactionDialog';
+import type { SettingsTab } from './components/SettingsModal';
+import { usePWAInstall } from './usePWAInstall';
 import { getSpreadsheetRowsUniversal, parseSheetRowsToTransactions } from './services/sheets';
 import { AmbientDashboard } from './components/AmbientDashboard';
 import { InteractiveDashboard } from './components/InteractiveDashboard';
@@ -25,8 +37,8 @@ import { SettingsModal } from './components/SettingsModal';
 import { PixelInstallModal } from './components/PixelInstallModal';
 import { GoogleSheetGuideModal } from './components/GoogleSheetGuideModal';
 
-// Firestore (mirrored from the Sheet by the Apps Script) is used whenever the signed-in account
-// belongs to a household; VITE_DATA_SOURCE=sheets forces the original browser-to-Sheets path.
+// The household's own data in Firestore is used whenever the signed-in account belongs to a
+// household; VITE_DATA_SOURCE=sheets forces the original browser-to-Sheets path.
 const FIRESTORE_SOURCE_ENABLED = import.meta.env.VITE_DATA_SOURCE !== 'sheets';
 
 export default function App() {
@@ -50,6 +62,9 @@ export default function App() {
 
   const [isSheetModalOpen, setIsSheetModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [settingsTab, setSettingsTab] = useState<SettingsTab>('budget');
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [openRecord, setOpenRecord] = useState<SpendingRecord | null>(null);
   const [isPixelGuideOpen, setIsPixelGuideOpen] = useState(false);
   const [isSheetGuideOpen, setIsSheetGuideOpen] = useState(false);
   const [sheetGuideTab, setSheetGuideTab] = useState<'quickstart' | 'gmail_sync' | 'columns' | 'chase_robinhood' | 'template'>('quickstart');
@@ -119,21 +134,57 @@ export default function App() {
     };
   }, [currentUser?.email]);
 
+  const showToast = useCallback((message: string, type: 'success' | 'error' = 'success', ms = 4000) => {
+    setSyncStatusToast({ message, type });
+    setTimeout(() => setSyncStatusToast(null), ms);
+  }, []);
+
+  // The household's spending, cards, rules and settings (live), or the sample household's (signed out).
+  // Until the household saves its own settings, this device's budget and skipped words stand in.
+  const fallback = useMemo(
+    () => deviceFallback(settings),
+    [settings.monthlyBudget, settings.currencySymbol, settings.ignoredKeywords], // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const live = useLiveStore(householdId, (currentUser?.email ?? '').toLowerCase(), fallback, (m) => showToast(m, 'error', 6000));
+  const sample = useSampleStore();
+  const store = householdId ? live : sample;
+  const emailCheck = useEmailCheck(store);
+  const { isInstallable, isInstalled, install } = usePWAInstall();
+
+  // The legacy Sheet path (no household, a connected Sheet) keeps this device's own settings.
+  const onSheet = !householdId && !!sheetConfig;
+  const effectiveSettings = useMemo<HouseholdSettings>(
+    () =>
+      onSheet
+        ? settings
+        : {
+            ...settings,
+            monthlyBudget: store.settings.monthlyBudget,
+            currencySymbol: store.settings.currencySymbol,
+            ignoredKeywords: store.settings.ignoredKeywords,
+          },
+    [onSheet, settings, store.settings],
+  );
+
+  // Live transactions replace the cached ones once Firestore answers; the cache opens the app fast.
+  const storeTransactions = useMemo(
+    () => docsToTransactions(store.records, effectiveSettings.ignoredKeywords),
+    [store.records, effectiveSettings.ignoredKeywords],
+  );
   useEffect(() => {
-    if (!householdId) return;
-    return subscribeTransactions(
-      householdId,
-      settings.ignoredKeywords,
-      (txs) => {
-        setTransactions(txs);
-        saveCachedTransactions(txs);
-      },
-      (err) => {
-        console.warn('Firestore subscription failed; falling back to the Sheets source.', err);
-        setHouseholdId(null);
-      },
-    );
-  }, [householdId, settings.ignoredKeywords]);
+    if (householdId && live.ready) saveCachedTransactions(storeTransactions);
+  }, [householdId, live.ready, storeTransactions]);
+  const shownTransactions = onSheet ? transactions : householdId ? (live.ready ? storeTransactions : transactions) : storeTransactions;
+
+  const openSettings = (tab: SettingsTab = 'budget') => {
+    setSettingsTab(tab);
+    setIsSettingsModalOpen(true);
+  };
+
+  const selectTransaction = (t: CardTransaction) => {
+    const record = store.records.find((r) => r.id === t.id);
+    if (record) setOpenRecord(record);
+  };
 
   // Members' names and photos come from their own sign-ins (shown in the portal and the other apps).
   useEffect(() => {
@@ -327,7 +378,7 @@ export default function App() {
     const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     monthSet.add(currentMonthKey);
 
-    transactions.forEach((t) => {
+    shownTransactions.forEach((t) => {
       const match = t.date.match(/^(\d{4}-\d{2})/);
       if (match) {
         monthSet.add(match[1]);
@@ -336,7 +387,7 @@ export default function App() {
 
     // Sort descending (latest month first)
     return Array.from(monthSet).sort((a, b) => b.localeCompare(a));
-  }, [transactions]);
+  }, [shownTransactions]);
 
   // Currently selected month (default to latest)
   const [selectedMonthKey, setSelectedMonthKey] = useState<string>(() => {
@@ -353,8 +404,8 @@ export default function App() {
 
   // Monthly summary computed for the active month
   const monthlySummary = useMemo(() => {
-    return aggregateMonthlySummary(transactions, selectedMonthKey);
-  }, [transactions, selectedMonthKey]);
+    return aggregateMonthlySummary(shownTransactions, selectedMonthKey);
+  }, [shownTransactions, selectedMonthKey]);
 
   // Handler for saving sheet configuration
   const handleSaveSheetConfig = (newConfig: SheetConfig) => {
@@ -376,27 +427,10 @@ export default function App() {
   };
 
   const handleResetToDemoData = () => {
+    sample.reset();
     setTransactions(MOCK_CARD_TRANSACTIONS);
     saveCachedTransactions(MOCK_CARD_TRANSACTIONS);
-    setSyncStatusToast({ message: 'Reloaded sample card spending data', type: 'success' });
-    setTimeout(() => setSyncStatusToast(null), 3000);
-  };
-
-  const handleImportTransactions = (importedTxs: CardTransaction[]) => {
-    const existingKeys = new Set(
-      transactions.map((t) => `${t.date}-${t.merchant.toLowerCase().trim()}-${t.amount.toFixed(2)}`)
-    );
-    const newItems = importedTxs.filter(
-      (t) => !existingKeys.has(`${t.date}-${t.merchant.toLowerCase().trim()}-${t.amount.toFixed(2)}`)
-    );
-    const combined = [...newItems, ...transactions].sort((a, b) => b.date.localeCompare(a.date));
-    setTransactions(combined);
-    saveCachedTransactions(combined);
-    setSyncStatusToast({
-      message: `Added ${newItems.length} Chase card transactions to dashboard!`,
-      type: 'success',
-    });
-    setTimeout(() => setSyncStatusToast(null), 5000);
+    showToast('Started the sample household over', 'success', 3000);
   };
 
   const togglePrivacyBlur = () => {
@@ -444,13 +478,13 @@ export default function App() {
       {isAmbientMode ? (
         <AmbientDashboard
           monthlySummary={monthlySummary}
-          settings={settings}
+          settings={effectiveSettings}
           sheetConfig={sheetConfig}
           hasGoogleAuth={hasGoogleAuth || !!householdId}
           onExitAmbient={() => setIsAmbientMode(false)}
           onRefresh={() => syncFromGoogleSheet(undefined, true)}
           isRefreshing={isRefreshing}
-          onOpenSettings={() => setIsSettingsModalOpen(true)}
+          onOpenSettings={() => openSettings()}
           onOpenSheetSync={() => setIsSheetModalOpen(true)}
           onTogglePrivacy={togglePrivacyBlur}
           onToggleTheme={toggleTheme}
@@ -463,7 +497,7 @@ export default function App() {
           availableMonths={availableMonths}
           selectedMonthKey={selectedMonthKey}
           onSelectMonth={setSelectedMonthKey}
-          settings={settings}
+          settings={effectiveSettings}
           sheetConfig={sheetConfig}
           hasGoogleAuth={hasGoogleAuth || !!householdId}
           onReconnectGoogle={handleReconnectGoogle}
@@ -474,7 +508,7 @@ export default function App() {
           onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           onEnterAmbient={() => setIsAmbientMode(true)}
-          onOpenSettings={() => setIsSettingsModalOpen(true)}
+          onOpenSettings={() => openSettings()}
           onOpenSheetSync={() => setIsSheetModalOpen(true)}
           onRefresh={() => syncFromGoogleSheet(undefined, true)}
           isRefreshing={isRefreshing}
@@ -486,6 +520,22 @@ export default function App() {
           onSelectCategory={setSelectedCategory}
           onOpenPixelGuide={() => setIsPixelGuideOpen(true)}
           onOpenSheetGuide={handleOpenSheetGuide}
+          onOpenImport={() => setIsImportOpen(true)}
+          onCheckEmail={() => void emailCheck.check(true)}
+          onSelectTransaction={onSheet ? undefined : selectTransaction}
+          dataBar={
+            onSheet ? undefined : (
+              <DataBar
+                store={store}
+                state={emailCheck.state}
+                onCheck={() => void emailCheck.check(true)}
+                onImport={() => setIsImportOpen(true)}
+                onAddCards={() => openSettings('cards')}
+                onOpenPixelGuide={() => setIsPixelGuideOpen(true)}
+                install={{ available: isInstallable && !isInstalled, onInstall: install }}
+              />
+            )
+          }
         />
       )}
 
@@ -499,17 +549,24 @@ export default function App() {
         onDisconnectConfig={handleDisconnectSheet}
         theme={settings.theme}
         onOpenFullGuide={(tab) => handleOpenSheetGuide(tab || 'quickstart')}
-        onImportTransactions={handleImportTransactions}
       />
 
       {/* Household & Filter Settings Modal */}
       <SettingsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
-        settings={settings}
-        onSaveSettings={handleSaveSettings}
+        tab={settingsTab}
+        onTab={setSettingsTab}
+        store={store}
+        device={settings}
+        onSaveDevice={handleSaveSettings}
         onResetToDemoData={handleResetToDemoData}
+        onReadSheet={async (link) => readSheetTabs(await sheetsToken(auth), link)}
       />
+
+      <ImportDialog isOpen={isImportOpen} onClose={() => setIsImportOpen(false)} store={store} onDone={(m) => showToast(m, 'success', 6000)} />
+
+      {openRecord && <TransactionDialog record={openRecord} store={store} onClose={() => setOpenRecord(null)} onDone={(m) => showToast(m)} />}
 
       {/* Pixel Tablet Installation & QR Code Modal */}
       <PixelInstallModal

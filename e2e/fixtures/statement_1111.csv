@@ -1,0 +1,5 @@
+Transaction Date,Post Date,Description,Category,Type,Amount,Memo
+03/13/2031,03/14/2031,EXAMPLE GROCERY #42,Groceries,Sale,-61.15,
+03/12/2031,03/13/2031,EXAMPLE BOOKSHOP,Shopping,Sale,-27.10,
+03/11/2031,03/11/2031,EXAMPLE TEA HOUSE,Food & Drink,Sale,-8.40,
+03/10/2031,03/10/2031,Payment Thank You-Mobile,,Payment,250.00,
