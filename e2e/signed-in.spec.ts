@@ -25,8 +25,11 @@ test('a budget one member saves is the household budget for the other', async ({
 
   // Saved in the household, not just on this screen: the other member's own browser reads it.
   const other = await browser.newContext({ baseURL: test.info().project.use.baseURL });
-  const theirs = await other.newPage();
-  await signInTestUser(theirs, { email: 'test-b@example.com' });
-  await expect((await budgetSettings(theirs)).getByLabel('Monthly budget')).toHaveValue(budget, { timeout: 20_000 });
-  await other.close();
+  try {
+    const theirs = await other.newPage();
+    await signInTestUser(theirs, { email: 'test-b@example.com' });
+    await expect((await budgetSettings(theirs)).getByLabel('Monthly budget')).toHaveValue(budget, { timeout: 20_000 });
+  } finally {
+    await other.close();
+  }
 });
