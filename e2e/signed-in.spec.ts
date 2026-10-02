@@ -33,3 +33,5 @@ test('a budget one member saves is the household budget for the other', async ({
     await other.close();
   }
 });
+
+// Staging path check (test PR, closed unmerged).
