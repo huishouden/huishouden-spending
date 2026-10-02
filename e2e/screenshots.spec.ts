@@ -91,3 +91,6 @@ test('account menu', ({ page }) =>
       await expect(p.getByRole('link', { name: 'All apps' })).toBeVisible();
     },
   }));
+
+// What a helper or kid sees: no money, a way back to the portal.
+test('helper', ({ page }) => captureScreenshot(page, 'helper', { path: '/?sample=helper' }));
