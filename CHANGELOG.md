@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/huishouden/spending/compare/v1.3.1...v2.0.0) (2026-10-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Dock Mode and the browser-to-Sheet data source are removed. A household's data comes from its Firestore documents; a Sheet's settings can still be brought in once from Settings > Email.
+
+### Features
+
+* Spending answers "how are we doing this month?" at a glance ([#15](https://github.com/huishouden/spending/issues/15)) ([db0aa74](https://github.com/huishouden/spending/commit/db0aa74efb13fb653ef06e15c6affccf0442e2f3))
+
 ## [1.3.1](https://github.com/huishouden/spending/compare/v1.3.0...v1.3.1) (2026-10-02)
 
 
