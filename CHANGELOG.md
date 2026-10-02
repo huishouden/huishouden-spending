@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/huishouden/spending/compare/v1.2.0...v1.3.0) (2026-10-02)
+
+
+### Features
+
+* Spending for any household: cards, category rules and budget as household settings; statement import and card alert emails in the browser ([#11](https://github.com/huishouden/spending/issues/11)) ([a0b01a1](https://github.com/huishouden/spending/commit/a0b01a18069146d70be5cc4dac7e831212364271))
+
 ## [1.2.0](https://github.com/huishouden/spending/compare/v1.1.0...v1.2.0) (2026-10-02)
 
 
