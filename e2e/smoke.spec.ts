@@ -5,13 +5,12 @@ import { expectCleanLoad, expectGoogleSignInPopup, expectInstallable } from '@pi
 
 test('loads without runtime errors', async ({ page }) => {
   await expectCleanLoad(page);
-  await expect(page.getByRole('button', { name: 'Connect My Google Sheet' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Sign in with Google' })).toBeVisible();
 });
 
 test('is installable', ({ page, request }) => expectInstallable(page, request));
 
 test('Google sign-in popup reaches Google with an allowed redirect URI', ({ page, context }) =>
   expectGoogleSignInPopup(page, context, async (p) => {
-    await p.getByRole('button', { name: 'Connect My Google Sheet' }).click();
-    await p.getByRole('button', { name: 'Sign in with Google' }).click();
+    await p.getByRole('button', { name: 'Sign in with Google' }).first().click();
   }));

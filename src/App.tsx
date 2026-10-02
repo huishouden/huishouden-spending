@@ -14,7 +14,8 @@ import {
   saveCachedTransactions,
 } from './services/storage';
 import { aggregateMonthlySummary, MOCK_CARD_TRANSACTIONS } from './services/mockData';
-import { initAuth, getAccessToken, setCachedAccessToken, googleSignIn, googleSignInBasic } from './services/auth';
+import { initAuth, getAccessToken, setCachedAccessToken, googleSignIn, googleSignInBasic, auth } from './services/auth';
+import { signInSilently } from '@piekstra/huishouden-pwa-kit/auth';
 import { findHouseholdId, subscribeTransactions } from './services/firestoreTransactions';
 import { getSpreadsheetRowsUniversal, parseSheetRowsToTransactions } from './services/sheets';
 import { AmbientDashboard } from './components/AmbientDashboard';
@@ -77,6 +78,25 @@ export default function App() {
     );
     return () => unsubscribe();
   }, []);
+
+  // Signs in without a click when the browser is already signed in to Google and has used the app.
+  useEffect(() => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (FIRESTORE_SOURCE_ENABLED && clientId) void signInSilently(auth, clientId);
+  }, []);
+
+  // A signed-in household member gets live data straight away; Firebase keeps the session on this
+  // device, so the tablet opens to live data after one sign-in.
+  useEffect(() => {
+    if (!FIRESTORE_SOURCE_ENABLED || !currentUser?.email || householdId) return;
+    let cancelled = false;
+    findHouseholdId(currentUser.email)
+      .then((id) => !cancelled && id && setHouseholdId(id))
+      .catch((err) => console.warn('Household lookup failed; staying on the Sheets source.', err));
+    return () => {
+      cancelled = true;
+    };
+  }, [currentUser, householdId]);
 
   // Live data from Firestore: no Google API token, so it keeps updating without re-sign-in.
   useEffect(() => {
@@ -410,6 +430,8 @@ export default function App() {
           sheetConfig={sheetConfig}
           hasGoogleAuth={hasGoogleAuth || !!householdId}
           onReconnectGoogle={handleReconnectGoogle}
+          isLiveHousehold={!!householdId}
+          isSignedIn={!!currentUser}
           onEnterAmbient={() => setIsAmbientMode(true)}
           onOpenSettings={() => setIsSettingsModalOpen(true)}
           onOpenSheetSync={() => setIsSheetModalOpen(true)}
