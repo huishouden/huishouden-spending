@@ -42,10 +42,20 @@ export function SettingsDialog({ store, tab, onTab, notify, onClose }: Props) {
         ))}
       </div>
       {!store.live && <p className="mb-4 rounded-xl bg-stone-100 px-4 py-3 text-sm text-stone-600">These are the sample household’s settings. Changes last until the page reloads.</p>}
-      {tab === 'budget' && <BudgetTab store={store} notify={notify} />}
-      {tab === 'cards' && <CardsTab store={store} />}
-      {tab === 'categories' && <CategoriesTab store={store} />}
-      {tab === 'email' && <EmailTab store={store} />}
+      {/* Each tab copies the settings into its form when it opens: before they arrive it would show
+          the defaults, and saving would overwrite the household's own. */}
+      {!store.ready ? (
+        <p role="status" className="py-6 text-base text-stone-600">
+          Loading the household’s settings
+        </p>
+      ) : (
+        <>
+          {tab === 'budget' && <BudgetTab store={store} notify={notify} />}
+          {tab === 'cards' && <CardsTab store={store} />}
+          {tab === 'categories' && <CategoriesTab store={store} />}
+          {tab === 'email' && <EmailTab store={store} />}
+        </>
+      )}
     </Dialog>
   );
 }
