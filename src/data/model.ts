@@ -9,7 +9,7 @@ import type { Source } from '../lib/matching';
  *   spendingCards/{id}         the household's cards: name, last 4, issuer, alert words, file columns
  *   spendingRules/{id}         "merchant contains X → category Y"
  *
- * Field lists here are the ones the security rules allow (huishouden/tasks firestore.rules).
+ * Field lists here are the ones the security rules allow (huishouden/rules firestore.rules).
  */
 
 export interface SpendingRecord {

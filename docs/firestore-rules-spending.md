@@ -1,6 +1,6 @@
-# Firestore rules for Spending (in huishouden/tasks)
+# Firestore rules for Spending (in huishouden/rules)
 
-One Firebase project has one rules file, and huishouden/tasks deploys it. Spending's blocks sit
+One Firebase project has one rules file, and [huishouden/rules](https://github.com/huishouden/rules) deploys it; changes go there as PRs. Spending's blocks sit
 inside `match /households/{householdId}` there and reuse `isMember()`; its tests are in
 `test/rules/firestore.rules.test.ts` (describe "Huishouden Spending").
 
