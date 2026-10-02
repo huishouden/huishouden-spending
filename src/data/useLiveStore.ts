@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { collection, doc, onSnapshot, writeBatch } from 'firebase/firestore';
+import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { writeBatch } from '@huishouden/pwa-kit/firestore';
 import { getDb } from '../services/firestoreTransactions';
 import { auth } from '../services/auth';
 import { gmailMailbox, requestGmailToken, storedGmailToken } from '@huishouden/pwa-kit/gmail';
