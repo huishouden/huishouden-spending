@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { captureScreenshot } from '@piekstra/huishouden-pwa-kit/e2e';
+import { captureScreenshot } from '@huishouden/pwa-kit/e2e';
 
 // README images of the signed-out app, which shows built-in sample data (no household data).
 // Refreshed by CI after each deploy; committed only when they change. The clock is frozen inside

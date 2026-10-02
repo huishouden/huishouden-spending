@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectCleanLoad, expectGoogleSignInPopup, expectInstallable } from '@piekstra/huishouden-pwa-kit/e2e';
+import { expectCleanLoad, expectGoogleSignInPopup, expectInstallable } from '@huishouden/pwa-kit/e2e';
 
 // Each check here caught, or would have caught, a bug a person found by hand first.
 

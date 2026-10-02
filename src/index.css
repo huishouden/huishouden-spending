@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@piekstra/huishouden-pwa-kit/theme.css";
+@import "@huishouden/pwa-kit/theme.css";
 
 /* The app toggles its own theme (settings.theme), so dark: follows the .dark class on the root, not the OS. */
 @custom-variant dark (&:where(.dark, .dark *));

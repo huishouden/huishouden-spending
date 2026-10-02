@@ -31,6 +31,6 @@ bun run e2e          # Playwright smoke tests against the live site (BASE_URL to
 bun run script:push  # deploy apps-script/ to the Sheet (tests first); see apps-script/README.md
 ```
 
-Built on [pwa-kit](https://github.com/piekstra/huishouden-pwa-kit) and follows its
-[standard](https://github.com/piekstra/huishouden-pwa-kit/blob/main/STANDARD.md). Merges to `main` deploy to
+Built on [pwa-kit](https://github.com/huishouden/huishouden-pwa-kit) and follows its
+[standard](https://github.com/huishouden/huishouden-pwa-kit/blob/main/STANDARD.md). Merges to `main` deploy to
 Firebase Hosting (project `huishouden-piekstra`), then run the smoke tests and refresh the screenshots.

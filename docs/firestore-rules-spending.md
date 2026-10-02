@@ -1,4 +1,4 @@
-# Firestore rules addition for spending (to apply in piekstra/household-tasks)
+# Firestore rules addition for spending (to apply in piekstra/huishouden-tasks)
 
 One Firebase project has one rules file, and household-tasks deploys it. Spending stores its data
 under the same household documents and reuses `isMember()`, so the addition is one block inside
