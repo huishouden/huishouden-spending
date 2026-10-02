@@ -1,23 +1,20 @@
-import { GoogleAuthProvider, reauthenticateWithPopup, type Auth } from 'firebase/auth';
+import type { Auth } from 'firebase/auth';
+import { googleAccessToken } from '@huishouden/pwa-kit/google-token';
+import { googleAccessMessage } from '@huishouden/pwa-kit/feedback';
 import { extractSpreadsheetId } from '../services/sheets';
 
 /**
  * Reads the legacy Sheet's settings tabs (Cards, Categories, Alert labels) for the one-time move into
- * Spending, with read-only Sheets access the member grants in a popup. A missing tab reads as empty.
+ * Spending, with read-only Sheets access the member grants in Google's window. A missing tab reads as empty.
  */
 
 const SHEETS_READONLY = 'https://www.googleapis.com/auth/spreadsheets.readonly';
 
-export async function sheetsToken(auth: Auth): Promise<string> {
-  const user = auth.currentUser;
-  if (!user) throw new Error('Sign in first.');
-  const provider = new GoogleAuthProvider();
-  provider.addScope(SHEETS_READONLY);
-  if (user.email) provider.setCustomParameters({ login_hint: user.email });
-  const result = await reauthenticateWithPopup(user, provider);
-  const token = GoogleAuthProvider.credentialFromResult(result)?.accessToken;
-  if (!token) throw new Error('Google did not allow reading the Sheet.');
-  return token;
+/** Read-only Sheets access from Google Identity Services (call from a tap); reused until it ends. */
+export function sheetsToken(auth: Auth): Promise<string> {
+  return googleAccessToken(auth, [SHEETS_READONLY], { deniedMessage: 'Google did not allow reading the Sheet.' }).catch((e: unknown) => {
+    throw new Error(googleAccessMessage(e, 'Sheets') ?? (e instanceof Error ? e.message : String(e)));
+  });
 }
 
 async function tab(token: string, id: string, range: string): Promise<string[][]> {

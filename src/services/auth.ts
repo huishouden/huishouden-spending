@@ -8,6 +8,7 @@ import {
   User,
 } from 'firebase/auth';
 import { firebaseConfigFromEnv } from '@huishouden/pwa-kit/firebase';
+import { configureGoogleTokens } from '@huishouden/pwa-kit/google-token';
 
 // From VITE_FIREBASE_* build variables: CI sets them from repo variables; locally run
 // `bun run env:pull` to write them to .env.local.
@@ -19,6 +20,9 @@ export const firebaseApp = app;
 // getAuth persists the session in IndexedDB (indexedDBLocalPersistence), so a device stays
 // signed in across reloads and restarts until someone signs out.
 export const auth = getAuth(app);
+// Gmail and Sheets tokens come from Google Identity Services with the OAuth web client, not from
+// Firebase sign-in (see @huishouden/pwa-kit/google-token).
+configureGoogleTokens({ clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID });
 
 // Provider with required scopes for Google Sheets and Google Drive
 export const SCOPES = [
