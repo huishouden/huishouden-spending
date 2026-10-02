@@ -95,9 +95,16 @@ function BudgetTab({ store, notify }: { store: SpendingStore; notify: (m: string
   const [budget, setBudget] = useState(store.settings.monthlyBudget ? String(store.settings.monthlyBudget) : '');
   const [currency, setCurrency] = useState(store.settings.currencySymbol);
   const [words, setWords] = useState(store.settings.ignoredKeywords);
+  const [status, setStatus] = useState<{ kind: 'idle' | 'saving' | 'saved' } | { kind: 'error'; message: string }>({ kind: 'idle' });
   const save = async () => {
-    await store.actions.saveSettings({ monthlyBudget: parseFloat(budget) || 0, currencySymbol: currency, ignoredKeywords: words });
-    notify('Saved the budget');
+    setStatus({ kind: 'saving' });
+    try {
+      await store.actions.saveSettings({ monthlyBudget: parseFloat(budget) || 0, currencySymbol: currency, ignoredKeywords: words });
+      setStatus({ kind: 'saved' });
+      notify('Saved the budget');
+    } catch (e) {
+      setStatus({ kind: 'error', message: readError(e, "Couldn't save the budget") });
+    }
   };
   return (
     <div className="space-y-6">
@@ -122,8 +129,11 @@ function BudgetTab({ store, notify }: { store: SpendingStore; notify: (m: string
         <WordList words={words} onChange={setWords} placeholder="hoa, escrow" label="Words never counted" />
       </div>
       <div className="flex items-center justify-end gap-3">
-        <button type="button" className={primaryButton} onClick={save}>
-          Save budget
+        <p role="status" className={`text-sm ${status.kind === 'error' ? 'text-red-700' : 'text-forest-700'}`}>
+          {status.kind === 'saved' ? 'Saved' : status.kind === 'error' ? status.message : ''}
+        </p>
+        <button type="button" className={primaryButton} onClick={save} disabled={status.kind === 'saving'}>
+          {status.kind === 'saving' ? 'Saving…' : 'Save budget'}
         </button>
       </div>
     </div>
