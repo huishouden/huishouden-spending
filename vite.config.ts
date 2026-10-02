@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
-import { pwaApp } from '@piekstra/pwa-kit/vite';
+import { pwaApp } from '@piekstra/huishouden-pwa-kit/vite';
 
 const googleFontsCache = (urlPattern: RegExp, cacheName: string) => ({
   urlPattern,
@@ -20,17 +20,12 @@ export default defineConfig(() => {
       react(),
       tailwindcss(),
       pwaApp({
-        name: 'Household Card Spend Display',
-        shortName: 'Card Spend',
-        description: 'Ambient household credit card spending & category tracker for Pixel Tablet & Google Sheets.',
-        themeColor: '#0f172a',
-        backgroundColor: '#020617',
-        icons: [
-          { src: '/pwa-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-          { src: '/pwa-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-          { src: '/pwa-maskable-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-        ],
-        includeAssets: ['icon.svg', 'favicon.png', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512x512.png'],
+        name: 'Huishouden Spending',
+        shortName: 'Spending',
+        description: 'Household card spending at a glance: this month against the budget, by category and by card.',
+        themeColor: '#1b4332',
+        backgroundColor: '#faf9f5',
+        includeAssets: ['icon.svg', 'favicon.png', 'apple-touch-icon.png'],
         overrides: {
           manifest: { categories: ['finance', 'productivity', 'utilities'] },
           workbox: {

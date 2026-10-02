@@ -30,19 +30,19 @@ export const CardBadge: React.FC<CardBadgeProps> = ({
   if (isRobinhood) {
     return (
       <span
-        className={`inline-flex items-center gap-1.5 font-medium rounded-lg border transition-all ${sizeClasses} ${
+        className={`inline-flex items-center gap-1.5 font-medium rounded-full border transition-all ${sizeClasses} ${
           isLight
-            ? 'bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-100/60 border-amber-300/80 text-amber-900 shadow-xs'
-            : 'bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-600/25 border-amber-500/40 text-amber-300 shadow-xs'
+            ? 'bg-forest-50 border-forest-100 text-forest-700'
+            : 'bg-forest-700 border-forest-600 text-forest-100'
         }`}
       >
-        <Sparkles className={size === 'sm' ? 'w-3 h-3 text-amber-600 dark:text-amber-400' : 'w-3.5 h-3.5 text-amber-600 dark:text-amber-400'} />
-        <span className="font-semibold tracking-wide">{cardName}</span>
+        <Sparkles className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
+        <span className="font-medium">{cardName}</span>
         {showCashback && (
-          <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full border ${
+          <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full border ${
             isLight
-              ? 'bg-amber-200/60 text-amber-950 border-amber-300'
-              : 'bg-amber-400/20 text-amber-200 border-amber-400/30'
+              ? 'bg-white text-forest-700 border-forest-200'
+              : 'bg-forest-800 text-forest-100 border-forest-600'
           }`}>
             Rewards
           </span>
@@ -54,27 +54,27 @@ export const CardBadge: React.FC<CardBadgeProps> = ({
   if (isChase) {
     return (
       <span
-        className={`inline-flex items-center gap-1.5 font-medium rounded-lg border transition-all ${sizeClasses} ${
+        className={`inline-flex items-center gap-1.5 font-medium rounded-full border transition-all ${sizeClasses} ${
           isLight
-            ? 'bg-sky-50 border-sky-200 text-sky-950 shadow-xs'
-            : 'bg-blue-950/40 border-blue-600/30 text-blue-300 shadow-xs'
+            ? 'bg-stone-100 border-stone-200 text-stone-700'
+            : 'bg-forest-900/60 border-forest-600 text-stone-200'
         }`}
       >
-        <CreditCard className={size === 'sm' ? 'w-3 h-3 text-sky-600 dark:text-blue-400' : 'w-3.5 h-3.5 text-sky-600 dark:text-blue-400'} />
-        <span className="font-semibold">{cardName || 'Chase Card'}</span>
+        <CreditCard className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
+        <span className="font-medium">{cardName || 'Chase Card'}</span>
       </span>
     );
   }
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 font-medium rounded-lg border transition-all ${sizeClasses} ${
+      className={`inline-flex items-center gap-1.5 font-medium rounded-full border transition-all ${sizeClasses} ${
         isLight
-          ? 'bg-slate-100 border-slate-200 text-slate-800 shadow-xs'
-          : 'bg-slate-800/80 border-slate-700 text-slate-300 shadow-xs'
+          ? 'bg-stone-100 border-stone-200 text-stone-700'
+          : 'bg-forest-900/60 border-forest-600 text-stone-200'
       }`}
     >
-      <CreditCard className={size === 'sm' ? 'w-3 h-3 text-slate-500 dark:text-slate-400' : 'w-3.5 h-3.5 text-slate-500 dark:text-slate-400'} />
+      <CreditCard className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} />
       <span className="font-medium">{cardName}</span>
     </span>
   );

@@ -23,31 +23,31 @@ export const CardBreakdown: React.FC<CardBreakdownProps> = ({
 
   return (
     <div
-      className={`rounded-2xl p-5 transition-all border ${
+      className={`rounded-2xl p-5 sm:p-6 transition-all border ${
         isLight
-          ? 'bg-white border-slate-200/90 shadow-sm'
-          : 'bg-slate-900/90 backdrop-blur-md border-slate-800/80 shadow-lg shadow-black/20'
+          ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+          : 'bg-forest-800 border-forest-700/60'
       }`}
     >
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between gap-3 mb-5">
         <div>
-          <h3 className={`text-base font-semibold tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
+          <h3 className={`text-base font-semibold tracking-tight ${isLight ? 'text-forest-700' : 'text-cream'}`}>
             Active Household Cards
           </h3>
-          <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+          <p className={`text-xs ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
             Card charges only (debits & mortgage excluded)
           </p>
         </div>
 
         {totalCashback > 0 && (
           <div
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium shrink-0 ${
               isLight
-                ? 'bg-amber-50 border-amber-200 text-amber-900'
-                : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                ? 'bg-forest-50 text-forest-700'
+                : 'bg-forest-700 text-forest-100'
             }`}
           >
-            <Coins className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+            <Coins className="w-3.5 h-3.5" />
             <span>~{currencySymbol}{Math.round(totalCashback)} rewards earned</span>
           </div>
         )}
@@ -56,43 +56,29 @@ export const CardBreakdown: React.FC<CardBreakdownProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {cards.map((card) => {
           const isSelected = selectedCard === card.cardName;
-          const isRobinhood = card.cardType === 'robinhood';
 
           return (
             <div
               key={card.cardName}
               onClick={() => onSelectCard(isSelected ? null : card.cardName)}
-              className={`relative overflow-hidden rounded-xl p-4 border transition-all cursor-pointer ${
+              className={`relative overflow-hidden rounded-xl p-4 sm:p-5 border transition-all cursor-pointer ${
                 isSelected
                   ? isLight
-                    ? 'border-indigo-500 ring-2 ring-indigo-500/20 bg-indigo-50/20 shadow-md'
-                    : 'border-indigo-500 ring-2 ring-indigo-500/30 bg-slate-800/90'
+                    ? 'border-forest-600 ring-2 ring-forest-600/20 bg-forest-50/60'
+                    : 'border-forest-400 ring-2 ring-forest-400/30 bg-forest-700'
                   : isLight
-                  ? isRobinhood
-                    ? 'bg-gradient-to-br from-amber-50/80 via-yellow-50/40 to-white border-amber-200/90 hover:border-amber-300 shadow-xs'
-                    : 'bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-white border-blue-200/90 hover:border-blue-300 shadow-xs'
-                  : isRobinhood
-                  ? 'bg-gradient-to-br from-slate-900 via-amber-950/20 to-slate-900 border-amber-500/30 hover:border-amber-500/50'
-                  : 'bg-gradient-to-br from-slate-900 via-blue-950/20 to-slate-900 border-blue-500/30 hover:border-blue-500/50'
+                  ? 'bg-stone-50 border-stone-200/70 hover:border-forest-300'
+                  : 'bg-forest-900/50 border-forest-700/60 hover:border-forest-500'
               }`}
             >
-              {/* Top Accent Stripe */}
-              <div
-                className={`absolute top-0 left-0 right-0 h-1.5 ${
-                  isRobinhood
-                    ? 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500'
-                    : 'bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600'
-                }`}
-              />
-
               <div className="flex items-start justify-between">
                 <div>
                   <CardBadge cardName={card.cardName} cardType={card.cardType} size="md" isLight={isLight} />
-                  <div className={`text-2xl font-bold mt-2.5 tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                  <div className={`text-2xl font-bold mt-3 tracking-tight tabular-nums ${isLight ? 'text-forest-700' : 'text-cream'}`}>
                     {currencySymbol}
                     {card.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
-                  <div className={`text-xs mt-0.5 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                  <div className={`text-xs mt-1 ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
                     {card.transactionCount} transactions · {Math.round(card.percentage)}% of household card spend
                   </div>
                 </div>
@@ -100,19 +86,19 @@ export const CardBreakdown: React.FC<CardBreakdownProps> = ({
                 <div className="text-right">
                   {card.cashbackEstimate && (
                     <div
-                      className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md border ${
+                      className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${
                         isLight
-                          ? 'bg-amber-100/70 text-amber-950 border-amber-200'
-                          : 'bg-amber-400/10 text-amber-300 border-amber-400/20'
+                          ? 'bg-forest-50 text-forest-700'
+                          : 'bg-forest-700 text-forest-100'
                       }`}
                     >
-                      <Sparkles className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                      <Sparkles className="w-3 h-3" />
                       +{currencySymbol}{card.cashbackEstimate.toFixed(0)} est.
                     </div>
                   )}
                   <div
                     className={`mt-4 flex items-center justify-end text-xs gap-1 transition ${
-                      isLight ? 'text-slate-500 hover:text-slate-800' : 'text-slate-400 hover:text-slate-200'
+                      isLight ? 'text-stone-600 hover:text-forest-700' : 'text-stone-300 hover:text-white'
                     }`}
                   >
                     <span>{isSelected ? 'Active Filter' : 'Filter Card'}</span>
@@ -123,13 +109,13 @@ export const CardBreakdown: React.FC<CardBreakdownProps> = ({
 
               {/* Share bar */}
               <div
-                className={`mt-3 w-full rounded-full h-1.5 overflow-hidden ${
-                  isLight ? 'bg-slate-100 border border-slate-200/50' : 'bg-slate-800'
+                className={`mt-4 w-full rounded-full h-1.5 overflow-hidden ${
+                  isLight ? 'bg-stone-200/70' : 'bg-forest-800'
                 }`}
               >
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
-                    isRobinhood ? 'bg-amber-500' : 'bg-blue-600'
+                    isLight ? 'bg-forest-600' : 'bg-forest-400'
                   }`}
                   style={{ width: `${Math.min(100, card.percentage)}%` }}
                 />
@@ -143,7 +129,7 @@ export const CardBreakdown: React.FC<CardBreakdownProps> = ({
         <div className="mt-3 text-right">
           <button
             onClick={() => onSelectCard(null)}
-            className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer font-medium"
+            className="text-xs text-forest-700 dark:text-forest-300 hover:underline cursor-pointer font-medium"
           >
             Clear card filter (show all cards)
           </button>

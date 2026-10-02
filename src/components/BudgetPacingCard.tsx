@@ -47,41 +47,30 @@ export const BudgetPacingCard: React.FC<BudgetPacingCardProps> = ({
     <div
       className={`relative overflow-hidden rounded-2xl border transition-all ${
         isLight
-          ? 'bg-white border-slate-200/90 p-5 shadow-sm'
+          ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5 p-5 sm:p-6'
           : isAmbient
-          ? 'bg-slate-900/80 border-slate-800 p-5'
-          : 'bg-slate-900/90 backdrop-blur-md border-slate-800/80 p-5 shadow-lg shadow-black/20'
+          ? 'bg-forest-800 border-forest-700/60 p-5 sm:p-6'
+          : 'bg-forest-800 border-forest-700/60 p-5 sm:p-6'
       }`}
     >
-      {/* Background glow based on budget status */}
-      <div
-        className={`absolute -right-16 -top-16 w-44 h-44 rounded-full blur-3xl pointer-events-none opacity-20 ${
-          isOverBudget
-            ? 'bg-rose-500'
-            : isPacingHot
-            ? 'bg-amber-500'
-            : 'bg-emerald-500'
-        }`}
-      />
-
-      <div className="relative z-10 flex flex-col justify-between h-full space-y-4">
+      <div className="relative z-10 flex flex-col justify-between h-full space-y-5">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div
-              className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+              className={`w-9 h-9 rounded-xl flex items-center justify-center ${
                 isLight
-                  ? 'bg-indigo-50 border border-indigo-200 text-indigo-600'
-                  : 'bg-indigo-500/20 border border-indigo-500/30 text-indigo-400'
+                  ? 'bg-forest-50 text-forest-700'
+                  : 'bg-forest-700 text-forest-100'
               }`}
             >
               <Target className="w-4 h-4" />
             </div>
             <div>
-              <h3 className={`text-sm font-semibold tracking-tight ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+              <h3 className={`text-base font-semibold tracking-tight ${isLight ? 'text-forest-700' : 'text-cream'}`}>
                 Household Card Target
               </h3>
-              <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              <p className={`text-xs ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
                 {isCurrentMonth ? `Day ${currentDay} of ${daysInMonth} (${daysRemaining}d left)` : 'Full Month Overview'}
               </p>
             </div>
@@ -89,10 +78,10 @@ export const BudgetPacingCard: React.FC<BudgetPacingCardProps> = ({
 
           <button
             onClick={onEditBudget}
-            className={`text-xs px-2.5 py-1 rounded-lg border transition cursor-pointer ${
+            className={`text-xs font-medium px-3 py-1.5 rounded-lg border transition cursor-pointer ${
               isLight
-                ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
-                : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+                ? 'bg-white hover:bg-forest-50 text-forest-700 border-stone-200'
+                : 'bg-forest-900/50 hover:bg-forest-700 text-forest-100 border-forest-700'
             }`}
           >
             Edit Goal
@@ -102,25 +91,25 @@ export const BudgetPacingCard: React.FC<BudgetPacingCardProps> = ({
         {/* Big numbers */}
         <div className="flex items-baseline justify-between">
           <div>
-            <div className={`text-2xl lg:text-3xl font-bold tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
+            <div className={`text-2xl lg:text-3xl font-bold tracking-tight tabular-nums ${isLight ? 'text-forest-700' : 'text-cream'}`}>
               {formatCurrency(totalSpend)}
-              <span className={`text-sm font-normal ml-1.5 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              <span className={`text-sm font-normal ml-1.5 ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                 / {formatCurrency(budget)}
               </span>
             </div>
-            <div className="text-xs font-medium mt-0.5 flex items-center gap-1.5">
+            <div className="text-xs font-medium mt-1 flex items-center gap-1.5">
               {isOverBudget ? (
-                <span className="text-rose-600 dark:text-rose-400 flex items-center gap-1">
+                <span className="text-terracotta-dark dark:text-terracotta-light flex items-center gap-1">
                   <AlertCircle className="w-3.5 h-3.5" />
                   Over goal by {formatCurrency(totalSpend - budget)}
                 </span>
               ) : isPacingHot ? (
-                <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                <span className="text-terracotta-dark dark:text-terracotta-light flex items-center gap-1">
                   <TrendingUp className="w-3.5 h-3.5" />
                   Trending fast (+{Math.round(percentUsed - expectedPacingPercent)}% ahead)
                 </span>
               ) : (
-                <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <span className="text-forest-700 dark:text-forest-300 flex items-center gap-1">
                   <TrendingDown className="w-3.5 h-3.5" />
                   On track ({formatCurrency(remainingBudget)} room)
                 </span>
@@ -132,42 +121,42 @@ export const BudgetPacingCard: React.FC<BudgetPacingCardProps> = ({
             <div
               className={`text-lg font-bold ${
                 isOverBudget
-                  ? 'text-rose-600 dark:text-rose-400'
+                  ? 'text-terracotta-dark dark:text-terracotta-light'
                   : isPacingHot
-                  ? 'text-amber-600 dark:text-amber-400'
-                  : 'text-emerald-600 dark:text-emerald-400'
+                  ? 'text-terracotta-dark dark:text-terracotta-light'
+                  : 'text-forest-700 dark:text-forest-300'
               }`}
             >
               {Math.round(percentUsed)}%
             </div>
-            <div className={`text-[11px] ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Target Used</div>
+            <div className={`text-[11px] ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>Target Used</div>
           </div>
         </div>
 
         {/* Progress Bar with Today Marker */}
         <div className="space-y-1.5">
           <div
-            className={`relative w-full h-3 rounded-full overflow-hidden ${
-              isLight ? 'bg-slate-100 border border-slate-200/80' : 'bg-slate-800/90'
+            className={`relative w-full h-2.5 rounded-full overflow-hidden ${
+              isLight ? 'bg-stone-100' : 'bg-forest-900/70'
             }`}
           >
             <div
               className={`h-full transition-all duration-700 rounded-full ${
                 isOverBudget
-                  ? 'bg-rose-500'
+                  ? 'bg-terracotta'
                   : isPacingHot
-                  ? 'bg-gradient-to-r from-amber-500 to-rose-500'
-                  : 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                  ? 'bg-terracotta'
+                  : 'bg-forest-500'
               }`}
               style={{ width: `${Math.min(100, percentUsed)}%` }}
             />
           </div>
 
           {/* Markers */}
-          <div className={`flex justify-between text-[11px] font-mono ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+          <div className={`flex justify-between text-[11px] tabular-nums ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
             <span>$0</span>
             {isCurrentMonth && (
-              <span className={isLight ? 'text-slate-700 font-medium' : 'text-slate-300'}>
+              <span className={isLight ? 'text-stone-700 font-medium' : 'text-stone-200 font-medium'}>
                 Pacing mark: {Math.round(expectedPacingPercent)}%
               </span>
             )}
@@ -178,27 +167,27 @@ export const BudgetPacingCard: React.FC<BudgetPacingCardProps> = ({
         {/* Velocity stats */}
         {isCurrentMonth && (
           <div
-            className={`grid grid-cols-2 gap-2 pt-2 border-t text-xs ${
-              isLight ? 'border-slate-100' : 'border-slate-800/80'
+            className={`grid grid-cols-2 gap-3 pt-4 border-t text-xs ${
+              isLight ? 'border-stone-100' : 'border-forest-700/60'
             }`}
           >
-            <div className={`p-2 rounded-xl ${isLight ? 'bg-slate-50 border border-slate-200/60' : 'bg-slate-800/40'}`}>
-              <span className={`block text-[10px] uppercase tracking-wider font-semibold ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className={`p-3 rounded-xl ${isLight ? 'bg-stone-50' : 'bg-forest-900/50'}`}>
+              <span className={`block text-[11px] font-medium ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                 Daily Burn
               </span>
-              <span className={`font-semibold ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+              <span className={`text-sm font-semibold ${isLight ? 'text-stone-800' : 'text-stone-100'}`}>
                 {formatCurrency(dailyBurnRate)}/day
               </span>
             </div>
-            <div className={`p-2 rounded-xl ${isLight ? 'bg-slate-50 border border-slate-200/60' : 'bg-slate-800/40'}`}>
-              <span className={`block text-[10px] uppercase tracking-wider font-semibold ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className={`p-3 rounded-xl ${isLight ? 'bg-stone-50' : 'bg-forest-900/50'}`}>
+              <span className={`block text-[11px] font-medium ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                 Safe Daily Pace
               </span>
               <span
-                className={`font-semibold ${
+                className={`text-sm font-semibold ${
                   allowableDailyRate < dailyBurnRate
-                    ? isLight ? 'text-amber-700' : 'text-amber-300'
-                    : isLight ? 'text-emerald-700' : 'text-emerald-300'
+                    ? isLight ? 'text-terracotta-dark' : 'text-terracotta-light'
+                    : isLight ? 'text-forest-700' : 'text-forest-300'
                 }`}
               >
                 {formatCurrency(allowableDailyRate)}/day

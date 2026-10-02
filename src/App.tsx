@@ -366,17 +366,17 @@ export default function App() {
 
   return (
     <div
-      className={`relative min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-300 ${
-        isLight ? 'bg-slate-50 text-slate-900' : 'bg-slate-950 text-slate-100'
+      className={`relative min-h-screen font-sans antialiased selection:bg-forest-200 selection:text-forest-900 transition-colors duration-300 ${
+        isLight ? 'bg-cream text-stone-800' : 'dark bg-forest-900 text-stone-100'
       }`}
     >
       {/* Toast alert */}
       {syncStatusToast && (
         <div
-          className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-2xl shadow-xl border text-xs font-semibold flex items-center gap-2 animate-bounce transition-all ${
+          className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-xl shadow-lg shadow-stone-900/10 border text-sm font-medium flex items-center gap-2 transition-all ${
             syncStatusToast.type === 'success'
-              ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-200'
-              : 'bg-rose-950/90 border-rose-500/40 text-rose-200'
+              ? 'bg-forest-700 border-forest-600 text-white'
+              : 'bg-terracotta-dark border-terracotta text-white'
           }`}
         >
           <span>{syncStatusToast.message}</span>

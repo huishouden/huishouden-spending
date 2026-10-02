@@ -19,6 +19,7 @@ import {
   TrendingUp,
   Tablet,
   HelpCircle,
+  AlertTriangle,
 } from 'lucide-react';
 
 interface AmbientDashboardProps {
@@ -126,34 +127,34 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
   return (
     <div
       className={`min-h-screen flex flex-col justify-between p-6 sm:p-8 lg:p-10 select-none overflow-hidden font-sans transition-colors duration-300 ${
-        isLight ? 'bg-slate-50 text-slate-900' : 'bg-slate-950 text-slate-100'
+        isLight ? 'bg-cream text-stone-800' : 'bg-forest-900 text-stone-100'
       }`}
     >
       {/* Top Bar: Ambient Clock, Date, and Discreet Household Status */}
       <header
-        className={`flex items-center justify-between pb-5 border-b ${
-          isLight ? 'border-slate-200' : 'border-slate-900'
+        className={`flex items-center justify-between pb-6 border-b ${
+          isLight ? 'border-stone-200/70' : 'border-forest-800'
         }`}
       >
         <div className="flex items-center gap-4">
           <div
-            className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
               isLight
-                ? 'bg-indigo-50 border-indigo-200 text-indigo-600 shadow-xs'
-                : 'bg-gradient-to-br from-indigo-500/20 to-blue-600/20 border-indigo-500/30 text-indigo-400'
+                ? 'bg-forest-700 text-white'
+                : 'bg-forest-800 text-forest-200'
             }`}
           >
             <Clock className="w-6 h-6" />
           </div>
           <div>
             <div
-              className={`text-3xl font-extrabold tracking-tight font-mono ${
-                isLight ? 'text-slate-900' : 'text-white'
+              className={`text-3xl font-bold tracking-tight tabular-nums ${
+                isLight ? 'text-forest-700' : 'text-cream'
               }`}
             >
               {timeStr}
             </div>
-            <div className={`text-xs sm:text-sm font-medium ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className={`text-xs sm:text-sm font-medium ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
               {dateStr}
             </div>
           </div>
@@ -166,21 +167,21 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
               <div
                 className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs ${
                   isLight
-                    ? 'bg-white border-slate-200 text-slate-600 shadow-xs'
-                    : 'bg-slate-900 border-slate-800 text-slate-400'
+                    ? 'bg-white border-stone-200 text-stone-600'
+                    : 'bg-forest-800 border-forest-700 text-stone-300'
                 }`}
               >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span className={`truncate max-w-[140px] font-medium ${isLight ? 'text-slate-800' : 'text-slate-300'}`}>
+                <FileSpreadsheet className="w-3.5 h-3.5 text-forest-700 dark:text-forest-300" />
+                <span className={`truncate max-w-[140px] font-medium ${isLight ? 'text-stone-800' : 'text-stone-100'}`}>
                   {sheetConfig.spreadsheetTitle || 'Synced Sheet'}
                 </span>
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 ml-1" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-forest-700 dark:text-forest-300 ml-1" />
               </div>
             ) : (
               <button
                 onClick={onRefresh}
                 title="Google session expired — tap to reconnect"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-xs cursor-pointer transition animate-pulse"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-terracotta-dark text-xs font-semibold bg-terracotta-dark hover:bg-terracotta text-white cursor-pointer transition"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5" />
                 <span>Reconnect Sheet</span>
@@ -189,13 +190,14 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
           ) : (
             <button
               onClick={onOpenSheetSync}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-medium transition cursor-pointer ${
                 isLight
-                  ? 'bg-amber-100 hover:bg-amber-200 border-amber-300 text-amber-900 shadow-xs'
-                  : 'bg-amber-950/60 hover:bg-amber-900/60 border-amber-700 text-amber-200'
+                  ? 'bg-terracotta-light/60 hover:bg-terracotta-light border-terracotta/40 text-terracotta-dark'
+                  : 'bg-terracotta/15 hover:bg-terracotta/25 border-terracotta/50 text-terracotta-light'
               }`}
             >
-              <span>⚠️ Demo Data • Connect Sheet</span>
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>Demo Data • Connect Sheet</span>
             </button>
           )}
 
@@ -205,11 +207,11 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
             title={isLight ? 'Switch to Dark/Night Ambient mode' : 'Switch to Bright/Day mode'}
             className={`p-2.5 rounded-xl border transition cursor-pointer ${
               isLight
-                ? 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
-                : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
             }`}
           >
-            {isLight ? <Moon className="w-4 h-4 text-indigo-600" /> : <Sun className="w-4 h-4 text-amber-400" />}
+            {isLight ? <Moon className="w-4 h-4 text-forest-700" /> : <Sun className="w-4 h-4 text-forest-200" />}
           </button>
 
           <button
@@ -217,11 +219,11 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
             title={settings.showPrivacyBlur ? 'Show amounts' : 'Hide amounts (Guest mode)'}
             className={`p-2.5 rounded-xl border transition cursor-pointer ${
               isLight
-                ? 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
-                : 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800'
+                ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
             }`}
           >
-            {settings.showPrivacyBlur ? <EyeOff className="w-4 h-4 text-amber-500" /> : <Eye className="w-4 h-4" />}
+            {settings.showPrivacyBlur ? <EyeOff className="w-4 h-4 text-terracotta-dark dark:text-terracotta-light" /> : <Eye className="w-4 h-4" />}
           </button>
 
           <button
@@ -230,24 +232,24 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
             title="Refresh from Google Sheets"
             className={`p-2.5 rounded-xl border transition cursor-pointer ${
               isLight
-                ? 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
-                : 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800'
+                ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
             }`}
           >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-indigo-600' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-forest-600 dark:text-forest-300' : ''}`} />
           </button>
 
           {/* Fullscreen Button */}
           <button
             onClick={toggleFullscreen}
             title="Toggle Fullscreen Tablet Kiosk Mode"
-            className={`px-3 py-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer ${
+            className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition cursor-pointer ${
               isLight
-                ? 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
-                : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
+                ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
             }`}
           >
-            {isFullscreen ? <Minimize2 className="w-4 h-4 text-indigo-500" /> : <Maximize2 className="w-4 h-4 text-indigo-500" />}
+            {isFullscreen ? <Minimize2 className="w-4 h-4 text-forest-600 dark:text-forest-300" /> : <Maximize2 className="w-4 h-4 text-forest-600 dark:text-forest-300" />}
             <span className="hidden sm:inline">{isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}</span>
           </button>
 
@@ -257,11 +259,11 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
               title="Pixel Tablet Setup Guide & QR Code"
               className={`p-2.5 rounded-xl border transition cursor-pointer ${
                 isLight
-                  ? 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800'
+                  ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                  : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
               }`}
             >
-              <Tablet className="w-4 h-4 text-indigo-500" />
+              <Tablet className="w-4 h-4 text-forest-600 dark:text-forest-300" />
             </button>
           )}
 
@@ -271,11 +273,11 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
               title="Google Sheet & Drive Data Guide"
               className={`p-2.5 rounded-xl border transition cursor-pointer ${
                 isLight
-                  ? 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800'
+                  ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                  : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
               }`}
             >
-              <HelpCircle className="w-4 h-4 text-emerald-500" />
+              <HelpCircle className="w-4 h-4 text-forest-700 dark:text-forest-300" />
             </button>
           )}
 
@@ -284,8 +286,8 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
             title="Household Settings"
             className={`p-2.5 rounded-xl border transition cursor-pointer ${
               isLight
-                ? 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200 shadow-xs'
-                : 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border-slate-800'
+                ? 'bg-white hover:bg-stone-100 text-stone-700 border-stone-200'
+                : 'bg-forest-800 hover:bg-forest-700 text-stone-200 border-forest-700'
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -293,7 +295,9 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
 
           <button
             onClick={onExitAmbient}
-            className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/25 transition cursor-pointer flex items-center gap-1.5"
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer flex items-center gap-1.5 ${
+              isLight ? 'bg-forest-700 hover:bg-forest-600 text-white' : 'bg-forest-400 hover:bg-forest-300 text-forest-900'
+            }`}
           >
             <span>Interactive Mode</span>
           </button>
@@ -301,32 +305,32 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
       </header>
 
       {/* Main Glance Section: High Legibility from Distance */}
-      <main className="my-auto py-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <main className="my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
         {/* Left Col: Giant Total Card Spend & Pacing (lg:col-span-5) */}
         <div className="lg:col-span-5 space-y-6">
           <div
             className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium ${
               isLight
-                ? 'bg-white border-slate-200 text-slate-700 shadow-2xs'
-                : 'bg-slate-900 border-slate-800 text-slate-300'
+                ? 'bg-white border-stone-200 text-stone-700'
+                : 'bg-forest-800 border-forest-700 text-stone-200'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-forest-500" />
             <span>{monthlySummary.monthName} · Household Card Total</span>
           </div>
 
           <div>
             <div
-              className={`text-6xl sm:text-7xl lg:text-8xl font-black tracking-tight font-sans leading-none ${
-                isLight ? 'text-slate-900' : 'text-white'
+              className={`text-6xl sm:text-7xl lg:text-8xl font-bold tracking-tight tabular-nums leading-none ${
+                isLight ? 'text-forest-700' : 'text-cream'
               }`}
             >
               {formatAmount(totalSpend)}
             </div>
-            <div className={`flex items-center gap-2 mt-3 text-sm ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+            <div className={`flex items-center gap-2 mt-4 text-sm ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
               <span>Monthly Target: {formatAmount(budget)}</span>
               <span>•</span>
-              <span className={`font-semibold ${isLight ? 'text-slate-800' : 'text-slate-300'}`}>
+              <span className={`font-semibold ${isLight ? 'text-stone-800' : 'text-stone-100'}`}>
                 {monthlySummary.transactionCount} card charges
               </span>
             </div>
@@ -334,29 +338,29 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
 
           {/* Large Glance Pacing Bar */}
           <div
-            className={`p-5 rounded-2xl border space-y-3 ${
+            className={`p-5 sm:p-6 rounded-2xl border space-y-3 ${
               isLight
-                ? 'bg-white border-slate-200/90 shadow-sm'
-                : 'bg-slate-900/80 border-slate-800/80'
+                ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+                : 'bg-forest-800 border-forest-700/60'
             }`}
           >
             <div className="flex items-center justify-between text-sm">
-              <span className={isLight ? 'text-slate-500' : 'text-slate-400'}>
+              <span className={isLight ? 'text-stone-600' : 'text-stone-300'}>
                 {isCurrentMonth ? `${daysRemaining} days left in month` : 'Monthly Total'}
               </span>
-              <div className="flex items-center gap-1 font-bold">
+              <div className="flex items-center gap-1 font-semibold">
                 {isOverBudget ? (
-                  <span className="text-rose-600 dark:text-rose-400 flex items-center gap-1">
+                  <span className="text-terracotta-dark dark:text-terracotta-light flex items-center gap-1">
                     <TrendingUp className="w-4 h-4" />
                     Over by {formatAmount(totalSpend - budget)}
                   </span>
                 ) : isPacingHot ? (
-                  <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                  <span className="text-terracotta-dark dark:text-terracotta-light flex items-center gap-1">
                     <TrendingUp className="w-4 h-4" />
                     Trending High
                   </span>
                 ) : (
-                  <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                  <span className="text-forest-700 dark:text-forest-300 flex items-center gap-1">
                     <TrendingDown className="w-4 h-4" />
                     On Track ({formatAmount(remaining)} left)
                   </span>
@@ -365,17 +369,17 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
             </div>
 
             <div
-              className={`w-full rounded-full h-3.5 overflow-hidden ${
-                isLight ? 'bg-slate-100 border border-slate-200/80' : 'bg-slate-800'
+              className={`w-full rounded-full h-3 overflow-hidden ${
+                isLight ? 'bg-stone-100' : 'bg-forest-900/70'
               }`}
             >
               <div
                 className={`h-full rounded-full transition-all duration-700 ${
                   isOverBudget
-                    ? 'bg-rose-500'
+                    ? 'bg-terracotta'
                     : isPacingHot
-                    ? 'bg-gradient-to-r from-amber-500 to-rose-500'
-                    : 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                    ? 'bg-terracotta'
+                    : 'bg-forest-500'
                 }`}
                 style={{ width: `${Math.min(100, percentUsed)}%` }}
               />
@@ -384,11 +388,11 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
             {isCurrentMonth && (
               <div
                 className={`flex items-center justify-between text-xs pt-1 ${
-                  isLight ? 'text-slate-500' : 'text-slate-400'
+                  isLight ? 'text-stone-600' : 'text-stone-300'
                 }`}
               >
                 <span>Paced at {Math.round(percentUsed)}% vs {Math.round(expectedPacingPercent)}% time elapsed</span>
-                <span className={`font-semibold ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                <span className={`font-semibold ${isLight ? 'text-stone-800' : 'text-stone-100'}`}>
                   {formatAmount(monthlySummary.dailyAverage)}/day avg
                 </span>
               </div>
@@ -396,31 +400,26 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
           </div>
 
           {/* Household Cards Quick Snapshot */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {monthlySummary.cards.map((c) => {
-              const isRobinhood = c.cardType === 'robinhood';
               return (
                 <div
                   key={c.cardName}
                   className={`p-4 rounded-2xl border transition-all ${
                     isLight
-                      ? isRobinhood
-                        ? 'bg-gradient-to-b from-amber-50/90 to-white border-amber-200 shadow-xs'
-                        : 'bg-gradient-to-b from-blue-50/90 to-white border-blue-200 shadow-xs'
-                      : isRobinhood
-                      ? 'bg-gradient-to-b from-amber-950/20 to-slate-900/60 border-amber-500/30'
-                      : 'bg-gradient-to-b from-blue-950/20 to-slate-900/60 border-blue-500/30'
+                      ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+                      : 'bg-forest-800 border-forest-700/60'
                   }`}
                 >
                   <CardBadge cardName={c.cardName} cardType={c.cardType} size="sm" isLight={isLight} />
                   <div
-                    className={`text-xl sm:text-2xl font-bold mt-2.5 ${
-                      isLight ? 'text-slate-900' : 'text-white'
+                    className={`text-xl sm:text-2xl font-bold mt-3 tabular-nums ${
+                      isLight ? 'text-forest-700' : 'text-cream'
                     }`}
                   >
                     {formatAmount(c.total)}
                   </div>
-                  <div className={`text-xs mt-0.5 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                  <div className={`text-xs mt-1 ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
                     {c.transactionCount} charges ({Math.round(c.percentage)}%)
                   </div>
                 </div>
@@ -433,17 +432,17 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
         <div className="lg:col-span-7 space-y-6">
           {/* Top Category Pillars */}
           <div
-            className={`p-5 rounded-3xl border ${
+            className={`p-5 sm:p-6 rounded-2xl border ${
               isLight
-                ? 'bg-white border-slate-200/90 shadow-sm'
-                : 'bg-slate-900/60 border-slate-800/80 backdrop-blur-md'
+                ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+                : 'bg-forest-800 border-forest-700/60'
             }`}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className={`text-sm font-bold uppercase tracking-wider ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className={`text-base font-semibold ${isLight ? 'text-forest-700' : 'text-cream'}`}>
                 Top Spend Categories
               </h3>
-              <span className={`text-xs ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>
+              <span className={`text-xs ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                 Debits & mortgage excluded
               </span>
             </div>
@@ -451,11 +450,11 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
             <div className="space-y-3.5">
               {monthlySummary.categories.slice(0, 5).map((cat) => {
                 const colorMeta = CATEGORY_COLORS[cat.category] || {
-                  bg: 'bg-slate-100 text-slate-800 border-slate-200',
-                  darkBg: 'bg-slate-500/15 text-slate-400 border-slate-500/20',
-                  text: 'text-slate-700',
-                  darkText: 'text-slate-400',
-                  bar: 'bg-slate-500',
+                  bg: 'bg-stone-100 text-stone-800 border-stone-200',
+                  darkBg: 'bg-stone-500/15 text-stone-300 border-stone-500/20',
+                  text: 'text-stone-700',
+                  darkText: 'text-stone-400',
+                  bar: 'bg-cat-stone',
                 };
 
                 const iconClass = isLight ? colorMeta.bg : colorMeta.darkBg;
@@ -465,22 +464,22 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2.5">
                         <div
-                          className={`w-7 h-7 rounded-lg flex items-center justify-center border ${iconClass}`}
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center ${iconClass}`}
                         >
                           <CategoryIcon name={cat.category} className="w-3.5 h-3.5" />
                         </div>
-                        <span className={`font-semibold ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                        <span className={`font-medium ${isLight ? 'text-stone-800' : 'text-stone-100'}`}>
                           {cat.category}
                         </span>
-                        <span className={`text-xs ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span className={`text-xs ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                           ({cat.transactionCount})
                         </span>
                       </div>
                       <div className="flex items-baseline gap-2">
-                        <span className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                        <span className={`text-xs ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                           {cat.percentage.toFixed(0)}%
                         </span>
-                        <span className={`font-bold tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                        <span className={`font-semibold tracking-tight tabular-nums ${isLight ? 'text-stone-800' : 'text-cream'}`}>
                           {formatExactAmount(cat.total)}
                         </span>
                       </div>
@@ -488,7 +487,7 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
 
                     <div
                       className={`w-full rounded-full h-2 overflow-hidden ${
-                        isLight ? 'bg-slate-100 border border-slate-200/50' : 'bg-slate-800/80'
+                        isLight ? 'bg-stone-100' : 'bg-forest-900/70'
                       }`}
                     >
                       <div
@@ -504,42 +503,42 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
 
           {/* Recent Household Charges (Glance Feed) */}
           <div
-            className={`p-5 rounded-3xl border ${
+            className={`p-5 sm:p-6 rounded-2xl border ${
               isLight
-                ? 'bg-white border-slate-200/90 shadow-sm'
-                : 'bg-slate-900/60 border-slate-800/80 backdrop-blur-md'
+                ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+                : 'bg-forest-800 border-forest-700/60'
             }`}
           >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className={`text-sm font-bold uppercase tracking-wider ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`text-base font-semibold ${isLight ? 'text-forest-700' : 'text-cream'}`}>
                 Latest Card Charges
               </h3>
               <button
                 onClick={onExitAmbient}
-                className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-medium cursor-pointer"
+                className="text-xs text-forest-700 dark:text-forest-300 hover:underline font-medium cursor-pointer"
               >
                 View all ({monthlySummary.transactions.length}) →
               </button>
             </div>
 
-            <div className={`divide-y ${isLight ? 'divide-slate-100' : 'divide-slate-800/50'}`}>
+            <div className={`divide-y ${isLight ? 'divide-stone-100' : 'divide-forest-700/50'}`}>
               {monthlySummary.transactions.slice(0, 4).map((t) => (
-                <div key={t.id} className="py-2.5 flex items-center justify-between">
+                <div key={t.id} className="py-3 flex items-center justify-between">
                   <div className="flex items-center gap-3 min-w-0 pr-2">
                     <div
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border ${
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                         isLight
-                          ? 'bg-slate-100 border-slate-200 text-slate-600'
-                          : 'bg-slate-800 border-slate-700 text-slate-400'
+                          ? 'bg-stone-100 text-stone-600'
+                          : 'bg-forest-900/60 text-stone-300'
                       }`}
                     >
                       <CategoryIcon name={t.category} className="w-3.5 h-3.5" />
                     </div>
                     <div className="min-w-0">
-                      <div className={`text-sm font-semibold truncate ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                      <div className={`text-sm font-medium truncate ${isLight ? 'text-stone-800' : 'text-stone-100'}`}>
                         {t.merchant}
                       </div>
-                      <div className={`text-[11px] flex items-center gap-2 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                      <div className={`text-xs flex items-center gap-2 ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                         <span>{t.date}</span>
                         <span>•</span>
                         <span>{t.cardName}</span>
@@ -548,7 +547,7 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
                   </div>
 
                   <div className="text-right shrink-0">
-                    <div className={`text-sm font-bold ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                    <div className={`text-sm font-semibold tabular-nums ${isLight ? 'text-stone-800' : 'text-cream'}`}>
                       {formatExactAmount(t.amount)}
                     </div>
                   </div>
@@ -562,7 +561,7 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
       {/* Bottom Footer: Status and Hub Dock Message */}
       <footer
         className={`flex flex-col sm:flex-row items-center justify-between pt-4 border-t text-xs gap-2 ${
-          isLight ? 'border-slate-200 text-slate-500' : 'border-slate-900 text-slate-500'
+          isLight ? 'border-stone-200/70 text-stone-500' : 'border-forest-800 text-stone-400'
         }`}
       >
         <div className="flex items-center gap-2">
@@ -573,14 +572,14 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
 
         <div className="flex items-center gap-3">
           {sheetConfig ? (
-            <span className={`flex items-center gap-1.5 ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
-              <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+            <span className={`flex items-center gap-1.5 ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
+              <CheckCircle2 className="w-3 h-3 text-forest-700 dark:text-forest-300" />
               Synced via Google Sheets
             </span>
           ) : (
             <button
               onClick={onOpenSheetSync}
-              className="text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer font-medium"
+              className="text-forest-700 dark:text-forest-300 hover:underline flex items-center gap-1 cursor-pointer font-medium"
             >
               <FileSpreadsheet className="w-3.5 h-3.5" />
               Connect Google Sheet
@@ -589,7 +588,7 @@ export const AmbientDashboard: React.FC<AmbientDashboardProps> = ({
           <span>•</span>
           <button
             onClick={onExitAmbient}
-            className={`hover:underline cursor-pointer ${isLight ? 'text-slate-600 hover:text-slate-900' : 'hover:text-slate-300'}`}
+            className={`hover:underline cursor-pointer ${isLight ? 'text-stone-600 hover:text-stone-900' : 'text-stone-300 hover:text-white'}`}
           >
             Tap anywhere to interact
           </button>

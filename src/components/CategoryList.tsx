@@ -26,28 +26,28 @@ export const CategoryList: React.FC<CategoryListProps> = ({
 
   return (
     <div
-      className={`rounded-2xl p-5 transition-all border ${
+      className={`rounded-2xl p-5 sm:p-6 transition-all border ${
         isLight
-          ? 'bg-white border-slate-200/90 shadow-sm'
-          : 'bg-slate-900/90 backdrop-blur-md border-slate-800/80 shadow-lg shadow-black/20'
+          ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5'
+          : 'bg-forest-800 border-forest-700/60'
       }`}
     >
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <div
-            className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center ${
               isLight
-                ? 'bg-emerald-50 border border-emerald-200 text-emerald-600'
-                : 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-400'
+                ? 'bg-forest-50 text-forest-700'
+                : 'bg-forest-700 text-forest-100'
             }`}
           >
             <Layers className="w-4 h-4" />
           </div>
           <div>
-            <h3 className={`text-base font-semibold tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
+            <h3 className={`text-base font-semibold tracking-tight ${isLight ? 'text-forest-700' : 'text-cream'}`}>
               Spending by Category
             </h3>
-            <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <p className={`text-xs ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
               Tap any category to filter card transactions
             </p>
           </div>
@@ -56,10 +56,10 @@ export const CategoryList: React.FC<CategoryListProps> = ({
         {selectedCategory && (
           <button
             onClick={() => onSelectCategory(null)}
-            className={`text-xs px-2.5 py-1 rounded-lg border transition cursor-pointer ${
+            className={`text-xs font-medium px-3 py-1.5 rounded-lg border transition cursor-pointer ${
               isLight
-                ? 'text-indigo-600 hover:text-indigo-700 bg-indigo-50 border-indigo-200'
-                : 'text-indigo-400 hover:text-indigo-300 bg-slate-800 border-slate-700'
+                ? 'text-forest-700 bg-white hover:bg-forest-50 border-stone-200'
+                : 'text-forest-100 bg-forest-900/50 hover:bg-forest-700 border-forest-700'
             }`}
           >
             Show All
@@ -67,15 +67,15 @@ export const CategoryList: React.FC<CategoryListProps> = ({
         )}
       </div>
 
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         {displayed.map((cat) => {
           const isSelected = selectedCategory === cat.category;
           const colorMeta = CATEGORY_COLORS[cat.category] || {
-            bg: 'bg-slate-100 text-slate-800 border-slate-200',
-            darkBg: 'bg-slate-500/15 text-slate-400 border-slate-500/20',
-            text: 'text-slate-700',
-            darkText: 'text-slate-400',
-            bar: 'bg-slate-500',
+            bg: 'bg-stone-100 text-stone-800 border-stone-200',
+            darkBg: 'bg-stone-500/15 text-stone-400 border-stone-500/20',
+            text: 'text-stone-700',
+            darkText: 'text-stone-400',
+            bar: 'bg-cat-stone',
           };
 
           const iconClass = isLight ? colorMeta.bg : colorMeta.darkBg;
@@ -87,32 +87,32 @@ export const CategoryList: React.FC<CategoryListProps> = ({
               className={`p-3 rounded-xl border transition-all cursor-pointer ${
                 isSelected
                   ? isLight
-                    ? 'border-indigo-500 bg-indigo-50/40 ring-1 ring-indigo-500/20 shadow-xs'
-                    : 'border-indigo-500 bg-slate-800/90 ring-1 ring-indigo-500/30'
+                    ? 'border-forest-600 bg-forest-50/60 ring-1 ring-forest-600/20'
+                    : 'border-forest-400 bg-forest-700 ring-1 ring-forest-400/30'
                   : isLight
-                  ? 'bg-slate-50/70 border-slate-200/80 hover:bg-slate-100/80 hover:border-slate-300 shadow-2xs'
-                  : 'bg-slate-800/30 border-slate-800/60 hover:bg-slate-800/60 hover:border-slate-700'
+                  ? 'bg-white border-stone-200/70 hover:bg-stone-50 hover:border-stone-300'
+                  : 'bg-forest-900/40 border-forest-700/50 hover:bg-forest-900/70 hover:border-forest-600'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center border ${iconClass}`}
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center ${iconClass}`}
                   >
                     <CategoryIcon name={cat.category} className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className={`text-sm font-semibold ${isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                    <div className={`text-sm font-medium ${isLight ? 'text-stone-800' : 'text-stone-100'}`}>
                       {cat.category}
                     </div>
-                    <div className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                    <div className={`text-xs ${isLight ? 'text-stone-500' : 'text-stone-300'}`}>
                       {cat.transactionCount} charges · {cat.percentage.toFixed(1)}% of card spend
                     </div>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <div className={`text-base font-bold tracking-tight ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                  <div className={`text-base font-semibold tracking-tight tabular-nums ${isLight ? 'text-stone-800' : 'text-cream'}`}>
                     {currencySymbol}
                     {cat.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
@@ -121,8 +121,8 @@ export const CategoryList: React.FC<CategoryListProps> = ({
 
               {/* Progress bar */}
               <div
-                className={`mt-2.5 w-full rounded-full h-1.5 overflow-hidden ${
-                  isLight ? 'bg-slate-100 border border-slate-200/50' : 'bg-slate-800'
+                className={`mt-3 w-full rounded-full h-1.5 overflow-hidden ${
+                  isLight ? 'bg-stone-100' : 'bg-forest-900/70'
                 }`}
               >
                 <div
@@ -135,7 +135,7 @@ export const CategoryList: React.FC<CategoryListProps> = ({
         })}
 
         {categories.length === 0 && (
-          <div className={`text-center py-6 text-sm ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>
+          <div className={`text-center py-6 text-sm ${isLight ? 'text-stone-500' : 'text-stone-400'}`}>
             No category spend recorded for this month.
           </div>
         )}
