@@ -1,0 +1,24 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  pwa:
+    uses: piekstra/pwa-kit/.github/workflows/pwa.yml@v0
+    permissions:
+      contents: write # README screenshots
+      id-token: write
+    with:
+      hosting-target: spending
+      site-url: https://huishouden-spending.web.app

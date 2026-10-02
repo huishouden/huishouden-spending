@@ -1,0 +1,29 @@
+[
+  {
+    "date": "2031-03-11",
+    "description": "EXAMPLE BOOKSHOP",
+    "amount": 27.1,
+    "category": "Shopping",
+    "card": "Card Two",
+    "type": "Sale",
+    "source": "alert"
+  },
+  {
+    "date": "2031-03-08",
+    "description": "EXAMPLE OUTFITTERS",
+    "amount": -18,
+    "category": "Shopping",
+    "card": "Card One",
+    "type": "Return",
+    "source": "statement"
+  },
+  {
+    "date": "2031-03-01",
+    "description": "LANDLORD RENT PAYMENT",
+    "amount": 1500,
+    "category": "Bills & Utilities",
+    "card": "Card Three",
+    "type": "Sale",
+    "source": "statement"
+  }
+]

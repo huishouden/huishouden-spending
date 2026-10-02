@@ -1,0 +1,10 @@
+Transaction Date,Post Date,Description,Category,Type,Amount,Memo
+03/20/2031,03/21/2031,COFFEE SHOP 123,Food & Drink,Sale,-12.50,
+03/19/2031,03/19/2031,RENTSCHLER BAKERY,Food & Drink,Sale,-14.20,
+03/18/2031,03/18/2031,ACME RENT-A-CAR,Travel,Sale,-41.50,
+03/17/2031,03/17/2031,EXAMPLE OUTFITTERS,Shopping,Return,18.00,
+03/16/2031,03/16/2031,STATEMENT CREDIT,Fees & Adjustments,Adjustment,35.00,
+03/15/2031,03/15/2031,ANNUAL MEMBERSHIP FEE,Fees & Adjustments,Fee,-120.00,
+03/14/2031,03/14/2031,Payment Thank You-Mobile,,Payment,500.00,
+03/13/2031,03/13/2031,LOAN TRANSFER TO 0000,Miscellaneous,Other,-5000.00,
+03/12/2031,03/12/2031,LANDLORD RENT PAYMENT,Bills & Utilities,Sale,-1450.00,

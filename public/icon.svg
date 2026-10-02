@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#e2e8f0" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="chip" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-opacity="0.35" flood-color="#1e1b4b" />
+    </filter>
+  </defs>
+
+  <!-- Base rounded icon background (safe-zone padding for maskable) -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)" />
+
+  <!-- Background decorative glows -->
+  <circle cx="120" cy="110" r="140" fill="#ffffff" fill-opacity="0.12" />
+  <circle cx="420" cy="400" r="130" fill="#10b981" fill-opacity="0.15" />
+
+  <!-- Main Credit Card shape -->
+  <g filter="url(#shadow)">
+    <!-- Back card / tilt -->
+    <rect x="100" y="110" width="312" height="196" rx="24" fill="#1e293b" fill-opacity="0.4" transform="rotate(-6 256 208)" />
+
+    <!-- Front card -->
+    <rect x="80" y="145" width="352" height="222" rx="26" fill="url(#cardGrad)" />
+    
+    <!-- Magnetic strip accent or card header -->
+    <rect x="80" y="195" width="352" height="34" fill="#0f172a" fill-opacity="0.85" />
+
+    <!-- EMV Chip -->
+    <rect x="114" y="246" width="52" height="42" rx="8" fill="url(#chip)" />
+    <path d="M114 267 h52 M140 246 v42" stroke="#b45309" stroke-width="2" />
+
+    <!-- Contactless symbol -->
+    <path d="M182 254 a16 16 0 0 1 0 24 M190 248 a24 24 0 0 1 0 36 M198 242 a32 32 0 0 1 0 48" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round" />
+
+    <!-- Card numbers dots -->
+    <circle cx="124" cy="328" r="4.5" fill="#475569" />
+    <circle cx="138" cy="328" r="4.5" fill="#475569" />
+    <circle cx="152" cy="328" r="4.5" fill="#475569" />
+    <circle cx="166" cy="328" r="4.5" fill="#475569" />
+
+    <circle cx="186" cy="328" r="4.5" fill="#475569" />
+    <circle cx="200" cy="328" r="4.5" fill="#475569" />
+    <circle cx="214" cy="328" r="4.5" fill="#475569" />
+    <circle cx="228" cy="328" r="4.5" fill="#475569" />
+
+    <text x="340" y="334" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#4f46e5" letter-spacing="1">4821</text>
+
+    <!-- Card label -->
+    <text x="114" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#334155" letter-spacing="0.5">HOUSEHOLD SPEND</text>
+  </g>
+
+  <!-- Ambient pulse dot in corner -->
+  <circle cx="400" cy="95" r="14" fill="#10b981" />
+  <circle cx="400" cy="95" r="22" fill="#10b981" fill-opacity="0.35" />
+</svg>

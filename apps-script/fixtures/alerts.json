@@ -1,0 +1,116 @@
+[
+  {
+    "name": "Chase alert: 'transaction with MERCHANT', card from the last four digits",
+    "email": {
+      "from": "no.reply.alerts@chase.com",
+      "subject": "Your $27.10 transaction with EXAMPLE BOOKSHOP",
+      "body": "You made a $27.10 transaction with EXAMPLE BOOKSHOP on your card ending in 2222"
+    },
+    "expected": {
+      "description": "EXAMPLE BOOKSHOP",
+      "amount": 27.1,
+      "category": "Shopping",
+      "card": "Card Two",
+      "type": "Sale"
+    }
+  },
+  {
+    "name": "Chase alert with a labelled merchant",
+    "email": {
+      "from": "no.reply.alerts@chase.com",
+      "subject": "You made a $8.75 transaction with CORNER CAFE",
+      "body": "Merchant: CORNER CAFE\nAmount: $8.75\nAccount ending in 3333"
+    },
+    "expected": {
+      "description": "CORNER CAFE",
+      "amount": 8.75,
+      "category": "Food & Drink",
+      "card": "Card Three",
+      "type": "Sale"
+    }
+  },
+  {
+    "name": "Card payment confirmations are not transactions",
+    "email": {
+      "from": "no.reply.alerts@chase.com",
+      "subject": "Your automatic payment of $210.00",
+      "body": "We received your payment"
+    },
+    "expected": null
+  },
+  {
+    "name": "Card named by a Cards-tab keyword when the alert gives no digits",
+    "email": {
+      "from": "alerts@cardalerts.visa.com",
+      "subject": "Visa Purchase Alert",
+      "body": "A purchase of $12.50 at COFFEE KIOSK was made with your Blue card"
+    },
+    "expected": {
+      "description": "COFFEE KIOSK",
+      "amount": 12.5,
+      "category": "Food & Drink",
+      "card": "Card Two",
+      "type": "Sale"
+    }
+  },
+  {
+    "name": "Refund wording makes a negative Return",
+    "email": {
+      "from": "no.reply.alerts@chase.com",
+      "subject": "You have a $18.00 refund from EXAMPLE OUTFITTERS",
+      "body": "A refund of $18.00 from EXAMPLE OUTFITTERS was credited to your card ending in 1111"
+    },
+    "expected": {
+      "description": "EXAMPLE OUTFITTERS",
+      "amount": -18,
+      "category": "Shopping",
+      "card": "Card One",
+      "type": "Return"
+    }
+  },
+  {
+    "name": "Visa Purchase Alerts subject: merchant ends before ' in <location>', card from 'on Card'",
+    "email": {
+      "from": "Visa Purchase Alerts <DoNotReplyVisaPurchaseAlerts@visa.com>",
+      "subject": "Visa Purchase Alerts: 123.45 USD at EXAMPLE HARDWARE in Springfield on Card 1111",
+      "body": "Your Visa card ending in 1111 was recently used at EXAMPLE HARDWARE in Springfield, USA for 123.45 USD."
+    },
+    "expected": {
+      "description": "EXAMPLE HARDWARE",
+      "amount": 123.45,
+      "category": "Shopping",
+      "card": "Card One",
+      "type": "Sale"
+    }
+  },
+  {
+    "name": "Visa Purchase Alerts with a phone number as the location",
+    "email": {
+      "from": "Visa Purchase Alerts <DoNotReplyVisaPurchaseAlerts@visa.com>",
+      "subject": "Visa Purchase Alerts: 77.77 USD at EXAMPLE* SUBSCRIPTION in +15555550100 on Card 1111",
+      "body": "Your Visa card ending in 1111 was recently used online or over the phone at EXAMPLE* SUBSCRIPTION in +15555550100, USA for 77.77 USD."
+    },
+    "expected": {
+      "description": "EXAMPLE* SUBSCRIPTION",
+      "amount": 77.77,
+      "category": "Shopping",
+      "card": "Card One",
+      "type": "Sale"
+    }
+  },
+  {
+    "name": "Card digits not in the Cards tab are kept as digits, not guessed",
+    "email": {
+      "from": "Visa Purchase Alerts <DoNotReplyVisaPurchaseAlerts@visa.com>",
+      "subject": "Visa Purchase Alerts: 9.40 USD at EXAMPLE SHOP in Springfield on Card 4444",
+      "body": "Your Visa card ending in 4444 was recently used at EXAMPLE SHOP in Springfield, USA for 9.40 USD."
+    },
+    "expected": {
+      "description": "EXAMPLE SHOP",
+      "amount": 9.4,
+      "category": "Shopping",
+      "card": "Card ...4444",
+      "type": "Sale"
+    }
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "rows": [
+    [
+      "2031-03-12",
+      "EXAMPLE PARKING",
+      4.5,
+      "Travel",
+      "Card One",
+      "Sale",
+      ""
+    ],
+    [
+      "2031-03-12",
+      "EXAMPLE PARKING",
+      4.5,
+      "Travel",
+      "Card One",
+      "Sale",
+      ""
+    ],
+    [
+      "2031-03-11",
+      "EXAMPLE OUTFITTERS",
+      "-29.9",
+      "Shopping",
+      "Card Two",
+      "Return",
+      "alert"
+    ],
+    [
+      "",
+      "blank date row",
+      10,
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "2031-03-09",
+      "not a number",
+      "abc",
+      "",
+      "",
+      "",
+      ""
+    ]
+  ]
+}

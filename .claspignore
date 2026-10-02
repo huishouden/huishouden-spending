@@ -1,0 +1,5 @@
+# Only the script and its manifest go to Apps Script; tests and fixtures stay in the repo.
+**/**
+!Code.gs
+!appsscript.json
+!Firestore.gs
