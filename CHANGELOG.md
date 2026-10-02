@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.2](https://github.com/huishouden/spending/compare/v2.0.1...v2.0.2) (2026-10-02)
+
+
+### Bug Fixes
+
+* an entry saved just before the app closes is no longer lost ([#26](https://github.com/huishouden/spending/issues/26)) ([9952740](https://github.com/huishouden/spending/commit/995274046bde87494921f188d1365e19691ea848))
+* settings opened before the household's settings arrived showed the defaults, and saving overwrote them ([#24](https://github.com/huishouden/spending/issues/24)) ([af59b8c](https://github.com/huishouden/spending/commit/af59b8c5b382f9bcc5822cc5df4c9fd0d9af9c0a))
+
 ## [2.0.1](https://github.com/huishouden/spending/compare/v2.0.0...v2.0.1) (2026-10-02)
 
 
