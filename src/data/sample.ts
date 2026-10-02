@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react';
 import type { Mailbox, MailMessage } from '../lib/mail';
 import { MOCK_CARD_TRANSACTIONS } from '../services/mockData';
-import { gmailMailbox, gmailTestToken } from './gmail';
+import { gmailMailbox } from '@huishouden/pwa-kit/gmail';
 import { cardDoc, DEFAULT_SPEND_SETTINGS, ruleDoc, type SpendSettings } from './model';
 import { applyWrites, DEFAULT_RULE_DOCS, derive, emptyDocs, makeActions, type Docs, type SpendingStore } from './store';
 
@@ -94,7 +94,7 @@ export function useSampleStore(): SpendingStore & { reset: () => void } {
   );
   const mail = useMemo(() => {
     const box = () => {
-      const token = gmailTestToken();
+      const token = typeof window !== 'undefined' ? window.__gmailTestToken : undefined;
       return token ? gmailMailbox(token) : sampleMailbox();
     };
     return {

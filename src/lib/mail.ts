@@ -1,18 +1,7 @@
-/** One email as a mailbox returns it (the same shape Huishouden Bills uses). */
-export interface MailMessage {
-  id: string;
-  /** ms since epoch. */
-  date: number;
-  from: string;
-  subject: string;
-  text?: string;
-  html?: string;
-}
+import type { Mailbox as GmailMailbox } from '@huishouden/pwa-kit/gmail';
 
-/** Read-only access to a member's mail: Gmail in the app, a stand-in in the sample and in tests. */
-export interface Mailbox {
-  /** Message ids matching a Gmail search, newest first. */
-  search(query: string, max: number): Promise<string[]>;
-  /** One message with its text and HTML parts. */
-  get(id: string): Promise<MailMessage>;
-}
+/** One email as a mailbox returns it: the kit's read-only Gmail shape, shared with Huishouden Bills. */
+export type { MailMessage } from '@huishouden/pwa-kit/gmail';
+
+/** Read-only access to a member's mail: Gmail in the app, a stand-in in the sample and in tests. Spending needs only search and get. */
+export type Mailbox = Pick<GmailMailbox, 'search' | 'get'>;

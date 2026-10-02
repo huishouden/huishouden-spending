@@ -1,5 +1,5 @@
 import { categorise, type CategoryRule } from './categorise';
-import { htmlToText } from './html';
+import { htmlToText } from '@huishouden/pwa-kit/gmail';
 import type { MailMessage } from './mail';
 
 /**

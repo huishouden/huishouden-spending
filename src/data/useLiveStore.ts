@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { collection, doc, onSnapshot, writeBatch } from 'firebase/firestore';
 import { getDb } from '../services/firestoreTransactions';
 import { auth } from '../services/auth';
-import { gmailMailbox, requestGmailToken, storedGmailToken } from './gmail';
+import { gmailMailbox, requestGmailToken, storedGmailToken } from '@huishouden/pwa-kit/gmail';
 import type { SpendSettings } from './model';
 import { derive, emptyDocs, makeActions, type Docs, type SpendingStore, type Write } from './store';
 
