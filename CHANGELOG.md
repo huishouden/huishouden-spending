@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/huishouden/spending/compare/v1.3.0...v1.3.1) (2026-10-02)
+
+
+### Bug Fixes
+
+* Google API tokens from Google Identity Services, not Firebase sign-in (kit v0.23.0) ([#16](https://github.com/huishouden/spending/issues/16)) ([84abd0f](https://github.com/huishouden/spending/commit/84abd0f6cd74f5b8d0ac1e0c81171d435e6c8d8d))
+
 ## [1.3.0](https://github.com/huishouden/spending/compare/v1.2.0...v1.3.0) (2026-10-02)
 
 
