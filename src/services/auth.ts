@@ -3,12 +3,15 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/
 import { firebaseConfigFromEnv } from '@huishouden/pwa-kit/firebase';
 import { configureGoogleTokens } from '@huishouden/pwa-kit/google-token';
 import { forgetSilentSignIn } from '@huishouden/pwa-kit/auth';
+import { startObservability } from '@huishouden/pwa-kit/observability';
 
 // From VITE_FIREBASE_* build variables: CI sets them from repo variables; locally run
 // `bun run env:pull` to write them to .env.local.
 export const firebaseApp = getApps()[0] ?? initializeApp(firebaseConfigFromEnv(import.meta.env));
 // getAuth keeps the session in IndexedDB, so the tablet stays signed in across restarts.
 export const auth = getAuth(firebaseApp);
+// Error, speed and anonymous usage reports (the portal's /privacy page); off without VITE_NEWRELIC_*.
+startObservability({ app: 'spending', env: import.meta.env });
 export const googleClientId: string | undefined = import.meta.env.VITE_GOOGLE_CLIENT_ID || undefined;
 // Gmail and Sheets tokens come from Google Identity Services with the OAuth web client, not from
 // Firebase sign-in (see @huishouden/pwa-kit/google-token).
