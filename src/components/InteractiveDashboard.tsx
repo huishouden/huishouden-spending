@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MonthlySummary, HouseholdSettings, SheetConfig } from '../types';
+import { CardTransaction, MonthlySummary, HouseholdSettings, SheetConfig } from '../types';
 import { BudgetPacingCard } from './BudgetPacingCard';
 import { CardBreakdown } from './CardBreakdown';
 import { CategoryList } from './CategoryList';
@@ -67,6 +67,11 @@ interface InteractiveDashboardProps {
   onSelectCategory: (cat: string | null) => void;
   onOpenPixelGuide?: () => void;
   onOpenSheetGuide?: (tab?: 'quickstart' | 'gmail_sync' | 'columns' | 'chase_robinhood' | 'template') => void;
+  /** Where spending comes from (email check, statement import); shown above the numbers. */
+  dataBar?: React.ReactNode;
+  onOpenImport: () => void;
+  onCheckEmail: () => void;
+  onSelectTransaction?: (transaction: CardTransaction) => void;
 }
 
 export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
@@ -97,6 +102,10 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
   onSelectCategory,
   onOpenPixelGuide,
   onOpenSheetGuide,
+  dataBar,
+  onOpenImport,
+  onCheckEmail,
+  onSelectTransaction,
 }) => {
   const { isInstallable, isInstalled, install } = usePWAInstall();
   const isLight = settings.theme === 'light';
@@ -302,103 +311,60 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                     </button>
                   </div>
 
-                  {/* Google Sheet Connection Status Card */}
-                  <div
-                    className={`p-3 rounded-xl border flex items-center justify-between gap-3 ${
-                      sheetConfig
-                        ? hasGoogleAuth
-                          ? isLight
-                            ? 'bg-forest-50/80 border-forest-200'
-                            : 'bg-forest-900/50 border-forest-700'
-                          : isLight
-                          ? 'bg-terracotta-light/50 border-terracotta/40'
-                          : 'bg-terracotta/15 border-terracotta/50'
-                        : isLight
-                        ? 'bg-stone-50 border-stone-200'
-                        : 'bg-forest-900/50 border-forest-700'
-                    }`}
-                  >
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span
-                          className={`w-2 h-2 rounded-full ${
-                            sheetConfig
-                              ? hasGoogleAuth
-                                ? 'bg-forest-500'
-                                : 'bg-terracotta animate-pulse'
-                              : 'bg-stone-400'
-                          }`}
-                        />
-                        <span
-                          className={`text-[10px] font-bold uppercase tracking-wider ${
-                            sheetConfig
-                              ? hasGoogleAuth
-                                ? 'text-forest-700 dark:text-forest-300'
-                                : 'text-terracotta-dark dark:text-terracotta-light'
-                              : 'text-stone-600 dark:text-stone-400'
-                          }`}
-                        >
-                          {sheetConfig
-                            ? hasGoogleAuth
-                              ? 'Connected & Synced'
-                              : 'Session Expired • Reconnect'
-                            : 'Sample Data Only'}
-                        </span>
-                      </div>
-                      <p className="text-xs font-semibold truncate mt-0.5">
-                        {sheetConfig ? sheetConfig.spreadsheetTitle : 'No sheet linked yet'}
-                      </p>
-                    </div>
+                  {/* Where this screen's numbers come from */}
+                  <p className="px-2 text-xs text-stone-600 dark:text-stone-300">
+                    {isLiveHousehold
+                      ? "Your household's spending, live for every member."
+                      : sheetConfig
+                      ? `From the Google Sheet "${sheetConfig.spreadsheetTitle}".`
+                      : 'A sample household. Sign in to see your own.'}
+                  </p>
 
-                    {sheetConfig ? (
-                      hasGoogleAuth ? (
-                        <button
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            onOpenSheetSync();
-                          }}
-                          className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer shrink-0 ${
-                            isLight
-                              ? 'bg-white hover:bg-forest-50 text-forest-700 border border-forest-200'
-                              : 'bg-forest-900 hover:bg-forest-700 text-forest-100 border border-forest-600'
-                          }`}
-                        >
-                          Manage
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            if (onReconnectGoogle) {
-                              onReconnectGoogle();
-                            } else {
-                              onRefresh();
-                            }
-                          }}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer shrink-0 bg-terracotta-dark hover:bg-terracotta text-white"
-                        >
-                          Reconnect
-                        </button>
-                      )
-                    ) : (
-                      <button
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          onOpenSheetSync();
-                        }}
-                        className="px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer shrink-0 bg-forest-700 hover:bg-forest-600 text-white dark:bg-forest-400 dark:hover:bg-forest-300 dark:text-forest-900"
-                      >
-                        Connect Sheet
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Section 1: Spreadsheet & Card Sync */}
+                  {/* Section 1: Bringing spending in */}
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 px-2">
-                      Card Sync &amp; Data
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 px-2">
+                      Spending
                     </span>
-
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onOpenImport();
+                      }}
+                      className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
+                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-lg bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-200 flex items-center justify-center shrink-0">
+                          <Upload className="w-4 h-4" />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-xs font-semibold">Import a statement</p>
+                          <p className="text-[11px] text-stone-600 dark:text-stone-300">A CSV file from your card or bank</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-stone-500" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onCheckEmail();
+                      }}
+                      className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
+                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-lg bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-200 flex items-center justify-center shrink-0">
+                          <RefreshCw className="w-4 h-4" />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-xs font-semibold">Check email</p>
+                          <p className="text-[11px] text-stone-600 dark:text-stone-300">Card alerts in your Gmail</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-stone-500" />
+                    </button>
                     <button
                       onClick={() => {
                         setIsMenuOpen(false);
@@ -413,85 +379,12 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                           <FileSpreadsheet className="w-4 h-4" />
                         </div>
                         <div className="text-left">
-                          <p className="text-xs font-semibold">Google Sheet Sync</p>
-                          <p className="text-[11px] text-stone-500 dark:text-stone-400">Manage spreadsheet ID &amp; card tabs</p>
+                          <p className="text-xs font-semibold">Google Sheet</p>
+                          <p className="text-[11px] text-stone-600 dark:text-stone-300">{sheetConfig ? 'Connected (older setup)' : 'Read spending from a Sheet (older setup)'}</p>
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
+                      <ChevronRight className="w-4 h-4 text-stone-500" />
                     </button>
-
-                    <button
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        onOpenSheetSync();
-                      }}
-                      className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                        isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-200 flex items-center justify-center shrink-0">
-                          <Upload className="w-4 h-4" />
-                        </div>
-                        <div className="text-left">
-                          <div className="flex items-center gap-1.5">
-                            <p className="text-xs font-semibold">Import Chase CSVs</p>
-                            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-100 font-semibold">New</span>
-                          </div>
-                          <p className="text-[11px] text-stone-500 dark:text-stone-400">Clean older data &amp; auto-filter payments</p>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
-                    </button>
-
-                    {onOpenSheetGuide && (
-                      <button
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          onOpenSheetGuide('gmail_sync');
-                        }}
-                        className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                          isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-7 h-7 rounded-lg bg-terracotta-light/60 text-terracotta-dark dark:bg-terracotta/20 dark:text-terracotta-light flex items-center justify-center shrink-0">
-                            <Zap className="w-4 h-4" />
-                          </div>
-                          <div className="text-left">
-                            <div className="flex items-center gap-1.5">
-                              <p className="text-xs font-semibold">Automated Gmail Sync</p>
-                              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-terracotta-light text-terracotta-dark dark:bg-terracotta/25 dark:text-terracotta-light font-semibold">Free</span>
-                            </div>
-                            <p className="text-[11px] text-stone-500 dark:text-stone-400">15-min background script for Chase &amp; Robinhood</p>
-                          </div>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
-                      </button>
-                    )}
-
-                    {onOpenSheetGuide && (
-                      <button
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          onOpenSheetGuide('quickstart');
-                        }}
-                        className={`w-full flex items-center justify-between p-2 rounded-xl transition cursor-pointer ${
-                          isLight ? 'hover:bg-stone-100' : 'hover:bg-forest-700'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-7 h-7 rounded-lg bg-stone-100 text-stone-600 dark:bg-forest-700 dark:text-stone-200 flex items-center justify-center shrink-0">
-                            <HelpCircle className="w-4 h-4" />
-                          </div>
-                          <div className="text-left">
-                            <p className="text-xs font-semibold">Spreadsheet Columns &amp; Guide</p>
-                            <p className="text-[11px] text-stone-500 dark:text-stone-400">Templates, headers, and format tips</p>
-                          </div>
-                        </div>
-                        <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
-                      </button>
-                    )}
                   </div>
 
                   {/* Section 2: Tablet & Display Options */}
@@ -610,8 +503,8 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                           <Sliders className="w-4 h-4" />
                         </div>
                         <div className="text-left">
-                          <p className="text-xs font-semibold">Budget &amp; Filter Settings</p>
-                          <p className="text-[11px] text-stone-500 dark:text-stone-400">Budget, currency symbol &amp; exclusions</p>
+                          <p className="text-xs font-semibold">Settings</p>
+                          <p className="text-[11px] text-stone-600 dark:text-stone-300">Budget, cards, categories and email</p>
                         </div>
                       </div>
                       <ChevronRight className="w-4 h-4 text-stone-400 dark:text-stone-500" />
@@ -643,7 +536,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
                 </div>
                 <p className={`text-xs mt-0.5 ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
                   {isSignedIn
-                    ? "You're signed in but not in a household yet. Ask a member to invite you in Huishouden, or connect a Google Sheet."
+                    ? "You're signed in but not in a household yet. Start one, or ask a member to invite you, on the Huishouden home screen."
                     : 'Sign in with the Google account your household uses to see your card spending.'}
                 </p>
               </div>
@@ -667,71 +560,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
             </div>
           </div>
         )}
-        {/* Tablet & Sheet Quick Setup Bar */}
-        <div
-          className={`p-4 sm:p-5 rounded-2xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-3 transition-colors ${
-            isLight
-              ? 'bg-white border-stone-200/80 shadow-sm shadow-stone-900/5 text-stone-800'
-              : 'bg-forest-800 border-forest-700/60 text-stone-200'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-100 flex items-center justify-center shrink-0">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <div>
-              <div className={`text-sm font-semibold flex items-center gap-1.5 ${isLight ? 'text-forest-700' : 'text-cream'}`}>
-                <span>Pixel Tablet & Google Drive Setup Guides</span>
-                <span className="px-2 py-0.5 rounded-full bg-forest-50 text-forest-700 dark:bg-forest-700 dark:text-forest-100 text-[10px] font-semibold">Ready</span>
-              </div>
-              <p className={`text-xs ${isLight ? 'text-stone-600' : 'text-stone-300'}`}>
-                {sheetConfig
-                  ? `Synced to "${sheetConfig.spreadsheetTitle}" • Always-on kitchen display ready`
-                  : 'Add this dashboard to your Pixel Tablet dock and learn where to format data in Google Drive.'}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
-            {onOpenPixelGuide && (
-              <button
-                onClick={onOpenPixelGuide}
-                className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition cursor-pointer ${
-                  isLight
-                    ? 'bg-white hover:bg-forest-50 text-forest-700 border-stone-200'
-                    : 'bg-forest-900/50 hover:bg-forest-700 text-forest-200 border-forest-700'
-                }`}
-              >
-                <Tablet className="w-3.5 h-3.5" />
-                <span>Pixel Tablet Guide</span>
-              </button>
-            )}
-
-            {onOpenSheetGuide && (
-              <button
-                onClick={() => onOpenSheetGuide('quickstart')}
-                className={`px-3 py-2 rounded-xl border text-xs font-medium flex items-center gap-1.5 transition cursor-pointer ${
-                  isLight
-                    ? 'bg-white hover:bg-forest-50 text-forest-700 border-stone-200'
-                    : 'bg-forest-900/50 hover:bg-forest-700 text-forest-200 border-forest-700'
-                }`}
-              >
-                <FileSpreadsheet className="w-3.5 h-3.5" />
-                <span>Google Sheet Guide</span>
-              </button>
-            )}
-
-            {isInstallable && !isInstalled && (
-              <button
-                onClick={install}
-                className="px-3 py-2 rounded-xl bg-forest-700 hover:bg-forest-600 text-white dark:bg-forest-400 dark:hover:bg-forest-300 dark:text-forest-900 text-xs font-medium flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Install App</span>
-              </button>
-            )}
-          </div>
-        </div>
+        {dataBar}
 
         {/* Top KPI Cards Row */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
@@ -926,6 +755,7 @@ export const InteractiveDashboard: React.FC<InteractiveDashboardProps> = ({
               onClearCardFilter={() => onSelectCard(null)}
               onClearCategoryFilter={() => onSelectCategory(null)}
               theme={settings.theme}
+              onSelect={onSelectTransaction}
             />
           </div>
         </div>

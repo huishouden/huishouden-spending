@@ -13,7 +13,7 @@
     "script:status": "clasp show-file-status",
     "script:pull": "clasp pull",
     "script:push": "bun test apps-script && clasp push --force",
-    "e2e": "playwright test e2e/smoke.spec.ts",
+    "e2e": "playwright test e2e/smoke.spec.ts e2e/household.spec.ts",
     "prepare": "git config core.hooksPath .githooks",
     "screenshots": "playwright test e2e/screenshots.spec.ts",
     "env:pull": "gh variable list --json name,value -q '.[] | select(.name|startswith(\"VITE_\")) | \"\\(.name)=\\(.value)\"' > .env.local && echo 'wrote .env.local'"

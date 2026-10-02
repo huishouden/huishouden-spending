@@ -1,4 +1,9 @@
-# Apps Script: Gmail card alerts → Sheet
+# Apps Script: Gmail card alerts → Sheet (legacy)
+
+> **Legacy.** Spending now does all of this in the browser for any household: statement import,
+> Check email for card alerts, and cards and category rules in its own settings. This script is kept
+> for the household that set it up until it switches (see "Moving from the Sheet" in the main
+> README). New households don't need it. Don't delete it while a Sheet still runs it.
 
 `Code.gs` is the script bound to the household spending Sheet. This folder is its source of truth;
 the copy inside the Sheet is deployed from here with [clasp](https://github.com/google/clasp).
@@ -34,7 +39,8 @@ against `fixtures/alerts.json`.
 
 Every sync copies the Sheet into Firestore at
 `households/{householdId}/spendingTransactions/{txId}`, which the dashboard reads live with a
-long-lived sign-in (no hourly Google token). Only changed rows are written; fingerprints of the
+long-lived sign-in (no hourly Google token). Members' browsers write the same collection too; the
+mirror only touches the documents it wrote itself (ids in its `FS_MIRROR_*` state). Only changed rows are written; fingerprints of the
 last mirrored state live in Script Properties `FS_MIRROR_*`.
 
 - Household: Script Property `SPENDING_HOUSEHOLD_ID`, auto-set when exactly one household exists.

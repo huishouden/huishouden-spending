@@ -1,0 +1,59 @@
+[
+  {
+    "name": "one signed amount column with purchases negative and a Type column",
+    "file": "csv/purchases-negative-with-type_1111.csv",
+    "card": "Card One",
+    "mapping": { "date": "Transaction Date", "description": "Description", "amount": "Amount", "category": "Category", "type": "Type", "purchases": "negative", "dayFirst": false },
+    "rows": [
+      ["2031-03-20", "COFFEE SHOP 123", 12.5, "Card One", "Dining & Food", "Sale"],
+      ["2031-03-19", "RENTSCHLER BAKERY", 14.2, "Card One", "Dining & Food", "Sale"],
+      ["2031-03-18", "ACME RENT-A-CAR", 41.5, "Card One", "Travel & Lodging", "Sale"],
+      ["2031-03-17", "EXAMPLE OUTFITTERS", -18, "Card One", "Shopping & Retail", "Return"],
+      ["2031-03-16", "STATEMENT CREDIT", -35, "Card One", "Fees & Adjustments", "Adjustment"],
+      ["2031-03-15", "ANNUAL MEMBERSHIP FEE", 120, "Card One", "Fees & Adjustments", "Fee"]
+    ],
+    "skipped": 3,
+    "unreadable": []
+  },
+  {
+    "name": "one amount column with purchases positive, no Type column",
+    "file": "csv/purchases-positive_1111.csv",
+    "card": "Card One",
+    "mapping": { "date": "Date", "description": "Description", "amount": "Amount", "purchases": "positive", "dayFirst": false },
+    "rows": [
+      ["2031-03-14", "EXAMPLE COFFEE ROASTERS", 4.75, "Card One", "Dining & Food", "Sale"],
+      ["2031-03-13", "EXAMPLE HARDWARE, SPRINGFIELD", 62.1, "Card One", "Home & Garden", "Sale"],
+      ["2031-03-11", "EXAMPLE OUTFITTERS RETURN", -18, "Card One", "Miscellaneous", "Return"],
+      ["2031-03-10", "EXAMPLE STREAMING", 15.99, "Card One", "Miscellaneous", "Sale"]
+    ],
+    "skipped": 1,
+    "unreadable": []
+  },
+  {
+    "name": "Debit and Credit columns, a card number per row, ISO dates",
+    "file": "csv/debit-credit-two-cards.csv",
+    "card": "Card Two",
+    "mapping": { "date": "Transaction Date", "description": "Description", "debit": "Debit", "credit": "Credit", "category": "Category", "card": "Card No.", "purchases": "negative", "dayFirst": false },
+    "rows": [
+      ["2031-03-14", "EXAMPLE NOODLE BAR", 23.4, "Card Two", "Dining & Food", "Sale"],
+      ["2031-03-13", "EXAMPLE GROCER", 88.02, "Card Three", "Merchandise", "Sale"],
+      ["2031-03-12", "EXAMPLE BOOKSHOP", -12, "Card Two", "Merchandise", "Return"],
+      ["2031-03-10", "EXAMPLE PARKING GARAGE", 9, "Card ...4444", "Gas & Transport", "Sale"]
+    ],
+    "skipped": 1,
+    "unreadable": []
+  },
+  {
+    "name": "an account summary above the header, day-first dates, bracketed negatives",
+    "file": "csv/summary-then-day-first.csv",
+    "card": "Card One",
+    "mapping": { "date": "Date", "description": "Details", "amount": "Amount", "purchases": "negative", "dayFirst": true },
+    "rows": [
+      ["2031-03-14", "EXAMPLE BAKERY", 6.2, "Card One", "Dining & Food", "Sale"],
+      ["2031-03-13", "EXAMPLE PHARMACY", 21.35, "Card One", "Health & Personal Care", "Sale"],
+      ["2031-03-12", "EXAMPLE REFUND", -5, "Card One", "Miscellaneous", "Return"]
+    ],
+    "skipped": 0,
+    "unreadable": [4]
+  }
+]

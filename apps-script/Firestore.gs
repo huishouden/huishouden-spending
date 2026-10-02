@@ -10,7 +10,8 @@
  * so a steady state costs one read of the Sheet and no Firestore writes.
  *
  * Writes use the script owner's OAuth token. The owner has IAM access to the project, so these
- * writes bypass security rules; browsers only ever read (rules: read if household member).
+ * writes bypass security rules. Members' browsers write this collection too (statement imports,
+ * card alerts); the mirror only updates and deletes documents it wrote (its fingerprint state).
  *
  * Household: Script Property SPENDING_HOUSEHOLD_ID, or the only household document if there is
  * exactly one (then remembered in that property).
