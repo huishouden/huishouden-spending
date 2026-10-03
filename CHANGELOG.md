@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/huishouden/spending/compare/v2.3.0...v2.3.1) (2026-10-03)
+
+
+### Bug Fixes
+
+* dialogs keep focus where it was tapped on phones (pwa-kit 0.51.0) ([#35](https://github.com/huishouden/spending/issues/35)) ([5846776](https://github.com/huishouden/spending/commit/5846776cfbedba040500a28e9ccb703404675f15))
+
 ## [2.3.0](https://github.com/huishouden/spending/compare/v2.2.0...v2.3.0) (2026-10-03)
 
 
