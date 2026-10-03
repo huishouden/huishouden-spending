@@ -1,3 +1,5 @@
+import { DAY } from '@huishouden/pwa-kit/time';
+
 /**
  * Whether an incoming transaction (a statement file row or a card alert email) is one the household
  * already has. The rules are the Apps Script's (apps-script/Code.gs findExisting): the same card,
@@ -23,8 +25,6 @@ export interface TxFields {
 export interface Existing extends TxFields {
   id: string;
 }
-
-const DAY_MS = 86_400_000;
 
 /** Words that say nothing about which shop it was. */
 const FILLER = new Set([
@@ -54,7 +54,7 @@ export function similarDescriptions(a: string, b: string): boolean {
 }
 
 const sameAmount = (a: number, b: number) => Math.abs(a - b) < 0.005;
-const daysApart = (a: string, b: string) => Math.abs(Date.parse(a) - Date.parse(b)) / DAY_MS;
+const daysApart = (a: string, b: string) => Math.abs(Date.parse(a) - Date.parse(b)) / DAY;
 const sameText = (a: string, b: string) => a.trim().toLowerCase().replace(/\s+/g, ' ') === b.trim().toLowerCase().replace(/\s+/g, ' ');
 
 /** The script's rule plus alike descriptions: same card and amount, within the window. */
