@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/huishouden/spending/compare/v2.2.0...v2.3.0) (2026-10-03)
+
+
+### Features
+
+* Spending moves to /spending/ on the suite's one site (pwa-kit 0.48.0) ([#33](https://github.com/huishouden/spending/issues/33)) ([856bf81](https://github.com/huishouden/spending/commit/856bf81edb41bf9b566107c3c12fd0389bad1b03))
+
 ## [2.2.0](https://github.com/huishouden/spending/compare/v2.1.0...v2.2.0) (2026-10-03)
 
 
