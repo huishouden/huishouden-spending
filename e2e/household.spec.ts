@@ -23,7 +23,7 @@ async function open(page: Page, gmail = true) {
       window.__gmailTestToken = 'test-token';
     });
   }
-  await page.goto('/');
+  await page.goto('./');
   await expect(glance(page)).toContainText('spent in September');
   return searches;
 }
@@ -139,7 +139,7 @@ test('an expired Gmail token is reported in words, with a retry', async ({ page 
   await page.addInitScript(() => {
     window.__gmailTestToken = 'expired-token';
   });
-  await page.goto('/');
+  await page.goto('./');
   await checkEmail(page);
   const alert = glance(page).getByRole('alert');
   await expect(alert).toContainText('Gmail access has ended; check email again to allow it.');
