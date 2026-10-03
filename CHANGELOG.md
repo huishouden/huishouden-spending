@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/huishouden/spending/compare/v2.1.0...v2.2.0) (2026-10-03)
+
+
+### Features
+
+* **security:** security headers; one-line Sample data banner on phones ([#30](https://github.com/huishouden/spending/issues/30)) ([f26b51a](https://github.com/huishouden/spending/commit/f26b51aefd70c63b4660ef317c606380f746a592))
+
 ## [2.1.0](https://github.com/huishouden/spending/compare/v2.0.2...v2.1.0) (2026-10-02)
 
 
