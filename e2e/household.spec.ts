@@ -46,7 +46,7 @@ async function importStatement(page: Page) {
 }
 
 async function openSettings(page: Page, tab: string) {
-  await page.locator('hh-app-bar').getByRole('button', { name: 'Settings' }).click();
+  await page.locator('hh-app-bar').getByRole('button', { name: 'Spending settings' }).click();
   const settings = page.getByRole('dialog', { name: 'Settings' });
   await settings.getByRole('button', { name: tab, exact: true }).click();
   return settings;

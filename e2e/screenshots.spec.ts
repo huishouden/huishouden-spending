@@ -67,7 +67,7 @@ test('import a statement', ({ page }) =>
 test('settings: budget', ({ page }) =>
   captureScreenshot(page, 'settings-budget', {
     prepare: async (p) => {
-      await p.getByRole('button', { name: 'Settings' }).click();
+      await p.getByRole('button', { name: 'Spending settings' }).click();
     },
   }));
 
@@ -75,7 +75,7 @@ test('settings: budget', ({ page }) =>
 test('settings: cards', ({ page }) =>
   captureScreenshot(page, 'settings-cards', {
     prepare: async (p) => {
-      await p.getByRole('button', { name: 'Settings' }).click();
+      await p.getByRole('button', { name: 'Spending settings' }).click();
       await p.getByRole('dialog', { name: 'Settings' }).getByRole('button', { name: 'Cards' }).click();
     },
   }));

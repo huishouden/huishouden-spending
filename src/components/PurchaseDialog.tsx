@@ -63,15 +63,15 @@ export function PurchaseDialog({ record, store, today, notify, onClose }: Props)
         </>
       }
     >
-      <p className="text-lg text-stone-800">
+      <p className="text-lg text-ink">
         <span className="font-semibold tabular-nums">{money(cents(record.amount), store.settings.currencySymbol)}</span> on {longDate(record.date, today)}
       </p>
-      <p className="mb-5 text-base text-stone-600">
+      <p className="mb-5 text-base text-muted">
         {record.card} · from {record.source === 'alert' ? 'a card alert email' : 'a statement'}
       </p>
 
       <fieldset>
-        <legend className="mb-2 text-sm font-medium text-stone-700">Category</legend>
+        <legend className="mb-2 text-sm font-medium text-ink-soft">Category</legend>
         <div className="flex flex-wrap gap-2">
           {choices.map((c) => (
             <Chip key={c} active={c === chosen} onClick={() => setCategory(c)}>
