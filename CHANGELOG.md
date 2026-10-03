@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.0](https://github.com/huishouden/spending/compare/v2.3.1...v2.4.0) (2026-10-03)
+
+
+### Features
+
+* dark mode that follows the suite's theme ([#37](https://github.com/huishouden/spending/issues/37)) ([8beb2a9](https://github.com/huishouden/spending/commit/8beb2a9a0041bf3e2c8dab17cdf0f5122ec05f1b))
+
 ## [2.3.1](https://github.com/huishouden/spending/compare/v2.3.0...v2.3.1) (2026-10-03)
 
 
