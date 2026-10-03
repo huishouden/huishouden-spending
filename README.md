@@ -3,8 +3,9 @@
 Where the household's money goes. Open it and the first thing you see answers "how are we doing
 this month?": what has been spent, what is left of the budget and whether that is on track, readable
 from across the room on the kitchen tablet. Below it, where the money went and the latest
-purchases; tap one to put it in another category. Live at https://huishouden-spending.web.app, also
-linked from the [Huishouden portal](https://huishouden-piekstra.web.app).
+purchases; tap one to put it in another category. Live at https://huishouden-piekstra.web.app/spending/, also
+linked from the [Huishouden portal](https://huishouden-piekstra.web.app). The old address,
+huishouden-spending.web.app, redirects there.
 
 | This month | On a phone |
 |---|---|

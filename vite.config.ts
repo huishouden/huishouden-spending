@@ -20,10 +20,12 @@ export default defineConfig(() => {
       react(),
       tailwindcss(),
       pwaApp({
+        // Spending's path on the suite's one site (pwa-kit docs/one-site.md).
+        base: '/spending/',
         name: 'Huishouden Spending',
         shortName: 'Spending',
         description: "Where the household's money goes",
-      url: 'https://huishouden-spending.web.app',
+        url: 'https://huishouden-piekstra.web.app/spending/',
         themeColor: '#1b4332',
         backgroundColor: '#faf9f5',
         includeAssets: ['icon.svg', 'favicon.png', 'apple-touch-icon.png'],

@@ -5,7 +5,7 @@ import { expectCleanLoad, expectCompactSampleBanner, expectGoogleSignInPopup, ex
 
 test('loads without runtime errors', async ({ page }) => {
   await expectCleanLoad(page);
-  await expectHuishoudenFrame(page, { app: 'Spending', portalUrl: 'https://huishouden-piekstra.web.app' });
+  await expectHuishoudenFrame(page, { app: 'Spending', portalUrl: '/' });
   await expect(page.locator('hh-app-bar').getByRole('button', { name: 'Sign in with Google' })).toBeVisible();
 });
 
@@ -16,6 +16,6 @@ test('Google sign-in popup reaches Google with an allowed redirect URI', ({ page
     await p.getByRole('button', { name: 'Sign in with Google' }).first().click();
   }));
 
-test('sends the security headers and leaves sign-in un-framed', ({ request }) => expectSecurityHeaders(request, '/', {}));
+test('sends the security headers and leaves sign-in un-framed', ({ request }) => expectSecurityHeaders(request, './', {}));
 
-test('Sample data banner is one line on a phone', ({ page }) => expectCompactSampleBanner(page, '/'));
+test('Sample data banner is one line on a phone', ({ page }) => expectCompactSampleBanner(page, './'));
