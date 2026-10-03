@@ -19,8 +19,8 @@ const TABS: { id: SettingsTab; label: string }[] = [
   { id: 'email', label: 'Email' },
 ];
 
-const labelClass = 'mb-1.5 block text-sm font-medium text-stone-700';
-const hintClass = 'mt-1 text-sm text-stone-600';
+const labelClass = 'mb-1.5 block text-sm font-medium text-ink-soft';
+const hintClass = 'mt-1 text-sm text-muted';
 
 interface Props {
   store: SpendingStore;
@@ -41,11 +41,11 @@ export function SettingsDialog({ store, tab, onTab, notify, onClose }: Props) {
           </Chip>
         ))}
       </div>
-      {!store.live && <p className="mb-4 rounded-xl bg-stone-100 px-4 py-3 text-sm text-stone-600">These are the sample household’s settings. Changes last until the page reloads.</p>}
+      {!store.live && <p className="mb-4 rounded-xl bg-sunken px-4 py-3 text-sm text-muted">These are the sample household’s settings. Changes last until the page reloads.</p>}
       {/* Each tab copies the settings into its form when it opens: before they arrive it would show
           the defaults, and saving would overwrite the household's own. */}
       {!store.ready ? (
-        <p role="status" className="py-6 text-base text-stone-600">
+        <p role="status" className="py-6 text-base text-muted">
           Loading the household’s settings
         </p>
       ) : (
@@ -71,9 +71,9 @@ function WordList({ words, onChange, placeholder, label, lower = true }: { words
     <div>
       <ul className="mb-2 flex flex-wrap gap-2" aria-label={label}>
         {words.map((w) => (
-          <li key={w} className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-white py-1 pr-1 pl-3 text-sm">
+          <li key={w} className="inline-flex items-center gap-1 rounded-full border border-line bg-surface py-1 pr-1 pl-3 text-sm">
             {w}
-            <button type="button" className="inline-flex h-8 w-8 items-center justify-center rounded-full text-stone-600 hover:bg-stone-100" aria-label={`Remove ${w}`} onClick={() => onChange(words.filter((x) => x !== w))}>
+            <button type="button" className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted hover:bg-stone-100 dark:hover:bg-forest-700" aria-label={`Remove ${w}`} onClick={() => onChange(words.filter((x) => x !== w))}>
               <X size={14} />
             </button>
           </li>
@@ -139,7 +139,7 @@ function BudgetTab({ store, notify }: { store: SpendingStore; notify: (m: string
         <WordList words={words} onChange={setWords} placeholder="hoa, escrow" label="Words never counted" />
       </div>
       <div className="flex items-center justify-end gap-3">
-        <p role="status" className={`text-sm ${status.kind === 'error' ? 'text-red-700' : 'text-forest-700'}`}>
+        <p role="status" className={`text-sm ${status.kind === 'error' ? 'text-error' : 'text-link'}`}>
           {status.kind === 'saved' ? 'Saved' : status.kind === 'error' ? status.message : ''}
         </p>
         <button type="button" className={primaryButton} onClick={save} disabled={status.kind === 'saving'}>
@@ -164,7 +164,7 @@ function CardForm({ card, onSave, onCancel }: { card?: Card; onSave: (c: Omit<Ca
   const valid = name.trim().length > 0 && (last4 === '' || /^\d{4}$/.test(last4));
   return (
     <form
-      className="space-y-4 rounded-2xl border border-stone-200 p-4"
+      className="space-y-4 rounded-2xl border border-line p-4"
       aria-label={card ? `Edit ${card.name}` : 'New card'}
       onSubmit={async (e) => {
         e.preventDefault();
@@ -215,10 +215,10 @@ function CardsTab({ store }: { store: SpendingStore }) {
   const [confirm, setConfirm] = useState<string | null>(null);
   return (
     <div className="space-y-4">
-      <p className="text-sm text-stone-600">
+      <p className="text-sm text-muted">
         The household's cards. Statement files and card alert emails are matched to a card by its last 4 digits, so every member's imports name a card the same way.
       </p>
-      <ul className="divide-y divide-stone-200" aria-label="Cards">
+      <ul className="divide-y divide-line" aria-label="Cards">
         {store.cards.map((c) =>
           editing === c.id ? (
             <li key={c.id} className="py-3">
@@ -236,9 +236,9 @@ function CardsTab({ store }: { store: SpendingStore }) {
               <div className="min-w-0 flex-1">
                 <p className="font-medium">
                   {c.name}
-                  {c.last4 && <span className="ml-2 text-stone-600 tabular-nums">•••• {c.last4}</span>}
+                  {c.last4 && <span className="ml-2 text-muted tabular-nums">•••• {c.last4}</span>}
                 </p>
-                <p className="text-sm text-stone-600">
+                <p className="text-sm text-muted">
                   {[c.issuer, c.alertWords.length ? `Alerts: ${c.alertWords.join(', ')}` : 'No alert words yet', c.csv ? 'Statement columns remembered' : ''].filter(Boolean).join(' · ')}
                 </p>
               </div>
@@ -301,11 +301,11 @@ function CategoriesTab({ store }: { store: SpendingStore }) {
   };
   return (
     <div className="space-y-4">
-      <p className="text-sm text-stone-600">
+      <p className="text-sm text-muted">
         New charges get the category of the longest phrase their description contains. Your own phrases win over the starting ones when they are more specific.
       </p>
       <form
-        className="grid gap-3 rounded-2xl border border-stone-200 p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
+        className="grid gap-3 rounded-2xl border border-line p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end"
         aria-label="New rule"
         onSubmit={(e) => {
           e.preventDefault();
@@ -334,17 +334,17 @@ function CategoriesTab({ store }: { store: SpendingStore }) {
         </button>
       </form>
       <input className={inputClass} value={filter} placeholder="Find a rule" aria-label="Find a rule" onChange={(e) => setFilter(e.target.value)} />
-      <ul className="divide-y divide-stone-200" aria-label="Category rules">
+      <ul className="divide-y divide-line" aria-label="Category rules">
         {shown.map((r) => (
           <li key={r.id} aria-label={r.contains} className="flex min-h-11 items-center gap-3 py-1">
             <span className="min-w-0 flex-1 truncate">{r.contains}</span>
-            <span className="text-sm text-stone-600">{r.category}</span>
+            <span className="text-sm text-muted">{r.category}</span>
             <button type="button" className={iconButton} aria-label={`Remove rule ${r.contains}`} onClick={() => void store.actions.deleteRule(r.id)}>
               <Trash2 size={18} />
             </button>
           </li>
         ))}
-        {shown.length === 0 && <li className="py-3 text-sm text-stone-600">No rules match.</li>}
+        {shown.length === 0 && <li className="py-3 text-sm text-muted">No rules match.</li>}
       </ul>
     </div>
   );
@@ -383,16 +383,16 @@ function EmailTab({ store }: { store: SpendingStore }) {
     <div className="space-y-6">
       <section className="space-y-3" aria-label="Card alert emails">
         <h3 className={overline}>Card alert emails</h3>
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-muted">
           Check email reads purchase alerts in the member's own Gmail, using each card's alert words and these Gmail labels. Google will warn that the app is unverified the first time. Spending only reads card alert emails and never changes your mail.
         </p>
         <WordList words={store.settings.alertLabels} lower={false} onChange={(w) => void store.actions.saveSettings({ alertLabels: w })} placeholder="Bank/Card alerts" label="Gmail labels" />
       </section>
 
-      <details className="rounded-2xl border border-stone-200 px-4 py-2">
-        <summary className="flex min-h-11 cursor-pointer items-center font-medium text-stone-800">Bring settings from a Google Sheet</summary>
+      <details className="rounded-2xl border border-line px-4 py-2">
+        <summary className="flex min-h-11 cursor-pointer items-center font-medium text-ink">Bring settings from a Google Sheet</summary>
         <div className="space-y-3 pb-3">
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-muted">
           For households that used the Sheet and its script: brings the Cards, Categories and Alert labels tabs in once. The Sheet is only read.
         </p>
         <div className="flex flex-col gap-2 sm:flex-row">
@@ -401,7 +401,7 @@ function EmailTab({ store }: { store: SpendingStore }) {
             {busy ? 'Reading' : 'Read the Sheet'}
           </button>
         </div>
-        <details className="rounded-xl border border-stone-200 px-4 py-3">
+        <details className="rounded-xl border border-line px-4 py-3">
           <summary className="min-h-8 cursor-pointer font-medium">Or paste the tabs' rows</summary>
           <div className="mt-3 space-y-3">
             {(
@@ -424,12 +424,12 @@ function EmailTab({ store }: { store: SpendingStore }) {
           </div>
         </details>
         {error && (
-          <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-red-700">
+          <p role="alert" className="rounded-xl bg-error-tint px-3 py-2 text-error">
             {error}
           </p>
         )}
         {found && (
-          <div role="region" className="space-y-3 rounded-2xl border border-stone-200 p-4" aria-label="Found in the Sheet">
+          <div role="region" className="space-y-3 rounded-2xl border border-line p-4" aria-label="Found in the Sheet">
             <p>
               Found {found.cards.length} card{found.cards.length === 1 ? '' : 's'} ({found.cards.map((c) => c.name).join(', ') || 'none'}), {found.rules.length} category rule
               {found.rules.length === 1 ? '' : 's'} and {found.labels.length} label{found.labels.length === 1 ? '' : 's'}.
@@ -445,7 +445,7 @@ function EmailTab({ store }: { store: SpendingStore }) {
           </div>
         )}
         {done && (
-          <p className="text-sm text-forest-600" aria-live="polite">
+          <p className="text-sm text-positive" aria-live="polite">
             {done} Add each card's alert address under Cards so Check email finds its alerts.
           </p>
         )}

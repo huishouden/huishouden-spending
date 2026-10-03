@@ -6,7 +6,7 @@ import { Dialog, ghostButton, iconButton, inputClass, primaryButton, secondaryBu
 import { shortDate } from '@huishouden/pwa-kit/time';
 import { cents, money } from '../lib/month';
 
-const labelClass = 'mb-1.5 block text-sm font-medium text-stone-700';
+const labelClass = 'mb-1.5 block text-sm font-medium text-ink-soft';
 
 /**
  * Statement files (CSV) from any bank or card into the household's transactions. Columns are found
@@ -139,15 +139,15 @@ export function ImportDialog({ onClose, store, onDone }: Props) {
   return (
     <Dialog title="Import a statement" onClose={onClose} footer={footer}>
       <div className="space-y-5">
-        <p className="text-stone-600">Download your card’s or bank’s activity as a CSV file from its website, then choose it here. Anything already here is left out.</p>
-        <label className="flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-stone-200 p-5 text-center hover:border-forest-400">
-          <FileUp size={24} className="text-forest-700" />
+        <p className="text-muted">Download your card’s or bank’s activity as a CSV file from its website, then choose it here. Anything already here is left out.</p>
+        <label className="flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-line p-5 text-center hover:border-forest-400 dark:hover:border-forest-300">
+          <FileUp size={24} className="text-link" />
           <span className="font-medium">Choose statement files</span>
-          <span className="text-sm text-stone-600">CSV, one or more</span>
+          <span className="text-sm text-muted">CSV, one or more</span>
           <input ref={input} type="file" accept=".csv,text/csv" multiple className="sr-only" aria-label="Statement files" onChange={(e) => void load(e.target.files)} />
         </label>
         {error && (
-          <p role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-red-700">
+          <p role="alert" className="rounded-xl bg-error-tint px-3 py-2 text-error">
             {error}
           </p>
         )}
@@ -173,7 +173,7 @@ export function ImportDialog({ onClose, store, onDone }: Props) {
           );
           const split = !!f.mapping && !f.mapping.amount && (!!f.mapping.debit || !!f.mapping.credit);
           return (
-            <section key={f.key} aria-label={f.fileName} className="space-y-4 rounded-2xl border border-stone-200 p-4">
+            <section key={f.key} aria-label={f.fileName} className="space-y-4 rounded-2xl border border-line p-4">
               <div className="flex items-center gap-3">
                 <h3 className="min-w-0 flex-1 truncate font-semibold">{f.fileName}</h3>
                 <button type="button" className={iconButton} aria-label={`Remove ${f.fileName}`} onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))}>
@@ -217,7 +217,7 @@ export function ImportDialog({ onClose, store, onDone }: Props) {
                 )}
               </div>
 
-              <details open={!f.mapping || f.missing.length > 0} className="rounded-xl bg-stone-100 px-4 py-3">
+              <details open={!f.mapping || f.missing.length > 0} className="rounded-xl bg-sunken px-4 py-3">
                 <summary className="min-h-8 cursor-pointer font-medium">
                   {f.mapping && f.missing.length === 0
                     ? `Columns: ${f.mapping.date}, ${f.mapping.description}, ${f.mapping.amount ?? `${f.mapping.debit} and ${f.mapping.credit}`}${f.mapping.amount ? `; purchases are ${f.mapping.purchases}` : ''}`
@@ -241,7 +241,7 @@ export function ImportDialog({ onClose, store, onDone }: Props) {
                       <div className="flex gap-4">
                         {(['negative', 'positive'] as const).map((s) => (
                           <label key={s} className="flex min-h-11 items-center gap-2">
-                            <input type="radio" className="h-5 w-5 accent-forest-700" name={`${f.key}-sign`} checked={f.mapping?.purchases === s} onChange={() => setMapping(i, { purchases: s })} />
+                            <input type="radio" className="h-5 w-5 accent-forest-700 dark:accent-forest-400" name={`${f.key}-sign`} checked={f.mapping?.purchases === s} onChange={() => setMapping(i, { purchases: s })} />
                             {s === 'negative' ? 'Negative (−12.50)' : 'Positive (12.50)'}
                           </label>
                         ))}
@@ -249,11 +249,11 @@ export function ImportDialog({ onClose, store, onDone }: Props) {
                     </div>
                   )}
                   <label className="flex min-h-11 items-center gap-2">
-                    <input type="checkbox" className="h-5 w-5 accent-forest-700" checked={!!f.mapping?.dayFirst} onChange={(e) => setMapping(i, { dayFirst: e.target.checked })} />
+                    <input type="checkbox" className="h-5 w-5 accent-forest-700 dark:accent-forest-400" checked={!!f.mapping?.dayFirst} onChange={(e) => setMapping(i, { dayFirst: e.target.checked })} />
                     Dates are day first (31/01/2031)
                   </label>
                 </div>
-                <p className="mt-2 text-sm text-stone-600">These columns are remembered for the card.</p>
+                <p className="mt-2 text-sm text-muted">These columns are remembered for the card.</p>
               </details>
 
               {result && (
@@ -267,12 +267,12 @@ export function ImportDialog({ onClose, store, onDone }: Props) {
                   </p>
                   <table className="w-full text-sm">
                     <caption className="sr-only">First rows of {f.fileName}</caption>
-                    <tbody className="divide-y divide-stone-200">
+                    <tbody className="divide-y divide-line">
                       {result.rows.slice(0, 5).map((r) => (
                         <tr key={r.row}>
-                          <td className="py-1.5 pr-3 whitespace-nowrap text-stone-600 tabular-nums">{shortDate(r.date)}</td>
+                          <td className="py-1.5 pr-3 whitespace-nowrap text-muted tabular-nums">{shortDate(r.date)}</td>
                           <td className="py-1.5 pr-3">{r.description}</td>
-                          <td className="py-1.5 pr-3 text-stone-600">{r.category}</td>
+                          <td className="py-1.5 pr-3 text-muted">{r.category}</td>
                           <td className="py-1.5 text-right tabular-nums">{money(cents(r.amount), store.settings.currencySymbol)}</td>
                         </tr>
                       ))}
@@ -280,7 +280,7 @@ export function ImportDialog({ onClose, store, onDone }: Props) {
                   </table>
                 </div>
               )}
-              {!cardName(f) && <p className="text-sm text-terracotta-dark">Choose the card this file is for.</p>}
+              {!cardName(f) && <p className="text-sm text-attention">Choose the card this file is for.</p>}
             </section>
           );
         })}

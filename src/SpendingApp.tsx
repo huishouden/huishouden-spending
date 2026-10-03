@@ -31,7 +31,7 @@ export interface FrameProps {
 /** The Huishouden app bar and the page under it. */
 export function Frame({ user, onSignIn, onSignOut, signingIn, actions, children }: FrameProps & { actions?: ReactNode; children?: ReactNode }) {
   return (
-    <div className="flex min-h-dvh flex-col bg-cream font-sans text-stone-800 antialiased lg:h-dvh lg:overflow-hidden">
+    <div className="flex min-h-dvh flex-col bg-page font-sans text-ink antialiased lg:h-dvh lg:overflow-hidden">
       <AppBar app="Spending" glyph="card" portalUrl={PORTAL_URL} version={VERSION} user={user} signingIn={signingIn} onSignIn={onSignIn} onSignOut={onSignOut}>
         {actions}
       </AppBar>
@@ -104,7 +104,7 @@ export function SpendingApp({ store, frame, toasts, banner }: Props) {
   };
 
   const settingsButton = (
-    <button slot="actions" type="button" className={iconButton} aria-label="Settings" onClick={() => setSettings('budget')}>
+    <button slot="actions" type="button" className={iconButton} aria-label="Spending settings" onClick={() => setSettings('budget')}>
       <Settings size={22} />
     </button>
   );
@@ -113,7 +113,7 @@ export function SpendingApp({ store, frame, toasts, banner }: Props) {
     <Frame {...frame} actions={settingsButton}>
       {banner}
       {!store.ready ? (
-        <p className="p-2 text-lg text-stone-600">Loading the household's spending</p>
+        <p className="p-2 text-lg text-muted">Loading the household's spending</p>
       ) : (
         <>
           <Glance summary={summary} months={shownMonths} onMonth={goMonth} symbol={symbol} store={store} now={now} email={email} onAdd={() => setAdding(true)} onRetry={checkEmail} />

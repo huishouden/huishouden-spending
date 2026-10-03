@@ -33,7 +33,7 @@ export function AddSpendingDialog({ store, checking, onCheckEmail, onImport, onC
         <Choice icon={<FileUp size={22} />} title="Import a statement" text="A CSV file from your bank’s or card’s website." onClick={onImport} />
       </div>
       {firstTime && (
-        <p className="mt-4 text-sm text-stone-600">Google warns that the app is unverified the first time. Spending only reads card alert emails and never changes your mail.</p>
+        <p className="mt-4 text-sm text-muted">Google warns that the app is unverified the first time. Spending only reads card alert emails and never changes your mail.</p>
       )}
     </Dialog>
   );
@@ -45,14 +45,14 @@ function Choice({ icon, title, text, onClick, disabled }: { icon: ReactNode; tit
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-stone-200 bg-white px-4 py-3 text-left transition-colors duration-150 hover:border-forest-400 hover:bg-stone-100 disabled:opacity-50"
+      className="flex min-h-16 w-full items-center gap-4 rounded-2xl border border-line bg-surface px-4 py-3 text-left transition-colors duration-150 hover:border-forest-400 dark:hover:border-forest-300 hover:bg-stone-100 dark:hover:bg-forest-700 disabled:opacity-50"
     >
-      <span className="text-forest-700">{icon}</span>
+      <span className="text-link">{icon}</span>
       <span className="min-w-0 flex-1">
-        <span className="block text-base font-semibold text-stone-800">{title}</span>
-        <span className="block text-sm text-stone-600">{text}</span>
+        <span className="block text-base font-semibold text-ink">{title}</span>
+        <span className="block text-sm text-muted">{text}</span>
       </span>
-      <ChevronRight size={20} className="text-stone-600" />
+      <ChevronRight size={20} className="text-muted" />
     </button>
   );
 }

@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { expectCleanLoad, expectCompactSampleBanner, expectGoogleSignInPopup, expectHuishoudenFrame, expectInstallable, expectSecurityHeaders } from '@huishouden/pwa-kit/e2e';
+import { expectCleanLoad, expectCompactSampleBanner, expectGoogleSignInPopup, expectHuishoudenFrame, expectInstallable, expectSecurityHeaders, expectThemeConsistent } from '@huishouden/pwa-kit/e2e';
 
 // Each check here caught, or would have caught, a bug a person found by hand first.
 
@@ -19,3 +19,5 @@ test('Google sign-in popup reaches Google with an allowed redirect URI', ({ page
 test('sends the security headers and leaves sign-in un-framed', ({ request }) => expectSecurityHeaders(request, './', {}));
 
 test('Sample data banner is one line on a phone', ({ page }) => expectCompactSampleBanner(page, './'));
+
+test('follows the suite theme: dark on a dark device, readable', ({ page }) => expectThemeConsistent(page, { path: './' }));

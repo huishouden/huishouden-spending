@@ -68,7 +68,7 @@ function SignedIn({ user, frame }: { user: User; frame: FrameProps }) {
   if (state.status === 'error') return <Note frame={frame}>Couldn't reach the household. Check the connection; the app tries again on its own.</Note>;
   return (
     <Note frame={frame}>
-      <h2 className="text-2xl font-semibold text-stone-800">Not in a household yet</h2>
+      <h2 className="text-2xl font-semibold text-ink">Not in a household yet</h2>
       <p className="mt-2">
         {user.email} isn't in a Huishouden household. Start one on the Huishouden home screen, or ask someone in your household to invite this address, then
         open Spending again.
@@ -107,7 +107,7 @@ function SampleApp({ frame, signInError }: { frame: FrameProps; signInError: str
 function MoneyRefusal({ frame }: { frame: FrameProps }) {
   return (
     <Note frame={frame}>
-      <h2 className="text-2xl font-semibold text-stone-800">Spending</h2>
+      <h2 className="text-2xl font-semibold text-ink">Spending</h2>
       <p className="mt-2">{refusal('see-money')}</p>
       <a className={`${primaryButton} mt-5`} href={PORTAL_URL}>
         Open Huishouden
@@ -119,7 +119,7 @@ function MoneyRefusal({ frame }: { frame: FrameProps }) {
 function Note({ frame, children }: { frame: FrameProps; children: ReactNode }) {
   return (
     <Frame {...frame}>
-      <div className={`${cardClass} max-w-2xl p-6 text-lg text-stone-600`}>{children}</div>
+      <div className={`${cardClass} max-w-2xl p-6 text-lg text-muted`}>{children}</div>
     </Frame>
   );
 }
